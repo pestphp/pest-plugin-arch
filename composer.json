@@ -1,5 +1,5 @@
 {
-    "name": "pestphp/pest-plugin-template",
+    "name": "pestphp/pest-arch",
     "description": "My awesome plugin",
     "keywords": [
         "php",
@@ -8,7 +8,9 @@
         "unit",
         "test",
         "testing",
-        "plugin"
+        "plugin",
+        "arch",
+        "architecture"
     ],
     "license": "MIT",
     "require": {
@@ -18,14 +20,21 @@
     },
     "autoload": {
         "psr-4": {
-            "Pest\\PluginName\\": "src/"
+            "Pest\\Arch\\": "src/"
         },
         "files": [
             "src/Autoload.php"
         ]
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
     "require-dev": {
-        "pestphp/pest-dev-tools": "^2.0.0"
+        "pestphp/pest-dev-tools": "^2.0.0",
+        "phpstan/phpstan": "^1.9.2",
+        "ta-tikoma/phpunit-architecture-test": "dev-main"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,

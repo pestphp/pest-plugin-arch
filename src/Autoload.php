@@ -2,17 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Pest\PluginName;
+use Pest\Arch\Blueprint;
+use Pest\Arch\Layers;
+use PHPUnit\Framework\ExpectationFailedException;
 
-use Pest\Plugin;
-use PHPUnit\Framework\TestCase;
+expect()->extend('toDependOn', function (array|string $targets) {
+    $blueprint = new Blueprint(
+        Layers::fromExpectationInput($this->value),
+        Layers::fromExpectationInput($targets),
+    );
 
-Plugin::uses(Example::class);
+    $blueprint->assert(fn (string $value, string $dependOn) => throw new ExpectationFailedException(
+        "Expecting '{$value}' to depend on '{$dependOn}'.",
+    ));
 
-/**
- * @return TestCase
- */
-function example(string $argument)
-{
-    return test()->example(...func_get_args()); // @phpstan-ignore-line
-}
+    return $this;
+});
