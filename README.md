@@ -1,8 +1,8 @@
-This repository contains the Pest Plugin Template.
+This repository contains the Pest Plugin Arch.
 
 > If you want to start testing your application with Pest, visit the main **[Pest Repository](https://github.com/pestphp/pest)**.
 
-- Explore the docs: **[pestphp.com/docs/plugins/creating-plugins »](https://pestphp.com/docs/plugins/creating-plugins)**
+- Explore the docs: **[pestphp.com/docs/plugins/arch »](https://pestphp.com/docs/plugins/laravel/)**
 - Follow us on Twitter: **[@pestphp »](https://twitter.com/pestphp)**
 - Join us on the Discord Server: **[discord.gg/bMAJv82 »](https://discord.gg/bMAJv82)**
 
