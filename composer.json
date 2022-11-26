@@ -1,5 +1,5 @@
 {
-    "name": "pestphp/pest-arch",
+    "name": "pestphp/pest-plugin-arch",
     "description": "My awesome plugin",
     "keywords": [
         "php",
