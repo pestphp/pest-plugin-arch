@@ -8,7 +8,7 @@ use Tests\Fixtures\Models\Product;
 
 class ProductController
 {
-    public function index(): Product
+    public function index(): array
     {
         return [
             new Product(),

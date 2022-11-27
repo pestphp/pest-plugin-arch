@@ -42,6 +42,9 @@ final class Layers implements Stringable
         return $this->values;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function __toString(): string
     {
         return implode(', ', $this->values);

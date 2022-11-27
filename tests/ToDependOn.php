@@ -6,7 +6,7 @@ use Tests\Fixtures\Models\Product;
 
 it('passes', function () {
     expect(ProductController::class)
-        ->toDependOn(Product::class)
+        ->toDependOn([Product::class])
         ->and(Product::class)
         ->not->toDependOn(ProductController::class)
         ->and('Tests\Fixtures\Controllers')
