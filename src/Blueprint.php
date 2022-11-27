@@ -20,8 +20,9 @@ final class Blueprint
     /**
      * Creates a new Blueprint instance.
      */
-    public function __construct(private readonly Layers $targets, private readonly Layers $dependencies)
+    public function __construct(private readonly string $target, private readonly Dependencies $dependencies)
     {
+        // ...
     }
 
     /**
@@ -31,20 +32,18 @@ final class Blueprint
      */
     public function expectToDependOn(callable $failure): void
     {
-        foreach ($this->targets->toArray() as $target) {
-            $targetLayer = $this->layer()->leaveByNameStart($target);
+        $targetLayer = $this->layer()->leaveByNameStart($this->target);
 
-            foreach ($this->dependencies->toArray() as $dependency) {
-                $dependencyLayer = $this->layer()->leaveByNameStart($dependency);
+        foreach ($this->dependencies->toArray() as $dependency) {
+            $dependencyLayer = $this->layer()->leaveByNameStart($dependency);
 
-                try {
-                    $this->assertDoesNotDependOn($targetLayer, $dependencyLayer);
-                } catch (ExpectationFailedException) {
-                    continue;
-                }
-
-                $failure($targetLayer->getName(), $dependencyLayer->getName());
+            try {
+                $this->assertDoesNotDependOn($targetLayer, $dependencyLayer);
+            } catch (ExpectationFailedException) {
+                continue;
             }
+
+            $failure($targetLayer->getName(), $dependencyLayer->getName());
         }
     }
 
@@ -55,17 +54,15 @@ final class Blueprint
      */
     public function expectToOnlyDependOn(callable $failure): void
     {
-        foreach ($this->targets->toArray() as $target) {
-            $targetLayer = $this->layer()->leaveByNameStart($target);
+        $targetLayer = $this->layer()->leaveByNameStart($this->target);
 
-            try {
-                $this->assertOnlyDependOn(
-                    $targetLayer,
-                    array_map(fn (string $dependency) => $this->layer()->leaveByNameStart($dependency), $this->dependencies->toArray())
-                );
-            } catch (ExpectationFailedException $e) {
-                $failure($targetLayer->getName(), $this->dependencies->__toString(), $e->getMessage());
-            }
+        try {
+            $this->assertOnlyDependOn(
+                $targetLayer,
+                array_map(fn (string $dependency) => $this->layer()->leaveByNameStart($dependency), $this->dependencies->toArray())
+            );
+        } catch (ExpectationFailedException $e) {
+            $failure($targetLayer->getName(), $this->dependencies->__toString(), $e->getMessage());
         }
     }
 

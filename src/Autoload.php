@@ -3,13 +3,15 @@
 declare(strict_types=1);
 
 use Pest\Arch\Blueprint;
-use Pest\Arch\Layers;
+use Pest\Arch\Dependencies;
 use PHPUnit\Framework\ExpectationFailedException;
 
 expect()->extend('toDependOn', function (array|string $targets) {
+    assert(is_string($this->value));
+
     $blueprint = new Blueprint(
-        Layers::fromExpectationInput($this->value),
-        Layers::fromExpectationInput($targets),
+        $this->value,
+        Dependencies::fromExpectationInput($targets),
     );
 
     $blueprint->expectToDependOn(static fn (string $value, string $dependOn) => throw new ExpectationFailedException(
@@ -20,9 +22,11 @@ expect()->extend('toDependOn', function (array|string $targets) {
 });
 
 expect()->extend('toOnlyDependOn', function (array|string $targets) {
+    assert(is_string($this->value));
+
     $blueprint = new Blueprint(
-        Layers::fromExpectationInput($this->value),
-        Layers::fromExpectationInput($targets),
+        $this->value,
+        Dependencies::fromExpectationInput($targets),
     );
 
     $blueprint->expectToOnlyDependOn(static fn (string $value, string $dependOn, string $notAllowedDependOn) => throw new ExpectationFailedException(

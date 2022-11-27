@@ -9,7 +9,7 @@ use Stringable;
 /**
  * @internal
  */
-final class Layers implements Stringable
+final class Dependencies implements Stringable
 {
     /**
      * Creates a new Layers instance.
