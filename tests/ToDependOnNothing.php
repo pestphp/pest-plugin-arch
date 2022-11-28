@@ -4,7 +4,7 @@ use PHPUnit\Framework\ExpectationFailedException;
 use Tests\Fixtures\Models\Product;
 
 it('passes', function () {
-    expect('App\Contracts')->toDependOnNothing()
+    expect('Tests\Fixtures\Contracts')->toDependOnNothing()
         ->and(Product::class)->not->toDependOnNothing();
 });
 

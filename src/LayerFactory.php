@@ -4,6 +4,7 @@ namespace Pest\Arch;
 
 use PHPUnit\Architecture\Asserts\Dependencies\Elements\ObjectUses;
 use PHPUnit\Architecture\Elements\Layer\Layer;
+use PHPUnit\Framework\ExpectationFailedException;
 
 /**
  * @internal
@@ -16,6 +17,10 @@ final class LayerFactory
     public function make(Blueprint $blueprint, string $name): Layer
     {
         $layer = $blueprint->layer()->leaveByNameStart($name);
+
+        if ($layer->getIterator()->count() === 0) {
+            throw new ExpectationFailedException("Layer '$name' does not exist.");
+        }
 
         foreach ($layer as $object) {
             $object->uses = new ObjectUses(array_filter(
