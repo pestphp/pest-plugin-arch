@@ -20,9 +20,22 @@ final class Blueprint
     /**
      * Creates a new Blueprint instance.
      */
-    public function __construct(private readonly string $target, private readonly Dependencies $dependencies)
-    {
+    public function __construct(
+        private readonly LayerFactory $layerFactory,
+        public readonly string $target,
+        public readonly Dependencies $dependencies
+    ) {
         // ...
+    }
+
+    /**
+     * Creates a new Blueprint instance.
+     */
+    public static function make(string $target, Dependencies $dependencies): self
+    {
+        $factory = new LayerFactory();
+
+        return new self($factory, $target, $dependencies);
     }
 
     /**
@@ -32,10 +45,10 @@ final class Blueprint
      */
     public function expectToDependOn(callable $failure): void
     {
-        $targetLayer = $this->layer()->leaveByNameStart($this->target);
+        $targetLayer = $this->layerFactory->make($this, $this->target);
 
         foreach ($this->dependencies->toArray() as $dependency) {
-            $dependencyLayer = $this->layer()->leaveByNameStart($dependency);
+            $dependencyLayer = $this->layerFactory->make($this, $dependency);
 
             try {
                 $this->assertDoesNotDependOn($targetLayer, $dependencyLayer);
@@ -54,12 +67,12 @@ final class Blueprint
      */
     public function expectToOnlyDependOn(callable $failure): void
     {
-        $targetLayer = $this->layer()->leaveByNameStart($this->target);
+        $targetLayer = $this->layerFactory->make($this, $this->target);
 
         try {
             $this->assertOnlyDependOn(
                 $targetLayer,
-                array_map(fn (string $dependency) => $this->layer()->leaveByNameStart($dependency), $this->dependencies->toArray())
+                array_map(fn (string $dependency) => $this->layerFactory->make($this, $dependency), $this->dependencies->toArray())
             );
         } catch (ExpectationFailedException $e) {
             $failure($targetLayer->getName(), $this->dependencies->__toString(), $e->getMessage());

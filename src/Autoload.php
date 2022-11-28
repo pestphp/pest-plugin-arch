@@ -9,7 +9,7 @@ use PHPUnit\Framework\ExpectationFailedException;
 expect()->extend('toDependOn', function (array|string $targets) {
     assert(is_string($this->value));
 
-    $blueprint = new Blueprint(
+    $blueprint = Blueprint::make(
         $this->value,
         Dependencies::fromExpectationInput($targets),
     );
@@ -24,7 +24,7 @@ expect()->extend('toDependOn', function (array|string $targets) {
 expect()->extend('toOnlyDependOn', function (array|string $targets) {
     assert(is_string($this->value));
 
-    $blueprint = new Blueprint(
+    $blueprint = Blueprint::make(
         $this->value,
         Dependencies::fromExpectationInput($targets),
     );
