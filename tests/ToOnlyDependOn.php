@@ -26,5 +26,5 @@ it('fail 2', function () {
     expect(Product::class)->toOnlyDependOn([]);
 })->throws(
     ExpectationFailedException::class,
-    "Expecting 'Tests\Fixtures\Models\Product' to not have any dependencies. However, it depends on 'Tests\Fixtures\Contracts\Models\Fooable'."
+    "Expecting 'Tests\Fixtures\Models\Product' to depend on nothing. However, it depends on 'Tests\Fixtures\Contracts\Models\Fooable'."
 );

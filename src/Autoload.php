@@ -31,10 +31,14 @@ expect()->extend('toOnlyDependOn', function (array|string $targets) {
 
     $blueprint->expectToOnlyDependOn(static fn (string $value, string $dependOn, string $notAllowedDependOn) => throw new ExpectationFailedException(
         empty($dependOn)
-            ? "Expecting '{$value}' to not have any dependencies. However, it depends on '{$notAllowedDependOn}'."
+            ? "Expecting '{$value}' to depend on nothing. However, it depends on '{$notAllowedDependOn}'."
             : "Expecting '{$value}' to depend only on '{$dependOn}'. However, it also depends on '{$notAllowedDependOn}'.",
 
     ));
 
     return $this;
+});
+
+expect()->extend('toDependOnNothing', function () {
+    return $this->toOnlyDependOn([]);
 });
