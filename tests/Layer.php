@@ -22,3 +22,5 @@ it('it does include vendor dependencies', function () {
         ->toOnlyDependOn('Pest\Support')
         ->toOnlyDependOn('Pest\Support\Str');
 });
+
+todo('add support for enums');
