@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace Pest\Arch;
 
+use Pest\Arch\Collections\Dependencies;
+use Pest\Arch\Factories\LayerFactory;
+use Pest\Arch\Repositories\ObjectsRepository;
+use Pest\Arch\ValueObjects\Dependency;
+use Pest\Arch\ValueObjects\Target;
 use PHPUnit\Architecture\ArchitectureAsserts;
 use PHPUnit\Architecture\Elements\Layer\Layer;
 use PHPUnit\Architecture\Elements\ObjectDescription;
@@ -22,8 +27,8 @@ final class Blueprint
      */
     public function __construct(
         private readonly LayerFactory $layerFactory,
-        public readonly string $target,
-        public readonly Dependencies $dependencies
+        private readonly Target $target,
+        private readonly Dependencies $dependencies
     ) {
         // ...
     }
@@ -31,24 +36,24 @@ final class Blueprint
     /**
      * Creates a new Blueprint instance.
      */
-    public static function make(string $target, Dependencies $dependencies): self
+    public static function make(Target $target, Dependencies $dependencies): self
     {
-        $factory = new LayerFactory();
+        $factory = new LayerFactory(ObjectsRepository::getInstance());
 
         return new self($factory, $target, $dependencies);
     }
 
     /**
-     * Expects the given targets to depend on the given dependencies.
+     * Expects the Blueprint targets to depend on the Blueprint dependencies.
      *
      * @param  callable(string, string): mixed  $failure
      */
     public function expectToDependOn(callable $failure): void
     {
-        $targetLayer = $this->layerFactory->make($this, $this->target);
+        $targetLayer = $this->layerFactory->make($this->target->value);
 
-        foreach ($this->dependencies->toArray() as $dependency) {
-            $dependencyLayer = $this->layerFactory->make($this, $dependency);
+        foreach ($this->dependencies->values as $dependency) {
+            $dependencyLayer = $this->layerFactory->make($dependency->value);
 
             try {
                 $this->assertDoesNotDependOn($targetLayer, $dependencyLayer);
@@ -61,21 +66,44 @@ final class Blueprint
     }
 
     /**
-     * Expects the given targets to only depend on the given dependencies.
+     * Expects the Blueprint targets to only depend on the Blueprint dependencies.
      *
-     * @param  callable(string, string): mixed  $failure
+     * @param  callable(string, string, string): mixed  $failure
      */
     public function expectToOnlyDependOn(callable $failure): void
     {
-        $targetLayer = $this->layerFactory->make($this, $this->target);
-
         try {
-            $this->assertOnlyDependOn(
-                $targetLayer,
-                array_map(fn (string $dependency) => $this->layerFactory->make($this, $dependency), $this->dependencies->toArray())
-            );
+            $allowedUses = array_merge(...array_map(function (Layer $layer): array {
+                // @phpstan-ignore-next-line
+                return array_map(function (ObjectDescription $object): string {
+                    return $object->name;
+                }, iterator_to_array($layer->getIterator()));
+            }, array_map(
+                fn (string $dependency): Layer => $this->layerFactory->make($dependency),
+                [$this->target->value, ...array_map(fn (Dependency $dependency): string => $dependency->value, $this->dependencies->values)],
+            )));
+
+            $notDeclaredDependencies = [];
+
+            foreach ($this->layerFactory->make($this->target->value) as $object) {
+                assert($object instanceof ObjectDescription);
+
+                foreach ($object->uses as $use) {
+                    assert(is_string($use));
+
+                    if (! in_array($use, $allowedUses, true)) {
+                        $notDeclaredDependencies[] = $use;
+                    }
+                }
+            }
+
+            if (count($notDeclaredDependencies) > 0) {
+                throw new ExpectationFailedException($notDeclaredDependencies[0]);
+            }
+
+            self::assertTrue(true);
         } catch (ExpectationFailedException $e) {
-            $failure($targetLayer->getName(), $this->dependencies->__toString(), $e->getMessage());
+            $failure($this->target->value, $this->dependencies->__toString(), $e->getMessage());
         }
     }
 
@@ -107,48 +135,5 @@ final class Blueprint
     public static function assertEquals(mixed $expected, mixed $actual, string $message = ''): void
     {
         Assert::assertEquals($expected, $actual, $message);
-    }
-
-    /**
-     * Check that layerA only depends on layerB.
-     *
-     * @param  array<int, Layer>  $layerB
-     */
-    public function assertOnlyDependOn(Layer $layerA, array $layersB): void
-    {
-        $names = $this->getObjectsWhichUsesOnLayerAButNotFromLayersB($layerA, $layersB);
-
-        if (count($names) > 0) {
-            throw new ExpectationFailedException($names[0]);
-        }
-
-        self::assertTrue(true);
-    }
-
-    /**
-     * Get objects which uses on layer A, but not from layer B
-     *
-     * @param  array<int, Layer>  $layerB
-     * @return array<int, string>
-     */
-    private function getObjectsWhichUsesOnLayerAButNotFromLayersB(Layer $layerA, array $layerB): array
-    {
-        $result = [];
-
-        $allowedUses = array_merge(...array_map(
-            static fn (Layer $layer) => array_map(
-                static fn (ObjectDescription $object) => $object->name, iterator_to_array($layer->getIterator())
-            ), $layerB)
-        );
-
-        foreach ($layerA as $object) {
-            foreach ($object->uses as $use) {
-                if (! in_array($use, $allowedUses, true)) {
-                    $result[] = $use;
-                }
-            }
-        }
-
-        return $result;
     }
 }

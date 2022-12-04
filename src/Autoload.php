@@ -3,14 +3,15 @@
 declare(strict_types=1);
 
 use Pest\Arch\Blueprint;
-use Pest\Arch\Dependencies;
+use Pest\Arch\Collections\Dependencies;
+use Pest\Arch\ValueObjects\Target;
 use PHPUnit\Framework\ExpectationFailedException;
 
 expect()->extend('toDependOn', function (array|string $targets) {
     assert(is_string($this->value));
 
     $blueprint = Blueprint::make(
-        $this->value,
+        Target::fromExpectation($this),
         Dependencies::fromExpectationInput($targets),
     );
 
@@ -25,12 +26,12 @@ expect()->extend('toOnlyDependOn', function (array|string $targets) {
     assert(is_string($this->value));
 
     $blueprint = Blueprint::make(
-        $this->value,
+        Target::fromExpectation($this),
         Dependencies::fromExpectationInput($targets),
     );
 
     $blueprint->expectToOnlyDependOn(static fn (string $value, string $dependOn, string $notAllowedDependOn) => throw new ExpectationFailedException(
-        empty($dependOn)
+        $dependOn === ''
             ? "Expecting '{$value}' to depend on nothing. However, it depends on '{$notAllowedDependOn}'."
             : "Expecting '{$value}' to depend only on '{$dependOn}'. However, it also depends on '{$notAllowedDependOn}'.",
 

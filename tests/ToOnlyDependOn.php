@@ -1,5 +1,6 @@
 <?php
 
+use Pest\Support\Str;
 use PHPUnit\Framework\ExpectationFailedException;
 use Tests\Fixtures\Contracts\Models\Fooable;
 use Tests\Fixtures\Contracts\Models\Storable;
@@ -10,7 +11,7 @@ it('passes', function () {
         ->not->toOnlyDependOn(Fooable::class)
         ->and(Fooable::class)->toOnlyDependOn([])
         ->and('Tests\Fixtures\Models')->toOnlyDependOn('Tests\Fixtures\Contracts\Models')
-        ->and('Tests\Fixtures')->toOnlyDependOn('Tests\Fixtures');
+        ->and('Tests\Fixtures')->toOnlyDependOn(['Tests\Fixtures', Str::class]);
 });
 
 it('fail 1', function () {
