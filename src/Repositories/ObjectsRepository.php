@@ -70,39 +70,48 @@ final class ObjectsRepository
     {
         $directoriesByNamespace = $this->directoriesByNamespace($namespace);
 
-        if ($directoriesByNamespace === null) {
+        if (count($directoriesByNamespace) === 0) {
             return [];
         }
 
-        [$prefix, $directories] = $directoriesByNamespace;
+        $objects = [];
 
-        if (array_key_exists($prefix, $this->cachedObjectsPerPrefix)) {
-            return $this->cachedObjectsPerPrefix[$prefix];
+        foreach ($directoriesByNamespace as $prefix => $directories) {
+            if (array_key_exists($prefix, $this->cachedObjectsPerPrefix)) {
+                $objects = array_merge($this->cachedObjectsPerPrefix[$prefix]);
+
+                continue;
+            }
+
+            $objectsPerPrefix = array_values(array_filter(array_reduce($directories, function (array $files, $directory): array {
+                return array_merge($files, array_values(array_map(
+                    static fn (SplFileInfo $file): ObjectDescription|null => ObjectDescriptionFactory::make($file->getRealPath()),
+                    iterator_to_array(Finder::create()->files()->in($directory)->name('*.php')),
+                )));
+            }, [])));
+
+            $objects = array_merge($this->cachedObjectsPerPrefix[$prefix] = $objectsPerPrefix);  // phpstan-ignore-line
         }
 
-        $objectsPerPrefix = array_values(array_filter(array_reduce($directories, function (array $files, $directory): array {
-            return array_merge($files, array_values(array_map(
-                static fn (SplFileInfo $file): ObjectDescription|null => ObjectDescriptionFactory::make($file->getRealPath()),
-                iterator_to_array(Finder::create()->files()->in($directory))
-            )));
-        }, [])));
-
-        return $this->cachedObjectsPerPrefix[$prefix] = $objectsPerPrefix;  // phpstan-ignore-line
+        return $objects;
     }
 
     /**
      * Gets all the directories for the given namespace.
      *
-     * @return array{string, array<int, string>}
+     * @return array<string, array<int, string>>
      */
-    private function directoriesByNamespace(string $name): array|null
+    private function directoriesByNamespace(string $name): array
     {
+        $directoriesByNamespace = [];
+
         foreach ($this->prefixes as $prefix => $directories) {
             if (str_starts_with($name, $prefix)) {
-                return [$prefix, $directories];
+                $directories = array_values(array_filter($directories, static fn (string $directory): bool => is_dir($directory)));
+                $directoriesByNamespace[$prefix] = $directories;
             }
         }
 
-        return null;
+        return $directoriesByNamespace;
     }
 }

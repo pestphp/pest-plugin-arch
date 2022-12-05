@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Pest\Arch\Factories;
 
+use Pest\Arch\VendorObjectDescription;
 use PHPUnit\Architecture\Asserts\Dependencies\Elements\ObjectUses;
 use PHPUnit\Architecture\Elements\ObjectDescription;
 use PHPUnit\Architecture\Services\ServiceContainer;
@@ -30,8 +31,12 @@ final class ObjectDescriptionFactory
 
         $object = null;
 
+        $isFromVendor = str_contains($filename, '/vendor/');
+
         try {
-            $object = ServiceContainer::$descriptionClass::make($filename);
+            $object = $isFromVendor
+                ? VendorObjectDescription::make($filename)
+                : ServiceContainer::$descriptionClass::make($filename);
         } catch (RuntimeException $e) {
             if (! str_contains($e->getFile(), 'phpdocumentor')) {
                 throw $e;
@@ -42,10 +47,12 @@ final class ObjectDescriptionFactory
             return null;
         }
 
-        $object->uses = new ObjectUses(array_values(array_filter(
-            iterator_to_array($object->uses->getIterator()),
-            static fn (string $use): bool => self::isUserDefined($use),
-        )));
+        if (! $isFromVendor) {
+            $object->uses = new ObjectUses(array_values(array_filter(
+                iterator_to_array($object->uses->getIterator()),
+                static fn (string $use): bool => self::isUserDefined($use),
+            )));
+        }
 
         return $object;
     }
