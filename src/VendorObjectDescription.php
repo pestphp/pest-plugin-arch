@@ -26,7 +26,7 @@ final class VendorObjectDescription extends ObjectDescription // @phpstan-ignore
             return null;
         }
 
-        if (! $vendorObject instanceof \PHPUnit\Architecture\Elements\ObjectDescriptionBase) {
+        if (! $vendorObject instanceof ObjectDescriptionBase) {
             return null;
         }
 
