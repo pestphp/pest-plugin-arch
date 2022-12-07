@@ -19,12 +19,6 @@
         "pestphp/pest-plugin": "^2.0.0",
         "ta-tikoma/phpunit-architecture-test": "dev-main"
     },
-    "repositories": {
-        "ta-tikoma/phpunit-architecture-test": {
-            "type": "path",
-            "url": "../phpunit-architecture-test"
-        }
-    },
     "autoload": {
         "psr-4": {
             "Pest\\Arch\\": "src/"
