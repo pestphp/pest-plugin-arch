@@ -53,7 +53,7 @@ final class ObjectsRepository
         $namespaces = [];
 
         foreach ((fn () => $loader->getPrefixesPsr4())->call($loader) as $namespacePrefix => $directories) {
-            $namespace = rtrim($namespacePrefix, '\\');
+            $namespace = rtrim((string) $namespacePrefix, '\\');
 
             $namespaces[$namespace] = $directories;
         }
@@ -70,7 +70,7 @@ final class ObjectsRepository
     {
         $directoriesByNamespace = $this->directoriesByNamespace($namespace);
 
-        if (count($directoriesByNamespace) === 0) {
+        if ($directoriesByNamespace === []) {
             return [];
         }
 
@@ -78,19 +78,17 @@ final class ObjectsRepository
 
         foreach ($directoriesByNamespace as $prefix => $directories) {
             if (array_key_exists($prefix, $this->cachedObjectsPerPrefix)) {
-                $objects = array_merge($this->cachedObjectsPerPrefix[$prefix]);
+                $objects = [...$this->cachedObjectsPerPrefix[$prefix]];
 
                 continue;
             }
 
-            $objectsPerPrefix = array_values(array_filter(array_reduce($directories, function (array $files, $directory): array {
-                return array_merge($files, array_values(array_map(
-                    static fn (SplFileInfo $file): ObjectDescription|null => ObjectDescriptionFactory::make($file->getRealPath()),
-                    iterator_to_array(Finder::create()->files()->in($directory)->name('*.php')),
-                )));
-            }, [])));
+            $objectsPerPrefix = array_values(array_filter(array_reduce($directories, fn (array $files, $directory): array => array_merge($files, array_values(array_map(
+                static fn (SplFileInfo $file): ObjectDescription|null => ObjectDescriptionFactory::make($file->getRealPath()),
+                iterator_to_array(Finder::create()->files()->in($directory)->name('*.php')),
+            ))), [])));
 
-            $objects = array_merge($this->cachedObjectsPerPrefix[$prefix] = $objectsPerPrefix);  // phpstan-ignore-line
+            $objects = [...$this->cachedObjectsPerPrefix[$prefix] = $objectsPerPrefix];  // phpstan-ignore-line
         }
 
         return $objects;

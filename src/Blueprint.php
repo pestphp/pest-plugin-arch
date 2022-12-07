@@ -73,15 +73,11 @@ final class Blueprint
     public function expectToOnlyDependOn(callable $failure): void
     {
         try {
-            $allowedUses = array_merge(...array_map(function (Layer $layer): array {
-                // @phpstan-ignore-next-line
-                return array_map(function (ObjectDescription $object): string {
-                    return $object->name;
-                }, iterator_to_array($layer->getIterator()));
-            }, array_map(
-                fn (string $dependency): Layer => $this->layerFactory->make($dependency),
-                [$this->target->value, ...array_map(fn (Dependency $dependency): string => $dependency->value, $this->dependencies->values)],
-            )));
+            $allowedUses = array_merge(...array_map(fn (Layer $layer): array => // @phpstan-ignore-next-line
+array_map(fn (ObjectDescription $object): string => $object->name, iterator_to_array($layer->getIterator())), array_map(
+    fn (string $dependency): Layer => $this->layerFactory->make($dependency),
+    [$this->target->value, ...array_map(fn (Dependency $dependency): string => $dependency->value, $this->dependencies->values)],
+)));
 
             $notDeclaredDependencies = [];
 
@@ -97,7 +93,7 @@ final class Blueprint
                 }
             }
 
-            if (count($notDeclaredDependencies) > 0) {
+            if ($notDeclaredDependencies !== []) {
                 throw new ExpectationFailedException($notDeclaredDependencies[0]);
             }
 

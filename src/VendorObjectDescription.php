@@ -22,11 +22,11 @@ final class VendorObjectDescription extends ObjectDescription // @phpstan-ignore
 
         try {
             $vendorObject = ObjectDescriptionBase::make($path);
-        } catch (Error $e) {
+        } catch (Error) {
             return null;
         }
 
-        if ($vendorObject === null) {
+        if (! $vendorObject instanceof \PHPUnit\Architecture\Elements\ObjectDescriptionBase) {
             return null;
         }
 

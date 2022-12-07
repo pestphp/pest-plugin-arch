@@ -62,7 +62,7 @@ final class ObjectDescriptionFactory
      */
     private static function ensureServiceContainerIsInitialized(): void
     {
-        if (self::$serviceContainerInitialized === false) {
+        if (! self::$serviceContainerInitialized) {
             ServiceContainer::init();
 
             self::$serviceContainerInitialized = true;

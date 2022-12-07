@@ -40,6 +40,4 @@ expect()->extend('toOnlyDependOn', function (array|string $targets) {
     return $this;
 });
 
-expect()->extend('toDependOnNothing', function () {
-    return $this->toOnlyDependOn([]);
-});
+expect()->extend('toDependOnNothing', fn () => $this->toOnlyDependOn([]));
