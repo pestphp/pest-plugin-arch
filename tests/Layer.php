@@ -1,6 +1,8 @@
 <?php
 
 use Pest\Arch\Exceptions\LayerNotFound;
+use Tests\Fixtures\Enums\Color;
+use Tests\Fixtures\Enums\ColorThatDependsOnColor;
 use Tests\Fixtures\Misc\DependsOnVendor;
 use Tests\Fixtures\NonExistingClass;
 use Tests\Fixtures\Support\Collection;
@@ -23,4 +25,7 @@ it('it does include vendor dependencies', function () {
         ->toOnlyDependOn('Pest\Support\Str');
 });
 
-todo('add support for enums');
+it('does support enums', function () {
+    expect(Color::class)->toDependOnNothing()
+        ->and(ColorThatDependsOnColor::class)->toDependOn([Color::class]);
+});
