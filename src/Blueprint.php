@@ -48,12 +48,12 @@ final class Blueprint
      *
      * @param  callable(string, string): mixed  $failure
      */
-    public function expectToDependOn(callable $failure): void
+    public function expectToDependOn(LayerOptions $options, callable $failure): void
     {
-        $targetLayer = $this->layerFactory->make($this->target->value);
+        $targetLayer = $this->layerFactory->make($options, $this->target->value);
 
         foreach ($this->dependencies->values as $dependency) {
-            $dependencyLayer = $this->layerFactory->make($dependency->value);
+            $dependencyLayer = $this->layerFactory->make($options, $dependency->value);
 
             try {
                 $this->assertDoesNotDependOn($targetLayer, $dependencyLayer);
@@ -70,18 +70,24 @@ final class Blueprint
      *
      * @param  callable(string, string, string): mixed  $failure
      */
-    public function expectToOnlyDependOn(callable $failure): void
+    public function expectToOnlyDependOn(LayerOptions $options, callable $failure): void
     {
         try {
-            $allowedUses = array_merge(...array_map(fn (Layer $layer): array => // @phpstan-ignore-next-line
-array_map(fn (ObjectDescription $object): string => $object->name, iterator_to_array($layer->getIterator())), array_map(
-    fn (string $dependency): Layer => $this->layerFactory->make($dependency),
-    [$this->target->value, ...array_map(fn (Dependency $dependency): string => $dependency->value, $this->dependencies->values)],
-)));
+            $allowedUses = array_merge(
+                ...array_map(fn (Layer $layer): array => array_map(
+                    // @phpstan-ignore-next-line
+                    fn (ObjectDescription $object): string => $object->name, iterator_to_array($layer->getIterator())), array_map(
+                        fn (string $dependency): Layer => $this->layerFactory->make($options, $dependency),
+                        [$this->target->value, ...array_map(
+                            fn (Dependency $dependency): string => $dependency->value, $this->dependencies->values
+                        )],
+                    )
+                )
+            );
 
             $notDeclaredDependencies = [];
 
-            foreach ($this->layerFactory->make($this->target->value) as $object) {
+            foreach ($this->layerFactory->make($options, $this->target->value) as $object) {
                 assert($object instanceof ObjectDescription);
 
                 foreach ($object->uses as $use) {

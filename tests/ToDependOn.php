@@ -1,6 +1,9 @@
 <?php
 
+use Pest\Arch\Exceptions\LayerNotFound;
 use PHPUnit\Framework\ExpectationFailedException;
+use Tests\Fixtures\Contracts\Models\Fooable;
+use Tests\Fixtures\Contracts\Models\Storable;
 use Tests\Fixtures\Controllers\ProductController;
 use Tests\Fixtures\Models\Product;
 
@@ -27,4 +30,34 @@ it('fails 2', function () {
 })->throws(
     ExpectationFailedException::class,
     "Expecting 'Tests\Fixtures\Models' not to depend on 'Tests\Fixtures\Contracts\Models'."
+);
+
+test('ignoring', function () {
+    expect(Product::class)
+        ->not()
+        ->toDependOn('Tests\Fixtures\Contracts')
+        ->ignoring([Fooable::class, Storable::class])
+        ->toDependOn('Tests\Fixtures\Contracts')
+        ->toDependOn([Fooable::class, Storable::class])
+        ->toDependOn([Fooable::class])
+        ->ignoring(Storable::class);
+});
+
+test('ignoring opposite message', function () {
+    expect(Product::class)
+        ->not
+        ->toDependOn([Fooable::class, Storable::class])
+        ->ignoring('Tests\Fixtures\Enums');
+})->throws(
+    ExpectationFailedException::class,
+    "Expecting 'Tests\Fixtures\Models\Product' not to depend on 'Tests\Fixtures\Contracts\Mode...ooable' 'Tests\Fixtures\Contracts\Mode...orable'"
+);
+
+test('ignoring as layer does not exist', function () {
+    expect(Product::class)
+        ->toDependOn(Fooable::class)
+        ->ignoring(Fooable::class);
+})->throws(
+    LayerNotFound::class,
+    "Layer 'Tests\Fixtures\Contracts\Models\Fooable' does not exist",
 );

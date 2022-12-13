@@ -48,10 +48,12 @@ final class ObjectDescriptionFactory
         }
 
         if (! $isFromVendor) {
-            $object->uses = new ObjectUses(array_values(array_filter(
-                iterator_to_array($object->uses->getIterator()),
-                static fn (string $use): bool => self::isUserDefined($use),
-            )));
+            $object->uses = new ObjectUses(array_values(
+                array_filter(
+                    iterator_to_array($object->uses->getIterator()),
+                    static fn (string $use): bool => self::isUserDefined($use),
+                )
+            ));
         }
 
         return $object;

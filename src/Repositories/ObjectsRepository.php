@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Pest\Arch\Repositories;
 
 use Pest\Arch\Factories\ObjectDescriptionFactory;
+use Pest\Arch\LayerOptions;
 use Pest\TestSuite;
 use PHPUnit\Architecture\Elements\ObjectDescription;
 use SplFileInfo;
@@ -86,9 +87,9 @@ final class ObjectsRepository
             $objectsPerPrefix = array_values(array_filter(array_reduce($directories, fn (array $files, $directory): array => array_merge($files, array_values(array_map(
                 static fn (SplFileInfo $file): ObjectDescription|null => ObjectDescriptionFactory::make($file->getRealPath()),
                 iterator_to_array(Finder::create()->files()->in($directory)->name('*.php')),
-            ))), [])));
+            ))), [])));  // phpstan-ignore-line
 
-            $objects = [...$this->cachedObjectsPerPrefix[$prefix] = $objectsPerPrefix];  // phpstan-ignore-line
+            return [...$this->cachedObjectsPerPrefix[$prefix] = $objectsPerPrefix];
         }
 
         return $objects;
@@ -106,6 +107,7 @@ final class ObjectsRepository
         foreach ($this->prefixes as $prefix => $directories) {
             if (str_starts_with($name, $prefix)) {
                 $directories = array_values(array_filter($directories, static fn (string $directory): bool => is_dir($directory)));
+
                 $directoriesByNamespace[$prefix] = $directories;
             }
         }
