@@ -32,9 +32,16 @@ final class ObjectDescriptionFactory
 
         $isFromVendor = str_contains($filename, '/vendor/');
 
-        $object = $isFromVendor
-            ? VendorObjectDescription::make($filename)
-            : ServiceContainer::$descriptionClass::make($filename);
+        $originalErrorReportingLevel = error_reporting();
+        error_reporting($originalErrorReportingLevel & ~E_USER_DEPRECATED);
+
+        try {
+            $object = $isFromVendor
+                ? VendorObjectDescription::make($filename)
+                : ServiceContainer::$descriptionClass::make($filename);
+        } finally {
+            error_reporting($originalErrorReportingLevel);
+        }
 
         if ($object === null) {
             return null;
