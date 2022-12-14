@@ -33,7 +33,7 @@ final class LayerFactory
      */
     public function make(LayerOptions $options, string $name): Layer
     {
-        $objects = array_map(function (ObjectDescription $object) use ($options): \Pest\Arch\VendorObjectDescription|\PHPUnit\Architecture\Elements\ObjectDescription {
+        $objects = array_map(function (ObjectDescription $object) use ($options): ObjectDescription {
             if ($object instanceof VendorObjectDescription) {
                 return $object;
             }

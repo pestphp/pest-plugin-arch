@@ -10,7 +10,6 @@ use PHPUnit\Architecture\Elements\ObjectDescription;
 use PHPUnit\Architecture\Services\ServiceContainer;
 use ReflectionClass;
 use ReflectionFunction;
-use RuntimeException;
 
 /**
  * @internal
@@ -33,15 +32,9 @@ final class ObjectDescriptionFactory
 
         $isFromVendor = str_contains($filename, '/vendor/');
 
-        try {
-            $object = $isFromVendor
-                ? VendorObjectDescription::make($filename)
-                : ServiceContainer::$descriptionClass::make($filename);
-        } catch (RuntimeException $e) {
-            if (! str_contains($e->getFile(), 'phpdocumentor')) {
-                throw $e;
-            }
-        }
+        $object = $isFromVendor
+            ? VendorObjectDescription::make($filename)
+            : ServiceContainer::$descriptionClass::make($filename);
 
         if ($object === null) {
             return null;
@@ -51,7 +44,9 @@ final class ObjectDescriptionFactory
             $object->uses = new ObjectUses(array_values(
                 array_filter(
                     iterator_to_array($object->uses->getIterator()),
-                    static fn (string $use): bool => self::isUserDefined($use) && ! self::isSameNamespace($object, $use),
+                    static fn (string $use): bool => self::isValidDependency($use)
+                        && self::isUserDefined($use)
+                        && ! self::isSameLayer($object, $use),
                 )
             ));
         }
@@ -87,10 +82,28 @@ final class ObjectDescriptionFactory
     }
 
     /**
-     * Checks if the given use is "user defined".
+     * Checks if the given use is in the same layer as the given object.
      */
-    private static function isSameNamespace(ObjectDescription $object, string $use): bool
+    private static function isSameLayer(ObjectDescription $object, string $use): bool
     {
-        return $object->reflectionClass->getNamespaceName() === $use;
+        return $use === 'self'
+            || $use === 'static'
+            || $use === 'parent'
+            || $object->reflectionClass->getNamespaceName() === $use;
+    }
+
+    /**
+     * Checks if the given use is a valid dependency.
+     */
+    private static function isValidDependency(string $use): bool
+    {
+        return match (true) {
+            function_exists($use) => true,
+            class_exists($use) => true,
+            interface_exists($use) => true,
+            // ...
+
+            default => false,
+        };
     }
 }

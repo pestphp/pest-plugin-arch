@@ -78,7 +78,7 @@ final class ObjectsRepository
 
         foreach ($directoriesByNamespace as $prefix => $directories) {
             if (array_key_exists($prefix, $this->cachedObjectsPerPrefix)) {
-                $objects = [...$this->cachedObjectsPerPrefix[$prefix]];
+                $objects = [...$objects, ...$this->cachedObjectsPerPrefix[$prefix]];
 
                 continue;
             }
@@ -88,7 +88,7 @@ final class ObjectsRepository
                 iterator_to_array(Finder::create()->files()->in($directory)->name('*.php')),
             ))), [])));  // phpstan-ignore-line
 
-            return [...$this->cachedObjectsPerPrefix[$prefix] = $objectsPerPrefix];
+            $objects = [...$objects, ...$this->cachedObjectsPerPrefix[$prefix] = $objectsPerPrefix];
         }
 
         return $objects;

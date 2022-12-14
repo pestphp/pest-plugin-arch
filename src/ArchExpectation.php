@@ -45,14 +45,14 @@ final class ArchExpectation
     /**
      * Ignores the given layers.
      *
-     * @param  array<int, string>|string  $dependencies
+     * @param  array<int, string>|string  $targetsOrDependencies
      * @return $this
      */
-    public function ignoring(array|string $dependencies): self
+    public function ignoring(array|string $targetsOrDependencies): self
     {
-        $dependencies = is_array($dependencies) ? $dependencies : [$dependencies];
+        $targetsOrDependencies = is_array($targetsOrDependencies) ? $targetsOrDependencies : [$targetsOrDependencies];
 
-        $this->ignoring = [...$this->ignoring, ...$dependencies];
+        $this->ignoring = [...$this->ignoring, ...$targetsOrDependencies];
 
         return $this;
     }
@@ -78,7 +78,7 @@ final class ArchExpectation
     /**
      * Proxies the call to the expectation.
      *
-     * @param  array<int|string, mixed>  $arguments
+     * @param  array<array-key, mixed>  $arguments
      * @return Expectation<TValue>
      */
     public function __call(string $name, array $arguments): mixed
