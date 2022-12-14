@@ -51,7 +51,7 @@ final class ObjectDescriptionFactory
             $object->uses = new ObjectUses(array_values(
                 array_filter(
                     iterator_to_array($object->uses->getIterator()),
-                    static fn (string $use): bool => self::isUserDefined($use),
+                    static fn (string $use): bool => self::isUserDefined($use) && ! self::isSameNamespace($object, $use),
                 )
             ));
         }
@@ -84,5 +84,13 @@ final class ObjectDescriptionFactory
 
             default => true,
         };
+    }
+
+    /**
+     * Checks if the given use is "user defined".
+     */
+    private static function isSameNamespace(ObjectDescription $object, string $use): bool
+    {
+        return $object->reflectionClass->getNamespaceName() === $use;
     }
 }
