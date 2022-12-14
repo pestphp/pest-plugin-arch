@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Pest\Arch\Repositories;
 
 use Pest\Arch\Factories\ObjectDescriptionFactory;
-use Pest\Arch\LayerOptions;
 use Pest\TestSuite;
 use PHPUnit\Architecture\Elements\ObjectDescription;
 use SplFileInfo;

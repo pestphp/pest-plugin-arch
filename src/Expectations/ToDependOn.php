@@ -18,14 +18,14 @@ use PHPUnit\Framework\ExpectationFailedException;
 final class ToDependOn
 {
     /**
-     * @param  Expectation<string>  $expectation
+     * @param  Expectation<mixed>  $expectation
      * @param  array<int, string>|string  $targets
      * @return ArchExpectation<string>
      */
     public static function make(Expectation $expectation, array|string $targets): ArchExpectation
     {
-        assert(is_string($expectation->value)); // @phpstan-ignore-line
-
+        assert(is_string($expectation->value));
+        /** @var Expectation<string> $expectation */
         $blueprint = Blueprint::make(
             Target::fromExpectation($expectation),
             Dependencies::fromExpectationInput($targets),

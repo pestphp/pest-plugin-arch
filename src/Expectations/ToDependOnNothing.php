@@ -13,7 +13,7 @@ use Pest\Expectation;
 final class ToDependOnNothing
 {
     /**
-     * @param  Expectation<string>  $expectation
+     * @param  Expectation<mixed>  $expectation
      * @return ArchExpectation<string>
      */
     public static function make(Expectation $expectation): ArchExpectation
