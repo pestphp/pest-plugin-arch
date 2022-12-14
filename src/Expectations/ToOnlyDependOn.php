@@ -36,7 +36,7 @@ final class ToOnlyDependOn
                 $options, static fn (string $value, string $dependOn, string $notAllowedDependOn) => throw new ExpectationFailedException(
                     $dependOn === ''
                         ? "Expecting '{$value}' to depend on nothing. However, it depends on '{$notAllowedDependOn}'."
-                        : "Expecting '{$value}' to depend only on '{$dependOn}'. However, it also depends on '{$notAllowedDependOn}'.",
+                        : "Expecting '{$value}' to only depend on '{$dependOn}'. However, it also depends on '{$notAllowedDependOn}'.",
 
                 ));
         });

@@ -21,7 +21,7 @@ it('fail 1', function () {
     ]);
 })->throws(
     ExpectationFailedException::class,
-    "Expecting 'Tests\Fixtures\Models\Product' to depend only on 'Tests\Fixtures\Contracts\Models\Fooable'. However, it also depends on 'Tests\Fixtures\Contracts\Models\Storable'."
+    "Expecting 'Tests\Fixtures\Models\Product' to only depend on 'Tests\Fixtures\Contracts\Models\Fooable'. However, it also depends on 'Tests\Fixtures\Contracts\Models\Storable'."
 );
 
 it('fail 2', function () {
