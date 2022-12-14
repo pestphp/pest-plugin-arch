@@ -79,6 +79,7 @@ final class ObjectDescriptionFactory
     private static function isUserDefined(string $use): bool
     {
         return match (true) {
+            enum_exists($use) => (new \ReflectionEnum($use))->isUserDefined(),
             function_exists($use) => (new ReflectionFunction($use))->isUserDefined(),
             class_exists($use) => (new ReflectionClass($use))->isUserDefined(),
             interface_exists($use) => (new ReflectionClass($use))->isUserDefined(),
@@ -105,7 +106,7 @@ final class ObjectDescriptionFactory
     private static function isValidDependency(string $use): bool
     {
         return match (true) {
-            function_exists($use) => true,
+            enum_exists($use) => true,
             class_exists($use) => true,
             interface_exists($use) => true,
             // ...

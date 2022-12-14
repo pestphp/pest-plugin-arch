@@ -6,6 +6,7 @@ namespace Pest\Arch;
 
 use Pest\Arch\Collections\Dependencies;
 use Pest\Arch\Factories\LayerFactory;
+use Pest\Arch\Options\LayerOptions;
 use Pest\Arch\Repositories\ObjectsRepository;
 use Pest\Arch\ValueObjects\Dependency;
 use Pest\Arch\ValueObjects\Target;

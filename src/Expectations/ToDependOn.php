@@ -7,7 +7,7 @@ namespace Pest\Arch\Expectations;
 use Pest\Arch\ArchExpectation;
 use Pest\Arch\Blueprint;
 use Pest\Arch\Collections\Dependencies;
-use Pest\Arch\LayerOptions;
+use Pest\Arch\Options\LayerOptions;
 use Pest\Arch\ValueObjects\Target;
 use Pest\Expectation;
 use PHPUnit\Framework\ExpectationFailedException;

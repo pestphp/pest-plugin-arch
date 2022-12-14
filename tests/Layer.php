@@ -29,3 +29,5 @@ it('does support enums', function () {
     expect(Color::class)->toDependOnNothing()
         ->and(ColorThatDependsOnColor::class)->toDependOn([Color::class]);
 });
+
+todo('supports global functions');

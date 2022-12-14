@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Pest\Arch;
 
 use Closure;
+use Pest\Arch\Options\LayerOptions;
 use Pest\Expectation;
 use PHPUnit\Framework\ExpectationFailedException;
 
@@ -32,7 +33,7 @@ final class ArchExpectation
      *
      * @var array<int, string>
      */
-    private array $ignoring = [];
+    public array $ignoring = [];
 
     /**
      * Creates a new Arch Expectation instance.
@@ -118,10 +119,10 @@ final class ArchExpectation
 
             $e = null;
 
+            $options = LayerOptions::fromExpectation($this);
+
             try {
-                ($this->lazyExpectation)(new LayerOptions(
-                    $this->ignoring,
-                ));
+                ($this->lazyExpectation)($options);
             } catch (ExpectationFailedException $e) {
                 if ($this->opposite === null) {
                     throw $e;

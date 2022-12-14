@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Pest\Arch\Factories;
 
 use Pest\Arch\Exceptions\LayerNotFound;
-use Pest\Arch\LayerOptions;
+use Pest\Arch\Options\LayerOptions;
 use Pest\Arch\Repositories\ObjectsRepository;
 use Pest\Arch\VendorObjectDescription;
 use PHPUnit\Architecture\Asserts\Dependencies\Elements\ObjectUses;
