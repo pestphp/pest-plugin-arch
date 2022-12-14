@@ -22,10 +22,7 @@
     "autoload": {
         "psr-4": {
             "Pest\\Arch\\": "src/"
-        },
-        "files": [
-            "src/Autoload.php"
-        ]
+        }
     },
     "autoload-dev": {
         "psr-4": {
