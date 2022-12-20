@@ -28,7 +28,7 @@ final class ObjectDescriptionFactory
     {
         self::ensureServiceContainerIsInitialized();
 
-        $isFromVendor = str_contains($filename, '/vendor/');
+        $isFromVendor = str_contains((string) realpath($filename), '/vendor/');
 
         $originalErrorReportingLevel = error_reporting();
         error_reporting($originalErrorReportingLevel & ~E_USER_DEPRECATED);

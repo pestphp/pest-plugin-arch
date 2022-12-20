@@ -98,9 +98,9 @@ final class ObjectsRepository
                 continue;
             }
 
-            $objectsPerPrefix = array_values(array_filter(array_reduce($directories, fn (array $files, $directory): array => array_merge($files, array_values(array_map(
-                static fn (SplFileInfo $file): ObjectDescription|null => ObjectDescriptionFactory::make($file->getRealPath()),
-                iterator_to_array(Finder::create()->files()->in($directory)->name('*.php')),
+            $objectsPerPrefix = array_values(array_filter(array_reduce($directories, fn (array $files, string $fileOrDirectory): array => array_merge($files, array_values(array_map(
+                static fn (SplFileInfo $file): ObjectDescription|null => ObjectDescriptionFactory::make($file->getPathname()),
+                is_dir($fileOrDirectory) ? iterator_to_array(Finder::create()->files()->in($fileOrDirectory)->name('*.php')) : [new SplFileInfo($fileOrDirectory)],
             ))), [])));
 
             $objects = [...$objects, ...$this->cachedObjectsPerPrefix[$prefix] = $objectsPerPrefix];
@@ -148,7 +148,17 @@ final class ObjectsRepository
             if (str_starts_with($name, $prefix)) {
                 $directories = array_values(array_filter($directories, static fn (string $directory): bool => is_dir($directory)));
 
-                $directoriesByNamespace[$prefix] = $directories;
+                $prefix = str_replace('\\', DIRECTORY_SEPARATOR, ltrim(str_replace($prefix, '', $name), '\\'));
+
+                $directoriesByNamespace[$name] = [...$directoriesByNamespace[$name] ?? [], ...array_values(array_filter(array_map(static function (string $directory) use ($prefix): string {
+                    $fileOrDirectory = $directory.DIRECTORY_SEPARATOR.$prefix;
+
+                    if (is_dir($fileOrDirectory)) {
+                        return $fileOrDirectory;
+                    }
+
+                    return $fileOrDirectory.'.php';
+                }, $directories), static fn (string $fileOrDirectory): bool => is_dir($fileOrDirectory) || file_exists($fileOrDirectory)))];
             }
         }
 
