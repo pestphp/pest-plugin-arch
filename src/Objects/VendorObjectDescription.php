@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Pest\Arch;
+namespace Pest\Arch\Objects;
 
 use Error;
 use PHPUnit\Architecture\Elements\ObjectDescription;

@@ -5,6 +5,7 @@ use Pest\Arch\ValueObjects\Target;
 test('base')
     ->expect('Pest\Arch')
     ->toOnlyDependOn([
+        'test',
         'Pest',
         'PHPUnit\Architecture',
         'Symfony\Component\Finder\Finder',
@@ -28,6 +29,7 @@ test('expectations')
 test('repositories')->expect('Pest\Arch\Repositories')->toOnlyDependOn([
     'Pest\TestSuite',
     'Pest\Arch\Factories',
+    'Pest\Arch\Objects',
     'Pest\Arch\ValueObjects',
     'PHPUnit\Architecture',
     'Symfony\Component\Finder\Finder',

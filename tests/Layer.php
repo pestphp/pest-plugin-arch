@@ -3,6 +3,8 @@
 use Pest\Arch\Exceptions\LayerNotFound;
 use Tests\Fixtures\Enums\Color;
 use Tests\Fixtures\Enums\ColorThatDependsOnColor;
+use Tests\Fixtures\Misc\DependOnGlobalFunctions;
+use Tests\Fixtures\Misc\DependOnNamespacedFunctions;
 use Tests\Fixtures\Misc\DependsOnVendor;
 use Tests\Fixtures\NonExistingClass;
 use Tests\Fixtures\Support\Collection;
@@ -30,4 +32,14 @@ it('does support enums', function () {
         ->and(ColorThatDependsOnColor::class)->toDependOn([Color::class]);
 });
 
-todo('supports global functions');
+it('supports global functions', function () {
+    expect(DependOnGlobalFunctions::class)
+        ->toDependOn('my_request_global_function')
+        ->not->toDependOn('Tests\Fixtures\my_request_namespaced_function');
+});
+
+it('supports namespaced functions', function () {
+    expect(DependOnNamespacedFunctions::class)
+        ->toDependOn('Tests\Fixtures\my_request_namespaced_function')
+        ->not->toDependOn('my_request_global_function');
+});

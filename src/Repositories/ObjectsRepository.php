@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Pest\Arch\Repositories;
 
 use Pest\Arch\Factories\ObjectDescriptionFactory;
+use Pest\Arch\Objects\FunctionDescription;
 use Pest\TestSuite;
 use PHPUnit\Architecture\Elements\ObjectDescription;
 use SplFileInfo;
@@ -64,10 +65,16 @@ final class ObjectsRepository
     /**
      * Gets the objects of the given namespace.
      *
-     * @return array<int, ObjectDescription>
+     * @return array<int, ObjectDescription|FunctionDescription>
      */
     public function allByNamespace(string $namespace): array
     {
+        if (function_exists($namespace)) {
+            return [
+                FunctionDescription::make($namespace),
+            ];
+        }
+
         $directoriesByNamespace = $this->directoriesByNamespace($namespace);
 
         if ($directoriesByNamespace === []) {
@@ -86,12 +93,23 @@ final class ObjectsRepository
             $objectsPerPrefix = array_values(array_filter(array_reduce($directories, fn (array $files, $directory): array => array_merge($files, array_values(array_map(
                 static fn (SplFileInfo $file): ObjectDescription|null => ObjectDescriptionFactory::make($file->getRealPath()),
                 iterator_to_array(Finder::create()->files()->in($directory)->name('*.php')),
-            ))), [])));  // phpstan-ignore-line
+            ))), [])));
 
             $objects = [...$objects, ...$this->cachedObjectsPerPrefix[$prefix] = $objectsPerPrefix];
         }
 
-        return $objects;
+        $functions = array_map(
+            static function ($functionName): string {
+                $reflection = new \ReflectionFunction($functionName);
+
+                return $reflection->getName();
+            },
+            array_values(array_filter(get_defined_functions()['user'], fn (string $function): bool => str_starts_with(
+                mb_strtolower($function), mb_strtolower($namespace)
+            )))
+        );
+
+        return [...$objects, ...array_map(static fn (string $function): FunctionDescription => FunctionDescription::make($function), $functions)];
     }
 
     /**

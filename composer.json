@@ -30,11 +30,15 @@
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/"
-        }
+        },
+        "files": [
+            "tests/Fixtures/Functions.php",
+            "tests/Fixtures/NamespacedFunctions.php"
+        ]
     },
     "require-dev": {
         "pestphp/pest-dev-tools": "^2.1.0",
-        "phpstan/phpstan": "^1.9.3"
+        "phpstan/phpstan": "^1.9.4"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,

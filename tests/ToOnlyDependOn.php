@@ -12,7 +12,11 @@ it('passes', function () {
         ->not->toOnlyDependOn(Fooable::class)
         ->and(Fooable::class)->toOnlyDependOn([])
         ->and('Tests\Fixtures\Models')->toOnlyDependOn('Tests\Fixtures\Contracts\Models')
-        ->and('Tests\Fixtures')->toOnlyDependOn(['Tests\Fixtures', Str::class]);
+        ->and('Tests\Fixtures')->toOnlyDependOn([
+            'Tests\Fixtures',
+            Str::class,
+            'my_request_global_function',
+        ]);
 });
 
 it('fail 1', function () {

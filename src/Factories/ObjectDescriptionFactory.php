@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Pest\Arch\Factories;
 
-use Pest\Arch\VendorObjectDescription;
+use Pest\Arch\Objects\VendorObjectDescription;
 use PHPUnit\Architecture\Asserts\Dependencies\Elements\ObjectUses;
 use PHPUnit\Architecture\Elements\ObjectDescription;
 use PHPUnit\Architecture\Services\ServiceContainer;
@@ -27,8 +27,6 @@ final class ObjectDescriptionFactory
     public static function make(string $filename): ObjectDescription|null
     {
         self::ensureServiceContainerIsInitialized();
-
-        $object = null;
 
         $isFromVendor = str_contains($filename, '/vendor/');
 
@@ -109,6 +107,7 @@ final class ObjectDescriptionFactory
             enum_exists($use) => true,
             class_exists($use) => true,
             interface_exists($use) => true,
+            function_exists($use) => true,
             // ...
 
             default => false,
