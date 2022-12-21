@@ -69,7 +69,7 @@ final class ObjectsRepository
      */
     public function allByNamespace(string $namespace): array
     {
-        if (function_exists($namespace)) {
+        if (function_exists($namespace) && (new ReflectionFunction($namespace))->getName() === $namespace) {
             return [
                 FunctionDescription::make($namespace),
             ];
