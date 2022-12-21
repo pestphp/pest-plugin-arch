@@ -38,6 +38,16 @@ it('supports global functions', function () {
         ->not->toDependOn('Tests\Fixtures\my_request_namespaced_function');
 });
 
+it('may ignore global functions', function () {
+    expect(DependOnGlobalFunctions::class)
+        ->not
+        ->toDependOn('my_request_global_function')
+        ->ignoringGlobalFunctions();
+})->throws(
+    LayerNotFound::class,
+    "Layer 'my_request_global_function' does not exist.",
+);
+
 it('supports namespaced functions', function () {
     expect(DependOnNamespacedFunctions::class)
         ->toDependOn('Tests\Fixtures\my_request_namespaced_function')

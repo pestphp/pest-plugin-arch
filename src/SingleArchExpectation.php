@@ -6,6 +6,7 @@ namespace Pest\Arch;
 
 use Closure;
 use Pest\Arch\Options\LayerOptions;
+use Pest\Arch\Support\UserDefinedFunctions;
 use Pest\Expectation;
 use PHPUnit\Framework\ExpectationFailedException;
 
@@ -40,18 +41,23 @@ final class SingleArchExpectation implements Contracts\ArchExpectation
     }
 
     /**
-     * Ignores the given layers.
-     *
-     * @param  array<int, string>|string  $targetsOrDependencies
-     * @return $this
+     * {@inheritDoc}
      */
     public function ignoring(array|string $targetsOrDependencies): self
     {
         $targetsOrDependencies = is_array($targetsOrDependencies) ? $targetsOrDependencies : [$targetsOrDependencies];
 
-        $this->ignoring = [...$this->ignoring, ...$targetsOrDependencies];
+        $this->ignoring = array_unique([...$this->ignoring, ...$targetsOrDependencies]);
 
         return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function ignoringGlobalFunctions(): self
+    {
+        return $this->ignoring(UserDefinedFunctions::get());
     }
 
     /**

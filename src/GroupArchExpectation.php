@@ -37,6 +37,20 @@ final class GroupArchExpectation implements Contracts\ArchExpectation
     }
 
     /**
+     * Ignores the global "user defined" functions.
+     *
+     * @return $this
+     */
+    public function ignoringGlobalFunctions(): self
+    {
+        foreach ($this->expectations as $expectation) {
+            $expectation->ignoringGlobalFunctions();
+        }
+
+        return $this;
+    }
+
+    /**
      * Creates a new Arch Expectation instance from the given expectations.
      *
      * @param  array<int, SingleArchExpectation>  $expectations

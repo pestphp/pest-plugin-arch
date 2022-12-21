@@ -31,6 +31,7 @@ test('repositories')->expect('Pest\Arch\Repositories')->toOnlyDependOn([
     'Pest\Arch\Factories',
     'Pest\Arch\Objects',
     'Pest\Arch\ValueObjects',
+    'Pest\Arch\Support',
     'PHPUnit\Architecture',
     'Symfony\Component\Finder\Finder',
 ]);

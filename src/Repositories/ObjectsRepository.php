@@ -6,6 +6,7 @@ namespace Pest\Arch\Repositories;
 
 use Pest\Arch\Factories\ObjectDescriptionFactory;
 use Pest\Arch\Objects\FunctionDescription;
+use Pest\Arch\Support\UserDefinedFunctions;
 use Pest\TestSuite;
 use PHPUnit\Architecture\Elements\ObjectDescription;
 use ReflectionFunction;
@@ -21,13 +22,6 @@ final class ObjectsRepository
      * Creates a new Objects Repository singleton instance, if any.
      */
     private static ?self $instance = null;
-
-    /**
-     * Holds a static list of defined "user" functions.
-     *
-     * @var array<int, string>|null
-     */
-    private static array|null $definedUserFunctions = null;
 
     /**
      * Holds the Objects Descriptions of the previous resolved prefixes.
@@ -119,17 +113,13 @@ final class ObjectsRepository
      */
     private function functionsByNamespace(string $name): array
     {
-        if (self::$definedUserFunctions === null) {
-            self::$definedUserFunctions = get_defined_functions()['user'];
-        }
-
         return array_map(
             static function ($functionName): string {
                 $reflection = new ReflectionFunction($functionName);
 
                 return $reflection->getName();
             },
-            array_values(array_filter(self::$definedUserFunctions, fn (string $function): bool => str_starts_with(
+            array_values(array_filter(UserDefinedFunctions::get(), fn (string $function): bool => str_starts_with(
                 mb_strtolower($function), mb_strtolower($name)
             )))
         );
