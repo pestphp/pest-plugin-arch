@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Pest\Arch\Options;
 
-use Pest\Arch\ArchExpectation;
+use Pest\Arch\SingleArchExpectation;
 
 /**
  * @internal
@@ -22,7 +22,7 @@ final class LayerOptions
     /**
      * Creates a new Layer Options instance, with the context of the given expectation.
      */
-    public static function fromExpectation(ArchExpectation $expectation): self
+    public static function fromExpectation(SingleArchExpectation $expectation): self
     {
         $exclude = array_merge(
             test()->arch()->ignore, // @phpstan-ignore-line

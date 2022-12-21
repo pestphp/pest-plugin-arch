@@ -32,6 +32,17 @@ it('fails 2', function () {
     "Expecting 'Tests\Fixtures\Models' not to depend on 'Tests\Fixtures\Contracts\Models'."
 );
 
+it('fails 3', function () {
+    expect(ProductController::class)
+        ->not->toDependOn([
+            'Tests\Fixtures\Controllers',
+            'Tests\Fixtures\Models',
+        ]);
+})->throws(
+    ExpectationFailedException::class,
+    "Expecting 'Tests\Fixtures\Controllers\Pr...roller' not to depend on 'Tests\Fixtures\Models'."
+);
+
 test('ignoring', function () {
     expect(Product::class)
         ->not()
@@ -50,7 +61,7 @@ test('ignoring opposite message', function () {
         ->ignoring('Tests\Fixtures\Enums');
 })->throws(
     ExpectationFailedException::class,
-    "Expecting 'Tests\Fixtures\Models\Product' not to depend on 'Tests\Fixtures\Contracts\Mode...ooable' 'Tests\Fixtures\Contracts\Mode...orable'"
+    "Expecting 'Tests\Fixtures\Models\Product' not to depend on 'Tests\Fixtures\Contracts\Mode...orable'."
 );
 
 test('ignoring as layer does not exist', function () {

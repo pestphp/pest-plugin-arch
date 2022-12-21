@@ -9,7 +9,6 @@ use Tests\Fixtures\Models\Product;
 
 it('passes', function () {
     expect(Product::class)->toOnlyDependOn([Fooable::class, Storable::class])
-        ->not->toOnlyDependOn(Fooable::class)
         ->and(Fooable::class)->toOnlyDependOn([])
         ->and('Tests\Fixtures\Models')->toOnlyDependOn('Tests\Fixtures\Contracts\Models')
         ->and('Tests\Fixtures')->toOnlyDependOn([
@@ -41,20 +40,8 @@ test('ignoring', function () {
         ->ignoring('Tests\Fixtures\Contracts')
         ->toOnlyDependOn(Storable::class)
         ->ignoring(Fooable::class)
-        ->toOnlyDependOn([Storable::class, Fooable::class])
-        ->not->toOnlyDependOn([])
-        ->ignoring(Fooable::class);
+        ->toOnlyDependOn([Storable::class, Fooable::class]);
 });
-
-test('ignoring opposite message', function () {
-    expect(Product::class)
-        ->not
-        ->toOnlyDependOn([Fooable::class, Storable::class])
-        ->ignoring('Tests\Fixtures\Enums');
-})->throws(
-    ExpectationFailedException::class,
-    "Expecting 'Tests\Fixtures\Models\Product' not to only depend on 'Tests\Fixtures\Contracts\Mode...ooable' 'Tests\Fixtures\Contracts\Mode...orable'."
-);
 
 test('ignoring as layer does not exist', function () {
     expect(Product::class)

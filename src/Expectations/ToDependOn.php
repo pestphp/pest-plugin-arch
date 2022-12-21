@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Pest\Arch\Expectations;
 
-use Pest\Arch\ArchExpectation;
 use Pest\Arch\Blueprint;
 use Pest\Arch\Collections\Dependencies;
 use Pest\Arch\Options\LayerOptions;
+use Pest\Arch\SingleArchExpectation;
 use Pest\Arch\ValueObjects\Target;
 use Pest\Expectation;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -18,11 +18,11 @@ use PHPUnit\Framework\ExpectationFailedException;
 final class ToDependOn
 {
     /**
-     * @param  Expectation<mixed>  $expectation
+     * Creates an "ToDependOn" expectation.
+     *
      * @param  array<int, string>|string  $targets
-     * @return ArchExpectation<string>
      */
-    public static function make(Expectation $expectation, array|string $targets): ArchExpectation
+    public static function make(Expectation $expectation, array|string $targets): SingleArchExpectation
     {
         assert(is_string($expectation->value));
         /** @var Expectation<string> $expectation */
@@ -31,7 +31,7 @@ final class ToDependOn
             Dependencies::fromExpectationInput($targets),
         );
 
-        return ArchExpectation::fromExpectation(
+        return SingleArchExpectation::fromExpectation(
             $expectation,
             static function (LayerOptions $options) use ($blueprint): void {
                 $blueprint->expectToDependOn(

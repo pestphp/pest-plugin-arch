@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Pest\Arch\Expectations;
 
-use Pest\Arch\ArchExpectation;
+use Pest\Arch\Contracts\ArchExpectation;
 use Pest\Expectation;
 
 /**
@@ -13,8 +13,7 @@ use Pest\Expectation;
 final class ToDependOnNothing
 {
     /**
-     * @param  Expectation<mixed>  $expectation
-     * @return ArchExpectation<string>
+     * Creates an "ToDependOnNothing" expectation.
      */
     public static function make(Expectation $expectation): ArchExpectation
     {

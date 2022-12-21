@@ -11,12 +11,8 @@ use PHPUnit\Framework\ExpectationFailedException;
 
 /**
  * @internal
- *
- * @template TValue
- *
- * @mixin Expectation<TValue>
  */
-final class ArchExpectation
+final class SingleArchExpectation implements Contracts\ArchExpectation
 {
     /**
      * The "opposite" callback.
@@ -80,7 +76,7 @@ final class ArchExpectation
      * Proxies the call to the expectation.
      *
      * @param  array<array-key, mixed>  $arguments
-     * @return Expectation<TValue>
+     * @return Expectation<string>
      */
     public function __call(string $name, array $arguments): mixed
     {
@@ -92,7 +88,7 @@ final class ArchExpectation
     /**
      * Proxies the call to the expectation.
      *
-     * @return Expectation<TValue>
+     * @return Expectation<string>
      */
     public function __get(string $name): mixed
     {
@@ -112,7 +108,7 @@ final class ArchExpectation
     /**
      * Ensures the lazy expectation is verified.
      */
-    private function ensureLazyExpectationIsVerified(): void
+    public function ensureLazyExpectationIsVerified(): void
     {
         if (! $this->lazyExpectationVerified) {
             $this->lazyExpectationVerified = true;
