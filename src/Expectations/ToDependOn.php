@@ -20,15 +20,15 @@ final class ToDependOn
     /**
      * Creates an "ToDependOn" expectation.
      *
-     * @param  array<int, string>|string  $targets
+     * @param  array<int, string>|string  $dependencies
      */
-    public static function make(Expectation $expectation, array|string $targets): SingleArchExpectation
+    public static function make(Expectation $expectation, array|string $dependencies): SingleArchExpectation
     {
         assert(is_string($expectation->value));
         /** @var Expectation<string> $expectation */
         $blueprint = Blueprint::make(
             Target::fromExpectation($expectation),
-            Dependencies::fromExpectationInput($targets),
+            Dependencies::fromExpectationInput($dependencies),
         );
 
         return SingleArchExpectation::fromExpectation(

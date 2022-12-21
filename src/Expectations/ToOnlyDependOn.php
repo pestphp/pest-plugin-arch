@@ -20,15 +20,15 @@ final class ToOnlyDependOn
     /**
      * Creates an "ToOnlyDependOn" expectation.
      *
-     * @param  array<int, string>|string  $targets
+     * @param  array<int, string>|string  $dependencies
      */
-    public static function make(Expectation $expectation, array|string $targets): SingleArchExpectation
+    public static function make(Expectation $expectation, array|string $dependencies): SingleArchExpectation
     {
         assert(is_string($expectation->value));
         /** @var Expectation<string> $expectation */
         $blueprint = Blueprint::make(
             Target::fromExpectation($expectation),
-            Dependencies::fromExpectationInput($targets),
+            Dependencies::fromExpectationInput($dependencies),
         );
 
         return SingleArchExpectation::fromExpectation($expectation, static function (LayerOptions $options) use ($blueprint): void {
@@ -37,7 +37,6 @@ final class ToOnlyDependOn
                     $dependOn === ''
                         ? "Expecting '{$value}' to depend on nothing. However, it depends on '{$notAllowedDependOn}'."
                         : "Expecting '{$value}' to only depend on '{$dependOn}'. However, it also depends on '{$notAllowedDependOn}'.",
-
                 ));
         });
     }
