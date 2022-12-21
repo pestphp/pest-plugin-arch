@@ -9,7 +9,7 @@ test('base')
         'Pest',
         'PHPUnit\Architecture',
         'Symfony\Component\Finder\Finder',
-    ])->ignoring('PHPUnit\Framework');
+    ])->ignoring(['PHPUnit\Framework', 'Composer']);
 
 test('collections')
     ->expect('Pest\Arch\Collections')

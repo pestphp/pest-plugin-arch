@@ -6,8 +6,8 @@ namespace Pest\Arch\Repositories;
 
 use Pest\Arch\Factories\ObjectDescriptionFactory;
 use Pest\Arch\Objects\FunctionDescription;
+use Pest\Arch\Support\Composer;
 use Pest\Arch\Support\UserDefinedFunctions;
-use Pest\TestSuite;
 use PHPUnit\Architecture\Elements\ObjectDescription;
 use ReflectionFunction;
 use SplFileInfo;
@@ -49,14 +49,12 @@ final class ObjectsRepository
             return self::$instance;
         }
 
-        $autoload = TestSuite::getInstance()->rootPath.DIRECTORY_SEPARATOR.'vendor'.DIRECTORY_SEPARATOR.'autoload.php';
-        $autoloadLines = explode("\n", (string) file_get_contents($autoload));
-        $loader = eval($autoloadLines[count($autoloadLines) - 2]); // @phpstan-ignore-line
+        $loader = Composer::loader();
 
         $namespaces = [];
 
-        foreach ((fn () => $loader->getPrefixesPsr4())->call($loader) as $namespacePrefix => $directories) {
-            $namespace = rtrim((string) $namespacePrefix, '\\');
+        foreach ((fn (): array => $loader->getPrefixesPsr4())->call($loader) as $namespacePrefix => $directories) {
+            $namespace = rtrim($namespacePrefix, '\\');
 
             $namespaces[$namespace] = $directories;
         }
