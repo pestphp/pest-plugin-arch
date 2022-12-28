@@ -118,8 +118,6 @@ final class Blueprint
      */
     public function expectToOnlyBeUsedOn(LayerOptions $options, callable $failure): void
     {
-        Composer::userNamespaces();
-
         foreach (Composer::userNamespaces() as $namespace) {
             $namespaceLayer = $this->layerFactory->make($options, $namespace);
 

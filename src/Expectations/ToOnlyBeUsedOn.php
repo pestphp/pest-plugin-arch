@@ -26,6 +26,7 @@ final class ToOnlyBeUsedOn
     public static function make(Expectation $expectation, array|string $targets): GroupArchExpectation
     {
         assert(is_string($expectation->value));
+
         /** @var Expectation<string> $expectation */
         $blueprint = Blueprint::make(
             Target::fromExpectation($expectation),

@@ -23,7 +23,7 @@ it('fails 1', function () {
     expect(Product::class)->toDependOn('Tests\Fixtures\Controllers');
 })->throws(
     ExpectationFailedException::class,
-    "Expecting 'Tests\Fixtures\Models\Product' to depend on 'Tests\Fixtures\Controllers\ProductController'."
+    "Expecting 'Tests\Fixtures\Models\Product' to depend on 'Tests\Fixtures\Controllers\ProductController,Tests\Fixtures\Controllers\UserController'"
 );
 
 it('fails 2', function () {
