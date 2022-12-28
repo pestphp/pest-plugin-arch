@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Pest\Arch;
 
+use Closure;
 use Pest\Expectation;
 
 /**
@@ -14,9 +15,9 @@ final class GroupArchExpectation implements Contracts\ArchExpectation
     /**
      * Creates a new Arch Expectation instance.
      *
-     * @param  array<int, SingleArchExpectation>  $expectations
+     * @param  array<int, GroupArchExpectation|SingleArchExpectation>  $expectations
      */
-    private function __construct(private readonly array $expectations)
+    private function __construct(private readonly Expectation $original, private readonly array $expectations)
     {
         // ...
     }
@@ -51,13 +52,25 @@ final class GroupArchExpectation implements Contracts\ArchExpectation
     }
 
     /**
+     * Sets the "opposite" callback.
+     */
+    public function opposite(Closure $callback): self
+    {
+        foreach ($this->expectations as $expectation) {
+            $expectation->opposite($callback);
+        }
+
+        return $this;
+    }
+
+    /**
      * Creates a new Arch Expectation instance from the given expectations.
      *
-     * @param  array<int, SingleArchExpectation>  $expectations
+     * @param  array<int, GroupArchExpectation|SingleArchExpectation>  $expectations
      */
-    public static function fromExpectations(array $expectations): self
+    public static function fromExpectations(Expectation $original, array $expectations): self
     {
-        return new self($expectations);
+        return new self($original, $expectations);
     }
 
     /**
@@ -70,7 +83,7 @@ final class GroupArchExpectation implements Contracts\ArchExpectation
     {
         $this->ensureLazyExpectationIsVerified();
 
-        return $this->expectations[0]->$name(...$arguments); // @phpstan-ignore-line
+        return $this->original->$name(...$arguments); // @phpstan-ignore-line
     }
 
     /**
@@ -82,7 +95,7 @@ final class GroupArchExpectation implements Contracts\ArchExpectation
     {
         $this->ensureLazyExpectationIsVerified();
 
-        return $this->expectations[0]->$name; // @phpstan-ignore-line
+        return $this->original->$name; // @phpstan-ignore-line
     }
 
     /**

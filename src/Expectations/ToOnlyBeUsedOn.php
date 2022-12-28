@@ -6,6 +6,7 @@ namespace Pest\Arch\Expectations;
 
 use Pest\Arch\Blueprint;
 use Pest\Arch\Collections\Dependencies;
+use Pest\Arch\GroupArchExpectation;
 use Pest\Arch\Options\LayerOptions;
 use Pest\Arch\SingleArchExpectation;
 use Pest\Arch\ValueObjects\Target;
@@ -22,7 +23,7 @@ final class ToOnlyBeUsedOn
      *
      * @param  array<int, string>|string  $targets
      */
-    public static function make(Expectation $expectation, array|string $targets): SingleArchExpectation
+    public static function make(Expectation $expectation, array|string $targets): GroupArchExpectation
     {
         assert(is_string($expectation->value));
         /** @var Expectation<string> $expectation */
@@ -31,16 +32,19 @@ final class ToOnlyBeUsedOn
             Dependencies::fromExpectationInput($targets),
         );
 
-        return SingleArchExpectation::fromExpectation(
-            $expectation,
-            static function (LayerOptions $options) use ($blueprint): void {
-                $blueprint->expectToOnlyBeUsedOn(
-                    $options,
-                    static fn (string $value, string $notAllowedDependOn) => throw new ExpectationFailedException(
-                        "Expecting '{$value}' not to be used on '{$notAllowedDependOn}'.",
-                    ),
-                );
-            },
-        );
+        return GroupArchExpectation::fromExpectations($expectation, [
+            SingleArchExpectation::fromExpectation(
+                $expectation,
+                static function (LayerOptions $options) use ($blueprint): void {
+                    $blueprint->expectToOnlyBeUsedOn(
+                        $options,
+                        static fn (string $value, string $notAllowedDependOn) => throw new ExpectationFailedException(
+                            "Expecting '{$value}' not to be used on '{$notAllowedDependOn}'.",
+                        ),
+                    );
+                },
+            ),
+            ToBeUsedOn::make($expectation, $targets),
+        ]);
     }
 }

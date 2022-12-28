@@ -5,6 +5,7 @@ use Pest\Arch\ValueObjects\Target;
 test('base')
     ->expect('Pest\Arch')
     ->toOnlyDependOn([
+        'expect',
         'test',
         'Pest',
         'PHPUnit\Architecture',
@@ -22,6 +23,7 @@ test('exceptions')
 test('expectations')
     ->expect('Pest\Arch\Expectations')
     ->toOnlyDependOn([
+        'expect',
         'Pest\Expectation',
         'Pest\Arch',
     ])->ignoring('PHPUnit\Framework');

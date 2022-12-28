@@ -2,6 +2,7 @@
 
 use Pest\Arch\Exceptions\LayerNotFound;
 use PHPUnit\Framework\ExpectationFailedException;
+use Tests\Fixtures\Contracts\Models\Barable;
 use Tests\Fixtures\Contracts\Models\Fooable;
 use Tests\Fixtures\Contracts\Models\Storable;
 use Tests\Fixtures\Controllers\ProductController;
@@ -47,7 +48,7 @@ test('ignoring', function () {
     expect(Product::class)
         ->not()
         ->toDependOn('Tests\Fixtures\Contracts')
-        ->ignoring([Fooable::class, Storable::class])
+        ->ignoring([Fooable::class, Storable::class, Barable::class])
         ->toDependOn('Tests\Fixtures\Contracts')
         ->toDependOn([Fooable::class, Storable::class])
         ->toDependOn([Fooable::class])
