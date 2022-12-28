@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Pest\Arch\Expectations;
 
 use Pest\Arch\GroupArchExpectation;
+use Pest\Arch\SingleArchExpectation;
 use Pest\Expectation;
 
 /**
@@ -25,7 +26,7 @@ final class ToBeUsedOn
         return GroupArchExpectation::fromExpectations(
             $expectation,
             array_map(
-                static fn ($target): \Pest\Arch\SingleArchExpectation => ToDependOn::make(expect($target), $expectation->value), $targets
+                static fn ($target): SingleArchExpectation => ToDependOn::make(expect($target), $expectation->value), $targets
             )
         );
     }
