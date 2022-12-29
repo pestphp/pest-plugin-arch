@@ -21,16 +21,24 @@ final class Composer
     {
         $namespaces = [];
 
-        $vendorDirectory = TestSuite::getInstance()->rootPath.DIRECTORY_SEPARATOR.'vendor';
+        $rootPath = TestSuite::getInstance()->rootPath.DIRECTORY_SEPARATOR;
 
         foreach (self::loader()->getPrefixesPsr4() as $namespace => $directories) {
             foreach ($directories as $directory) {
-                if (realpath($directory) === false) {
+                $directory = realpath($directory);
+
+                if ($directory === false) {
                     continue;
                 }
-                if (str_starts_with(realpath($directory), $vendorDirectory)) {
+
+                if (str_starts_with($directory, $rootPath.'vendor')) {
                     continue;
                 }
+
+                if (str_starts_with($directory, $rootPath.'tests') && ! str_ends_with($directory, 'pest-plugin-arch/tests')) {
+                    continue;
+                }
+
                 $namespaces[] = rtrim($namespace, '\\');
             }
         }
