@@ -17,7 +17,7 @@ it('fails 1', function () {
         ->toBeUsedOn(['Tests\Fixtures\Models', 'Tests\Fixtures\Controllers']);
 })->throws(
     ExpectationFailedException::class,
-    "Expecting 'Tests\Fixtures\Controllers\ProductController,Tests\Fixtures\Controllers\UserController' to depend on 'Tests\Fixtures\Contracts\Models\Fooable'."
+    "Expecting 'Tests\Fixtures\Controllers\ProductController,Tests\Fixtures\Controllers\UserController' to use 'Tests\Fixtures\Contracts\Models\Fooable'."
 );
 
 it('fails 2', function () {
@@ -42,7 +42,7 @@ test('ignoring opposite message', function () {
         ->ignoring(ProductController::class);
 })->throws(
     ExpectationFailedException::class,
-    "Expecting 'Tests\Fixtures\Controllers\UserController' to depend on 'Tests\Fixtures\Contracts\Models\Fooable'."
+    "Expecting 'Tests\Fixtures\Controllers\UserController' to use 'Tests\Fixtures\Contracts\Models\Fooable'."
 );
 
 test('ignoring as layer does not exist', function () {

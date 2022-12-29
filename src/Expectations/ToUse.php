@@ -15,10 +15,10 @@ use PHPUnit\Framework\ExpectationFailedException;
 /**
  * @internal
  */
-final class ToOnlyDependOn
+final class ToUse
 {
     /**
-     * Creates an "ToOnlyDependOn" expectation.
+     * Creates an "ToUse" expectation.
      *
      * @param  array<int, string>|string  $dependencies
      */
@@ -31,13 +31,16 @@ final class ToOnlyDependOn
             Dependencies::fromExpectationInput($dependencies),
         );
 
-        return SingleArchExpectation::fromExpectation($expectation, static function (LayerOptions $options) use ($blueprint): void {
-            $blueprint->expectToOnlyDependOn(
-                $options, static fn (string $value, string $dependOn, string $notAllowedDependOn) => throw new ExpectationFailedException(
-                    $dependOn === ''
-                        ? "Expecting '{$value}' to depend on nothing. However, it depends on '{$notAllowedDependOn}'."
-                        : "Expecting '{$value}' to only depend on '{$dependOn}'. However, it also depends on '{$notAllowedDependOn}'.",
-                ));
-        });
+        return SingleArchExpectation::fromExpectation(
+            $expectation,
+            static function (LayerOptions $options) use ($blueprint): void {
+                $blueprint->expectToUse(
+                    $options,
+                    static fn (string $value, string $dependOn) => throw new ExpectationFailedException(
+                        "Expecting '{$value}' to use '{$dependOn}'.",
+                    ),
+                );
+            },
+        );
     }
 }

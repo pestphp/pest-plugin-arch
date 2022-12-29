@@ -10,11 +10,11 @@ use Tests\Fixtures\NonExistingClass;
 use Tests\Fixtures\Support\Collection;
 
 it('does not include native classes', function () {
-    expect(Collection::class)->toDependOnNothing();
+    expect(Collection::class)->toUseNothing();
 });
 
 it('does not allow empty layers', function () {
-    expect(NonExistingClass::class)->toDependOnNothing();
+    expect(NonExistingClass::class)->toUseNothing();
 })->throws(
     LayerNotFound::class,
     "Layer 'Tests\Fixtures\NonExistingClass' does not exist.",
@@ -22,26 +22,26 @@ it('does not allow empty layers', function () {
 
 it('it does include vendor dependencies', function () {
     expect(DependsOnVendor::class)
-        ->toOnlyDependOn('Pest')
-        ->toOnlyDependOn('Pest\Support')
-        ->toOnlyDependOn('Pest\Support\Str');
+        ->toOnlyUse('Pest')
+        ->toOnlyUse('Pest\Support')
+        ->toOnlyUse('Pest\Support\Str');
 });
 
 it('does support enums', function () {
-    expect(Color::class)->toDependOnNothing()
-        ->and(ColorThatDependsOnColor::class)->toDependOn([Color::class]);
+    expect(Color::class)->toUseNothing()
+        ->and(ColorThatDependsOnColor::class)->toUse([Color::class]);
 });
 
 it('supports global functions', function () {
     expect(DependOnGlobalFunctions::class)
-        ->toDependOn('my_request_global_function')
-        ->not->toDependOn('Tests\Fixtures\my_request_namespaced_function');
+        ->toUse('my_request_global_function')
+        ->not->toUse('Tests\Fixtures\my_request_namespaced_function');
 });
 
 it('may ignore global functions', function () {
     expect(DependOnGlobalFunctions::class)
         ->not
-        ->toDependOn('my_request_global_function')
+        ->toUse('my_request_global_function')
         ->ignoringGlobalFunctions();
 })->throws(
     LayerNotFound::class,
@@ -50,6 +50,6 @@ it('may ignore global functions', function () {
 
 it('supports namespaced functions', function () {
     expect(DependOnNamespacedFunctions::class)
-        ->toDependOn('Tests\Fixtures\my_request_namespaced_function')
-        ->not->toDependOn('my_request_global_function');
+        ->toUse('Tests\Fixtures\my_request_namespaced_function')
+        ->not->toUse('my_request_global_function');
 });

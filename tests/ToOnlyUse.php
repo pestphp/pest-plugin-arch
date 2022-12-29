@@ -9,10 +9,10 @@ use Tests\Fixtures\Contracts\Models\Storable;
 use Tests\Fixtures\Models\Product;
 
 it('passes', function () {
-    expect(Product::class)->toOnlyDependOn([Fooable::class, Storable::class, Barable::class])
-        ->and(Fooable::class)->toOnlyDependOn([])
-        ->and('Tests\Fixtures\Models')->toOnlyDependOn('Tests\Fixtures\Contracts\Models')
-        ->and('Tests\Fixtures')->toOnlyDependOn([
+    expect(Product::class)->toOnlyUse([Fooable::class, Storable::class, Barable::class])
+        ->and(Fooable::class)->toOnlyUse([])
+        ->and('Tests\Fixtures\Models')->toOnlyUse('Tests\Fixtures\Contracts\Models')
+        ->and('Tests\Fixtures')->toOnlyUse([
             'Tests\Fixtures',
             Str::class,
             'my_request_global_function',
@@ -20,33 +20,33 @@ it('passes', function () {
 });
 
 it('fail 1', function () {
-    expect(Product::class)->toOnlyDependOn([
+    expect(Product::class)->toOnlyUse([
         Fooable::class,
     ]);
 })->throws(
     ExpectationFailedException::class,
-    "Expecting 'Tests\Fixtures\Models\Product' to only depend on 'Tests\Fixtures\Contracts\Models\Fooable'. However, it also depends on 'Tests\Fixtures\Contracts\Models\Barable'."
+    "Expecting 'Tests\Fixtures\Models\Product' to only use 'Tests\Fixtures\Contracts\Models\Fooable'. However, it also uses 'Tests\Fixtures\Contracts\Models\Barable'."
 );
 
 it('fail 2', function () {
-    expect(Product::class)->toOnlyDependOn([]);
+    expect(Product::class)->toOnlyUse([]);
 })->throws(
     ExpectationFailedException::class,
-    "Expecting 'Tests\Fixtures\Models\Product' to depend on nothing. However, it depends on 'Tests\Fixtures\Contracts\Models\Barable'."
+    "Expecting 'Tests\Fixtures\Models\Product' to use nothing. However, it uses 'Tests\Fixtures\Contracts\Models\Barable'."
 );
 
 test('ignoring', function () {
     expect(Product::class)
-        ->toOnlyDependOn([])
+        ->toOnlyUse([])
         ->ignoring('Tests\Fixtures\Contracts')
-        ->toOnlyDependOn([Storable::class])
+        ->toOnlyUse([Storable::class])
         ->ignoring([Fooable::class, Barable::class])
-        ->toOnlyDependOn([Storable::class, Fooable::class, Barable::class]);
+        ->toOnlyUse([Storable::class, Fooable::class, Barable::class]);
 });
 
 test('ignoring as layer does not exist', function () {
     expect(Product::class)
-        ->toOnlyDependOn('Tests\Fixtures\Contracts\Models')
+        ->toOnlyUse('Tests\Fixtures\Contracts\Models')
         ->ignoring('Tests\Fixtures\Contracts\Models');
 })->throws(
     LayerNotFound::class,

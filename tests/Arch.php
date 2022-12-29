@@ -4,7 +4,7 @@ use Pest\Arch\ValueObjects\Target;
 
 test('base')
     ->expect('Pest\Arch')
-    ->toOnlyDependOn([
+    ->toOnlyUse([
         'expect',
         'test',
         'Pest',
@@ -14,21 +14,21 @@ test('base')
 
 test('collections')
     ->expect('Pest\Arch\Collections')
-    ->toOnlyDependOn('Pest\Arch\ValueObjects');
+    ->toOnlyUse('Pest\Arch\ValueObjects');
 
 test('exceptions')
     ->expect('Pest\Arch\Exceptions')
-    ->toDependOnNothing();
+    ->toUseNothing();
 
 test('expectations')
     ->expect('Pest\Arch\Expectations')
-    ->toOnlyDependOn([
+    ->toOnlyUse([
         'expect',
         'Pest\Expectation',
         'Pest\Arch',
     ])->ignoring('PHPUnit\Framework');
 
-test('repositories')->expect('Pest\Arch\Repositories')->toOnlyDependOn([
+test('repositories')->expect('Pest\Arch\Repositories')->toOnlyUse([
     'Pest\TestSuite',
     'Pest\Arch\Factories',
     'Pest\Arch\Objects',
@@ -40,7 +40,7 @@ test('repositories')->expect('Pest\Arch\Repositories')->toOnlyDependOn([
 
 test('value objects')
     ->expect('Pest\Arch\ValueObjects')
-        ->toDependOnNothing()
+        ->toUseNothing()
         ->ignoring(Target::class)
         ->and(Target::class)
-        ->toOnlyDependOn(\Pest\Expectation::class);
+        ->toOnlyUse(\Pest\Expectation::class);

@@ -21,7 +21,7 @@ it('fail 1', function () {
     expect(Storable::class)->toOnlyBeUsedOn([
         User::class,
     ]);
-})->throws(ExpectationFailedException::class, "Expecting 'Tests\Fixtures\Models\User' to depend on 'Tests\Fixtures\Contracts\Models\Storable'.");
+})->throws(ExpectationFailedException::class, "Expecting 'Tests\Fixtures\Models\User' to use 'Tests\Fixtures\Contracts\Models\Storable'.");
 
 it('fail 2', function () {
     expect(Barable::class)->toOnlyBeUsedOn([

@@ -26,7 +26,7 @@ final class ToBeUsedOn
         return GroupArchExpectation::fromExpectations(
             $expectation,
             array_map(
-                static fn ($target): SingleArchExpectation => ToDependOn::make(expect($target), $expectation->value), $targets
+                static fn ($target): SingleArchExpectation => ToUse::make(expect($target), $expectation->value), $targets
             )
         );
     }

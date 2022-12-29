@@ -7,25 +7,25 @@ use Tests\Fixtures\Contracts\Models\Fooable;
 use Tests\Fixtures\Models\Product;
 
 it('passes', function () {
-    expect('Tests\Fixtures\Contracts')->toDependOnNothing();
+    expect('Tests\Fixtures\Contracts')->toUseNothing();
 });
 
 it('fails 1', function () {
-    expect(Product::class)->toDependOnNothing();
+    expect(Product::class)->toUseNothing();
 })->throws(
     ExpectationFailedException::class,
-    "Expecting 'Tests\Fixtures\Models\Product' to depend on nothing. However, it depends on 'Tests\Fixtures\Contracts\Models\Barable'."
+    "Expecting 'Tests\Fixtures\Models\Product' to use nothing. However, it uses 'Tests\Fixtures\Contracts\Models\Barable'."
 );
 
 test('ignoring', function () {
     expect(Product::class)
-        ->toDependOnNothing()
+        ->toUseNothing()
         ->ignoring('Tests\Fixtures\Contracts');
 });
 
 test('ignoring as layer does not exist', function () {
     expect(Fooable::class)
-        ->toDependOnNothing()
+        ->toUseNothing()
         ->ignoring(Fooable::class);
 })->throws(
     LayerNotFound::class,
@@ -35,5 +35,5 @@ test('ignoring as layer does not exist', function () {
 test('opposite', function () {
     expect(Product::class)
         ->not
-        ->toDependOnNothing();
-})->throws(InvalidExpectation::class, 'Expectation [not->toDependOnNothing] is not valid.');
+        ->toUseNothing();
+})->throws(InvalidExpectation::class, 'Expectation [not->toUseNothing] is not valid.');

@@ -46,11 +46,11 @@ final class Blueprint
     }
 
     /**
-     * Expects the Blueprint targets to depend on the Blueprint dependencies.
+     * Expects the target to use the given dependencies.
      *
      * @param  callable(string, string): mixed  $failure
      */
-    public function expectToDependOn(LayerOptions $options, callable $failure): void
+    public function expectToUse(LayerOptions $options, callable $failure): void
     {
         $targetLayer = $this->layerFactory->make($options, $this->target->value);
 
@@ -68,11 +68,11 @@ final class Blueprint
     }
 
     /**
-     * Expects the Blueprint targets to only depend on the Blueprint dependencies.
+     * Expects the target to "only" use the given dependencies.
      *
      * @param  callable(string, string, string): mixed  $failure
      */
-    public function expectToOnlyDependOn(LayerOptions $options, callable $failure): void
+    public function expectToOnlyUse(LayerOptions $options, callable $failure): void
     {
         $allowedUses = array_merge(
             ...array_map(fn (Layer $layer): array => array_map(
@@ -112,7 +112,7 @@ final class Blueprint
     }
 
     /**
-     * Expects the Blueprint targets to only depend on the Blueprint dependencies.
+     * Expects the dependency to "only" be used by given targets.
      *
      * @param  callable(string, string): mixed  $failure
      */
