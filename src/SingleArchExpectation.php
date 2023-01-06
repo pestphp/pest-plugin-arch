@@ -8,6 +8,7 @@ use Closure;
 use Pest\Arch\Options\LayerOptions;
 use Pest\Arch\Support\UserDefinedFunctions;
 use Pest\Expectation;
+use Pest\TestSuite;
 use PHPUnit\Framework\ExpectationFailedException;
 
 /**
@@ -116,7 +117,7 @@ final class SingleArchExpectation implements Contracts\ArchExpectation
      */
     public function ensureLazyExpectationIsVerified(): void
     {
-        if (! $this->lazyExpectationVerified) {
+        if (TestSuite::getInstance()->test !== null && ! $this->lazyExpectationVerified) {
             $this->lazyExpectationVerified = true;
 
             $e = null;
