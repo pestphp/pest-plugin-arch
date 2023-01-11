@@ -63,7 +63,7 @@ final class Blueprint
                 continue;
             }
 
-            $failure($targetLayer->getName(), $dependencyLayer->getName());
+            $failure($this->target->value, $dependency->value);
         }
     }
 

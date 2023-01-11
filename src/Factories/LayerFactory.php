@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Pest\Arch\Factories;
 
-use Pest\Arch\Exceptions\LayerNotFound;
 use Pest\Arch\Objects\VendorObjectDescription;
 use Pest\Arch\Options\LayerOptions;
 use Pest\Arch\Repositories\ObjectsRepository;
@@ -28,8 +27,6 @@ final class LayerFactory
 
     /**
      * Make a new Layer using the given name.
-     *
-     * @throws LayerNotFound
      */
     public function make(LayerOptions $options, string $name): Layer
     {
@@ -66,10 +63,6 @@ final class LayerFactory
 
         foreach ($options->exclude as $exclude) {
             $layer = $layer->excludeByNameStart($exclude);
-        }
-
-        if ($layer->getIterator()->count() === 0) { // @phpstan-ignore-line
-            throw new LayerNotFound($name);
         }
 
         return $layer;

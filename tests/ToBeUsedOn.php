@@ -1,6 +1,5 @@
 <?php
 
-use Pest\Arch\Exceptions\LayerNotFound;
 use PHPUnit\Framework\ExpectationFailedException;
 use Tests\Fixtures\Contracts\Models\Fooable;
 use Tests\Fixtures\Controllers\ProductController;
@@ -17,7 +16,7 @@ it('fails 1', function () {
         ->toBeUsedOn(['Tests\Fixtures\Models', 'Tests\Fixtures\Controllers']);
 })->throws(
     ExpectationFailedException::class,
-    "Expecting 'Tests\Fixtures\Controllers\ProductController,Tests\Fixtures\Controllers\UserController' to use 'Tests\Fixtures\Contracts\Models\Fooable'."
+    "Expecting 'Tests\Fixtures\Controllers' to use 'Tests\Fixtures\Contracts\Models\Fooable'."
 );
 
 it('fails 2', function () {
@@ -42,15 +41,12 @@ test('ignoring opposite message', function () {
         ->ignoring(ProductController::class);
 })->throws(
     ExpectationFailedException::class,
-    "Expecting 'Tests\Fixtures\Controllers\UserController' to use 'Tests\Fixtures\Contracts\Models\Fooable'."
+    "Expecting 'Tests\Fixtures\Controllers' to use 'Tests\Fixtures\Contracts\Models\Fooable'."
 );
 
-test('ignoring as layer does not exist', function () {
+test('layer may not exist', function () {
     expect(Fooable::class)
         ->not
         ->toBeUsedOn(['Tests\Fixtures\Controllers'])
         ->ignoring([UserController::class, ProductController::class]);
-})->throws(
-    LayerNotFound::class,
-    "Layer 'Tests\Fixtures\Controllers' does not exist.",
-);
+});

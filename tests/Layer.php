@@ -1,6 +1,5 @@
 <?php
 
-use Pest\Arch\Exceptions\LayerNotFound;
 use Tests\Fixtures\Enums\Color;
 use Tests\Fixtures\Enums\ColorThatDependsOnColor;
 use Tests\Fixtures\Misc\DependOnGlobalFunctions;
@@ -13,12 +12,9 @@ it('does not include native classes', function () {
     expect(Collection::class)->toUseNothing();
 });
 
-it('does not allow empty layers', function () {
-    expect(NonExistingClass::class)->toUseNothing();
-})->throws(
-    LayerNotFound::class,
-    "Layer 'Tests\Fixtures\NonExistingClass' does not exist.",
-);
+it('does allow empty layers', function ($layer) {
+    expect($layer)->toUseNothing();
+})->with(['App\Repositories', NonExistingClass::class, 'ray']);
 
 it('it does include vendor dependencies', function () {
     expect(DependsOnVendor::class)
@@ -43,10 +39,7 @@ it('may ignore global functions', function () {
         ->not
         ->toUse('my_request_global_function')
         ->ignoringGlobalFunctions();
-})->throws(
-    LayerNotFound::class,
-    "Layer 'my_request_global_function' does not exist.",
-);
+});
 
 it('supports namespaced functions', function () {
     expect(DependOnNamespacedFunctions::class)

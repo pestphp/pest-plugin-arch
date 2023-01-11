@@ -1,6 +1,5 @@
 <?php
 
-use Pest\Arch\Exceptions\LayerNotFound;
 use Pest\Support\Str;
 use PHPUnit\Framework\ExpectationFailedException;
 use Tests\Fixtures\Contracts\Models\Barable;
@@ -44,11 +43,8 @@ test('ignoring', function () {
         ->toOnlyUse([Storable::class, Fooable::class, Barable::class]);
 });
 
-test('ignoring as layer does not exist', function () {
+test('layer may not exist', function () {
     expect(Product::class)
         ->toOnlyUse('Tests\Fixtures\Contracts\Models')
         ->ignoring('Tests\Fixtures\Contracts\Models');
-})->throws(
-    LayerNotFound::class,
-    "Layer 'Tests\Fixtures\Contracts\Models' does not exist",
-);
+});

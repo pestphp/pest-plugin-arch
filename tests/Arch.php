@@ -2,6 +2,10 @@
 
 use Pest\Arch\ValueObjects\Target;
 
+test('globals')
+    ->expect('Pest\Arch')
+    ->not->toUse(['dd', 'dump', 'ray']);
+
 test('base')
     ->expect('Pest\Arch')
     ->toOnlyUse([

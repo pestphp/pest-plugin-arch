@@ -1,6 +1,5 @@
 <?php
 
-use Pest\Arch\Exceptions\LayerNotFound;
 use Pest\Exceptions\InvalidExpectation;
 use PHPUnit\Framework\ExpectationFailedException;
 use Tests\Fixtures\Contracts\Models\Fooable;
@@ -32,14 +31,11 @@ test('ignoring', function () {
     expect(Fooable::class)->toBeUsedOnNothing()->ignoring('Tests\Fixtures\Models');
 });
 
-test('ignoring as layer does not exist', function () {
+test('layer may not exist', function () {
     expect(Fooable::class)
         ->toBeUsedOnNothing()
         ->ignoring(Fooable::class);
-})->throws(
-    LayerNotFound::class,
-    "Layer 'Tests\Fixtures\Contracts\Models\Fooable' does not exist",
-);
+});
 
 test('opposite', function () {
     expect(Fooable::class)

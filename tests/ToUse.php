@@ -1,6 +1,5 @@
 <?php
 
-use Pest\Arch\Exceptions\LayerNotFound;
 use PHPUnit\Framework\ExpectationFailedException;
 use Tests\Fixtures\Contracts\Models\Barable;
 use Tests\Fixtures\Contracts\Models\Fooable;
@@ -23,7 +22,7 @@ it('fails 1', function () {
     expect(Product::class)->toUse('Tests\Fixtures\Controllers');
 })->throws(
     ExpectationFailedException::class,
-    "Expecting 'Tests\Fixtures\Models\Product' to use 'Tests\Fixtures\Controllers\ProductController,Tests\Fixtures\Controllers\UserController'"
+    "Expecting 'Tests\Fixtures\Models\Product' to use 'Tests\Fixtures\Controllers'"
 );
 
 it('fails 2', function () {
@@ -65,11 +64,11 @@ test('ignoring opposite message', function () {
     "Expecting 'Tests\Fixtures\Models\Product' not to use 'Tests\Fixtures\Contracts\Mode...orable'."
 );
 
-test('ignoring as layer does not exist', function () {
+test('layer may not exist', function () {
     expect(Product::class)
         ->toUse(Fooable::class)
         ->ignoring(Fooable::class);
 })->throws(
-    LayerNotFound::class,
-    "Layer 'Tests\Fixtures\Contracts\Models\Fooable' does not exist",
+    ExpectationFailedException::class,
+    "Expecting 'Tests\Fixtures\Models\Product' to use 'Tests\Fixtures\Contracts\Models\Fooable'."
 );
