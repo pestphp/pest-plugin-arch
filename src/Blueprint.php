@@ -10,7 +10,7 @@ use Pest\Arch\Options\LayerOptions;
 use Pest\Arch\Repositories\ObjectsRepository;
 use Pest\Arch\Support\Composer;
 use Pest\Arch\ValueObjects\Dependency;
-use Pest\Arch\ValueObjects\Target;
+use Pest\Arch\ValueObjects\Targets;
 use PHPUnit\Architecture\ArchitectureAsserts;
 use PHPUnit\Architecture\Elements\Layer\Layer;
 use PHPUnit\Architecture\Elements\ObjectDescription;
@@ -29,7 +29,7 @@ final class Blueprint
      */
     public function __construct(
         private readonly LayerFactory $layerFactory,
-        private readonly Target $target,
+        private readonly Targets $target,
         private readonly Dependencies $dependencies
     ) {
         // ...
@@ -38,7 +38,7 @@ final class Blueprint
     /**
      * Creates a new Blueprint instance.
      */
-    public static function make(Target $target, Dependencies $dependencies): self
+    public static function make(Targets $target, Dependencies $dependencies): self
     {
         $factory = new LayerFactory(ObjectsRepository::getInstance());
 
@@ -52,18 +52,20 @@ final class Blueprint
      */
     public function expectToUse(LayerOptions $options, callable $failure): void
     {
-        $targetLayer = $this->layerFactory->make($options, $this->target->value);
+        foreach ($this->target->value as $targetValue) {
+            $targetLayer = $this->layerFactory->make($options, $targetValue);
 
-        foreach ($this->dependencies->values as $dependency) {
-            $dependencyLayer = $this->layerFactory->make($options, $dependency->value);
+            foreach ($this->dependencies->values as $dependency) {
+                $dependencyLayer = $this->layerFactory->make($options, $dependency->value);
 
-            try {
-                $this->assertDoesNotDependOn($targetLayer, $dependencyLayer);
-            } catch (ExpectationFailedException) {
-                continue;
+                try {
+                    $this->assertDoesNotDependOn($targetLayer, $dependencyLayer);
+                } catch (ExpectationFailedException) {
+                    continue;
+                }
+
+                $failure($targetValue, $dependency->value);
             }
-
-            $failure($this->target->value, $dependency->value);
         }
     }
 
@@ -74,40 +76,41 @@ final class Blueprint
      */
     public function expectToOnlyUse(LayerOptions $options, callable $failure): void
     {
-        $allowedUses = array_merge(
-            ...array_map(fn (Layer $layer): array => array_map(
-                // @phpstan-ignore-next-line
-                fn (ObjectDescription $object): string => $object->name, iterator_to_array($layer->getIterator())), array_map(
-                    fn (string $dependency): Layer => $this->layerFactory->make($options, $dependency),
-                    [$this->target->value, ...array_map(
-                        fn (Dependency $dependency): string => $dependency->value, $this->dependencies->values
-                    )],
-                )
-            )
-        );
+        foreach ($this->target->value as $targetValue) {
+            $allowedUses = array_merge(
+                ...array_map(fn (Layer $layer): array => array_map(
+                    // @phpstan-ignore-next-line
+                    fn (ObjectDescription $object): string => $object->name, iterator_to_array($layer->getIterator())), array_map(
+                        fn (string $dependency): Layer => $this->layerFactory->make($options, $dependency),
+                        [$targetValue, ...array_map(
+                            fn (Dependency $dependency): string => $dependency->value, $this->dependencies->values
+                        )],
+                    )
+                ));
 
-        $notDeclaredDependencies = [];
+            $notDeclaredDependencies = [];
 
-        foreach ($this->layerFactory->make($options, $this->target->value) as $object) {
-            assert($object instanceof ObjectDescription);
+            foreach ($this->layerFactory->make($options, $targetValue) as $object) {
+                assert($object instanceof ObjectDescription);
 
-            foreach ($object->uses as $use) {
-                assert(is_string($use));
+                foreach ($object->uses as $use) {
+                    assert(is_string($use));
 
-                if (! in_array($use, $allowedUses, true)) {
-                    $notDeclaredDependencies[] = $use;
+                    if (! in_array($use, $allowedUses, true)) {
+                        $notDeclaredDependencies[] = $use;
+                    }
                 }
             }
-        }
 
-        try {
-            if ($notDeclaredDependencies !== []) {
-                throw new ExpectationFailedException($notDeclaredDependencies[0]);
+            try {
+                if ($notDeclaredDependencies !== []) {
+                    throw new ExpectationFailedException($notDeclaredDependencies[0]);
+                }
+
+                self::assertTrue(true);
+            } catch (ExpectationFailedException $e) {
+                $failure($targetValue, $this->dependencies->__toString(), $e->getMessage());
             }
-
-            self::assertTrue(true);
-        } catch (ExpectationFailedException $e) {
-            $failure($this->target->value, $this->dependencies->__toString(), $e->getMessage());
         }
     }
 
@@ -125,17 +128,17 @@ final class Blueprint
                 $namespaceLayer = $namespaceLayer->excludeByNameStart($dependency->value);
             }
 
-            $dependencyLayer = $this->layerFactory->make($options, $this->target->value);
+            foreach ($this->target->value as $targetValue) {
+                $dependencyLayer = $this->layerFactory->make($options, $targetValue);
 
-            $objects = $this->getObjectsWhichUsesOnLayerAFromLayerB($namespaceLayer, $dependencyLayer);
+                try {
+                    $this->assertDoesNotDependOn($namespaceLayer, $dependencyLayer);
+                } catch (ExpectationFailedException) {
+                    $objects = $this->getObjectsWhichUsesOnLayerAFromLayerB($namespaceLayer, $dependencyLayer);
+                    [$dependOn, $target] = explode(' <- ', $objects[0]);
 
-            try {
-                $this->assertDoesNotDependOn($namespaceLayer, $dependencyLayer);
-            } catch (ExpectationFailedException) {
-                $objects = $this->getObjectsWhichUsesOnLayerAFromLayerB($namespaceLayer, $dependencyLayer);
-                [$dependOn, $target] = explode(' <- ', $objects[0]);
-
-                $failure($target, $dependOn);
+                    $failure($target, $dependOn);
+                }
             }
         }
     }

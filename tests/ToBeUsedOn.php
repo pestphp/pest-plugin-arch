@@ -6,13 +6,15 @@ use Tests\Fixtures\Controllers\ProductController;
 use Tests\Fixtures\Controllers\UserController;
 
 it('passes', function () {
-    expect(Fooable::class)
-        ->toBeUsedOn('Tests\Fixtures\Models')
-        ->not->toBeUsedOn('Tests\Fixtures\Controllers');
+    foreach ([Fooable::class, [Fooable::class]] as $value) {
+        expect($value)
+            ->toBeUsedOn('Tests\Fixtures\Models')
+            ->not->toBeUsedOn('Tests\Fixtures\Controllers');
+    }
 });
 
 it('fails 1', function () {
-    expect(Fooable::class)
+    expect([Fooable::class])
         ->toBeUsedOn(['Tests\Fixtures\Models', 'Tests\Fixtures\Controllers']);
 })->throws(
     ExpectationFailedException::class,

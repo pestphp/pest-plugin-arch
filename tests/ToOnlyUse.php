@@ -8,18 +8,21 @@ use Tests\Fixtures\Contracts\Models\Storable;
 use Tests\Fixtures\Models\Product;
 
 it('passes', function () {
-    expect(Product::class)->toOnlyUse([Fooable::class, Storable::class, Barable::class])
-        ->and(Fooable::class)->toOnlyUse([])
-        ->and('Tests\Fixtures\Models')->toOnlyUse('Tests\Fixtures\Contracts\Models')
-        ->and('Tests\Fixtures')->toOnlyUse([
-            'Tests\Fixtures',
-            Str::class,
-            'my_request_global_function',
-        ]);
+    foreach ([Product::class, [Product::class]] as $value) {
+        expect($value)
+            ->toOnlyUse([Fooable::class, Storable::class, Barable::class])
+            ->and(Fooable::class)->toOnlyUse([])
+            ->and('Tests\Fixtures\Models')->toOnlyUse('Tests\Fixtures\Contracts\Models')
+            ->and('Tests\Fixtures')->toOnlyUse([
+                'Tests\Fixtures',
+                Str::class,
+                'my_request_global_function',
+            ]);
+    }
 });
 
 it('fail 1', function () {
-    expect(Product::class)->toOnlyUse([
+    expect([Product::class])->toOnlyUse([
         Fooable::class,
     ]);
 })->throws(

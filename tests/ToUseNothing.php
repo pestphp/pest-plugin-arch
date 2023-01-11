@@ -6,11 +6,13 @@ use Tests\Fixtures\Contracts\Models\Fooable;
 use Tests\Fixtures\Models\Product;
 
 it('passes', function () {
-    expect('Tests\Fixtures\Contracts')->toUseNothing();
+    foreach (['Tests\Fixtures\Contracts', ['Tests\Fixtures\Contracts']] as $value) {
+        expect($value)->toUseNothing();
+    }
 });
 
 it('fails 1', function () {
-    expect(Product::class)->toUseNothing();
+    expect([Product::class])->toUseNothing();
 })->throws(
     ExpectationFailedException::class,
     "Expecting 'Tests\Fixtures\Models\Product' to use nothing. However, it uses 'Tests\Fixtures\Contracts\Models\Barable'."

@@ -6,11 +6,13 @@ use Tests\Fixtures\Contracts\Models\Fooable;
 use Tests\Fixtures\Support\Env;
 
 it('passes', function () {
-    expect(Env::class)->toBeUsedOnNothing();
+    foreach ([Env::class, [Env::class]] as $value) {
+        expect($value)->toBeUsedOnNothing();
+    }
 });
 
 it('passes as aliases', function () {
-    expect(Env::class)->not->toBeUsed();
+    expect([Env::class])->not->toBeUsed();
 });
 
 it('fails 1', function () {

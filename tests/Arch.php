@@ -1,6 +1,6 @@
 <?php
 
-use Pest\Arch\ValueObjects\Target;
+use Pest\Arch\ValueObjects\Targets;
 
 test('globals')
     ->expect('Pest\Arch')
@@ -45,6 +45,6 @@ test('repositories')->expect('Pest\Arch\Repositories')->toOnlyUse([
 test('value objects')
     ->expect('Pest\Arch\ValueObjects')
         ->toUseNothing()
-        ->ignoring(Target::class)
-        ->and(Target::class)
+        ->ignoring(Targets::class)
+        ->and(Targets::class)
         ->toOnlyUse(\Pest\Expectation::class);

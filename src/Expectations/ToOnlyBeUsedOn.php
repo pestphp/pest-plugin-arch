@@ -9,7 +9,7 @@ use Pest\Arch\Collections\Dependencies;
 use Pest\Arch\GroupArchExpectation;
 use Pest\Arch\Options\LayerOptions;
 use Pest\Arch\SingleArchExpectation;
-use Pest\Arch\ValueObjects\Target;
+use Pest\Arch\ValueObjects\Targets;
 use Pest\Expectation;
 use PHPUnit\Framework\ExpectationFailedException;
 
@@ -25,11 +25,11 @@ final class ToOnlyBeUsedOn
      */
     public static function make(Expectation $expectation, array|string $targets): GroupArchExpectation
     {
-        assert(is_string($expectation->value));
+        assert(is_string($expectation->value) || is_array($expectation->value));
 
-        /** @var Expectation<string> $expectation */
+        /** @var Expectation<array<int, string>|string> $expectation */
         $blueprint = Blueprint::make(
-            Target::fromExpectation($expectation),
+            Targets::fromExpectation($expectation),
             Dependencies::fromExpectationInput($targets),
         );
 

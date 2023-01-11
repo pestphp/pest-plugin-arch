@@ -8,18 +8,20 @@ use Tests\Fixtures\Controllers\ProductController;
 use Tests\Fixtures\Models\Product;
 
 it('passes', function () {
-    expect(ProductController::class)
-        ->toUse([Product::class])
-        ->and(Product::class)
-        ->not->toUse(ProductController::class)
-        ->and('Tests\Fixtures\Controllers')
-        ->toUse('Tests\Fixtures\Models')
-        ->and('Tests\Fixtures\Models')
-        ->not->toUse('Tests\Fixtures\Controllers');
+    foreach ([ProductController::class, [ProductController::class]] as $value) {
+        expect($value)
+            ->toUse([Product::class])
+            ->and(Product::class)
+            ->not->toUse(ProductController::class)
+            ->and('Tests\Fixtures\Controllers')
+            ->toUse('Tests\Fixtures\Models')
+            ->and('Tests\Fixtures\Models')
+            ->not->toUse('Tests\Fixtures\Controllers');
+    }
 });
 
 it('fails 1', function () {
-    expect(Product::class)->toUse('Tests\Fixtures\Controllers');
+    expect([Product::class])->toUse('Tests\Fixtures\Controllers');
 })->throws(
     ExpectationFailedException::class,
     "Expecting 'Tests\Fixtures\Models\Product' to use 'Tests\Fixtures\Controllers'"

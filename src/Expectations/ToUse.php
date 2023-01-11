@@ -8,7 +8,7 @@ use Pest\Arch\Blueprint;
 use Pest\Arch\Collections\Dependencies;
 use Pest\Arch\Options\LayerOptions;
 use Pest\Arch\SingleArchExpectation;
-use Pest\Arch\ValueObjects\Target;
+use Pest\Arch\ValueObjects\Targets;
 use Pest\Expectation;
 use PHPUnit\Framework\ExpectationFailedException;
 
@@ -24,10 +24,10 @@ final class ToUse
      */
     public static function make(Expectation $expectation, array|string $dependencies): SingleArchExpectation
     {
-        assert(is_string($expectation->value));
-        /** @var Expectation<string> $expectation */
+        assert(is_string($expectation->value) || is_array($expectation->value));
+        /** @var Expectation<array<int, string>|string> $expectation */
         $blueprint = Blueprint::make(
-            Target::fromExpectation($expectation),
+            Targets::fromExpectation($expectation),
             Dependencies::fromExpectationInput($dependencies),
         );
 

@@ -7,18 +7,20 @@ use Tests\Fixtures\Models\Product;
 use Tests\Fixtures\Models\User;
 
 it('passes', function () {
-    expect(Storable::class)->toOnlyBeUsedOn([
-        Product::class,
-    ])->toOnlyBeUsedOn([
-        'Tests',
-    ])->toOnlyBeUsedOn([
-        Product::class,
-        'Tests',
-    ]);
+    foreach ([Storable::class, [Storable::class]] as $value) {
+        expect($value)->toOnlyBeUsedOn([
+            Product::class,
+        ])->toOnlyBeUsedOn([
+            'Tests',
+        ])->toOnlyBeUsedOn([
+            Product::class,
+            'Tests',
+        ]);
+    }
 });
 
 it('fail 1', function () {
-    expect(Storable::class)->toOnlyBeUsedOn([
+    expect([Storable::class])->toOnlyBeUsedOn([
         User::class,
     ]);
 })->throws(ExpectationFailedException::class, "Expecting 'Tests\Fixtures\Models\User' to use 'Tests\Fixtures\Contracts\Models\Storable'.");

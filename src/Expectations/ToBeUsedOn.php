@@ -20,7 +20,8 @@ final class ToBeUsedOn
      */
     public static function make(Expectation $expectation, array|string $targets): GroupArchExpectation
     {
-        assert(is_string($expectation->value));
+        assert(is_string($expectation->value) || is_array($expectation->value));
+
         $targets = is_string($targets) ? [$targets] : $targets;
 
         return GroupArchExpectation::fromExpectations(
