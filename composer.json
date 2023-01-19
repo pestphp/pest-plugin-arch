@@ -37,8 +37,7 @@
         ]
     },
     "require-dev": {
-        "pestphp/pest-dev-tools": "^2.1.0",
-        "phpstan/phpstan": "^1.9.9"
+        "pestphp/pest-dev-tools": "^2.2.0"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
