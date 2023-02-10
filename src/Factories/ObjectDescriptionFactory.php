@@ -49,9 +49,7 @@ final class ObjectDescriptionFactory
             $object->uses = new ObjectUses(array_values(
                 array_filter(
                     iterator_to_array($object->uses->getIterator()),
-                    static fn (string $use): bool => self::isValidDependency($use)
-                        && self::isUserDefined($use)
-                        && ! self::isSameLayer($object, $use),
+                    static fn (string $use): bool => self::isUserDefined($use) && ! self::isSameLayer($object, $use),
                 )
             ));
         }
@@ -96,21 +94,5 @@ final class ObjectDescriptionFactory
             || $use === 'static'
             || $use === 'parent'
             || $object->reflectionClass->getNamespaceName() === $use;
-    }
-
-    /**
-     * Checks if the given use is a valid dependency.
-     */
-    private static function isValidDependency(string $use): bool
-    {
-        return match (true) {
-            enum_exists($use) => true,
-            class_exists($use) => true,
-            interface_exists($use) => true,
-            function_exists($use) => true,
-            // ...
-
-            default => false,
-        };
     }
 }
