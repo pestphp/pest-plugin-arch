@@ -7,7 +7,7 @@ use Tests\Fixtures\Support\Env;
 
 it('passes', function () {
     foreach ([Env::class, [Env::class]] as $value) {
-        expect($value)->toBeUsedOnNothing();
+        expect($value)->toBeUsedInNothing();
     }
 });
 
@@ -16,7 +16,7 @@ it('passes as aliases', function () {
 });
 
 it('fails 1', function () {
-    expect(Fooable::class)->toBeUsedOnNothing();
+    expect(Fooable::class)->toBeUsedInNothing();
 })->throws(
     ExpectationFailedException::class,
     "Expecting 'Tests\Fixtures\Contracts\Models\Fooable' not to be used on 'Tests\Fixtures\Models\Product'."
@@ -30,20 +30,20 @@ it('fails 2', function () {
 );
 
 test('ignoring', function () {
-    expect(Fooable::class)->toBeUsedOnNothing()->ignoring('Tests\Fixtures\Models');
+    expect(Fooable::class)->toBeUsedInNothing()->ignoring('Tests\Fixtures\Models');
 });
 
 test('layer may not exist', function () {
     expect(Fooable::class)
-        ->toBeUsedOnNothing()
+        ->toBeUsedInNothing()
         ->ignoring(Fooable::class);
 });
 
 test('opposite', function () {
     expect(Fooable::class)
         ->not
-        ->toBeUsedOnNothing();
-})->throws(InvalidExpectation::class, 'Expectation [not->toBeUsedOnNothing] is not valid.');
+        ->toBeUsedInNothing();
+})->throws(InvalidExpectation::class, 'Expectation [not->toBeUsedInNothing] is not valid.');
 
 test('opposite as aliases', function () {
     expect(Fooable::class)

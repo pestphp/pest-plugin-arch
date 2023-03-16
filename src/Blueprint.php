@@ -119,7 +119,7 @@ final class Blueprint
      *
      * @param  callable(string, string): mixed  $failure
      */
-    public function expectToOnlyBeUsedOn(LayerOptions $options, callable $failure): void
+    public function expectToOnlyBeUsedIn(LayerOptions $options, callable $failure): void
     {
         foreach (Composer::userNamespaces() as $namespace) {
             $namespaceLayer = $this->layerFactory->make($options, $namespace);

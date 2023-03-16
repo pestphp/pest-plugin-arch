@@ -29,7 +29,7 @@ final class Targets
      */
     public static function fromExpectation(Expectation $expectation): self
     {
-        assert(is_string($expectation->value) || is_array($expectation->value));
+        assert(is_string($expectation->value) || is_array($expectation->value)); // @phpstan-ignore-line
 
         return new self(is_string($expectation->value) ? [$expectation->value] : $expectation->value);
     }

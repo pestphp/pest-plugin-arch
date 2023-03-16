@@ -42,7 +42,7 @@ it('fails 3', function () {
         ]);
 })->throws(
     ExpectationFailedException::class,
-    "Expecting 'Tests\Fixtures\Controllers\Pr...roller' not to use 'Tests\Fixtures\Models'."
+    "Expecting 'Tests\Fixtures\Controllers\Pr…roller' not to use 'Tests\Fixtures\Models'."
 );
 
 test('ignoring', function () {
@@ -63,7 +63,7 @@ test('ignoring opposite message', function () {
         ->ignoring('Tests\Fixtures\Enums');
 })->throws(
     ExpectationFailedException::class,
-    "Expecting 'Tests\Fixtures\Models\Product' not to use 'Tests\Fixtures\Contracts\Mode...orable'."
+    "Expecting 'Tests\Fixtures\Models\Product' not to use 'Tests\Fixtures\Contracts\Mode…orable'."
 );
 
 test('layer may not exist', function () {

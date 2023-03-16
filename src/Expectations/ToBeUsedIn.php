@@ -11,10 +11,10 @@ use Pest\Expectation;
 /**
  * @internal
  */
-final class ToBeUsedOn
+final class ToBeUsedIn
 {
     /**
-     * Creates an "ToBeUsedOn" expectation.
+     * Creates an "ToBeUsedIn" expectation.
      *
      * @param  array<int, string>|string  $targets
      */

@@ -16,10 +16,10 @@ use PHPUnit\Framework\ExpectationFailedException;
 /**
  * @internal
  */
-final class ToOnlyBeUsedOn
+final class ToOnlyBeUsedIn
 {
     /**
-     * Creates an "ToDependOn" expectation.
+     * Creates an "ToOnlyBeUsedIn" expectation.
      *
      * @param  array<int, string>|string  $targets
      */
@@ -37,7 +37,7 @@ final class ToOnlyBeUsedOn
             SingleArchExpectation::fromExpectation(
                 $expectation,
                 static function (LayerOptions $options) use ($blueprint): void {
-                    $blueprint->expectToOnlyBeUsedOn(
+                    $blueprint->expectToOnlyBeUsedIn(
                         $options,
                         static fn (string $value, string $notAllowedDependOn) => throw new ExpectationFailedException(
                             "Expecting '{$value}' not to be used on '{$notAllowedDependOn}'.",
@@ -45,7 +45,7 @@ final class ToOnlyBeUsedOn
                     );
                 },
             ),
-            ToBeUsedOn::make($expectation, $targets),
+            ToBeUsedIn::make($expectation, $targets),
         ]);
     }
 }

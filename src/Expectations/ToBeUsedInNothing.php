@@ -10,13 +10,13 @@ use Pest\Expectation;
 /**
  * @internal
  */
-final class ToBeUsedOnNothing
+final class ToBeUsedInNothing
 {
     /**
-     * Creates an "ToDependOnNothing" expectation.
+     * Creates an "ToBeUsedInNothing" expectation.
      */
     public static function make(Expectation $expectation): ArchExpectation
     {
-        return ToOnlyBeUsedOn::make($expectation, []);
+        return ToOnlyBeUsedIn::make($expectation, []);
     }
 }
