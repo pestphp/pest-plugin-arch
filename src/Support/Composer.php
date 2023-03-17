@@ -35,7 +35,7 @@ final class Composer
                     continue;
                 }
 
-                if (str_starts_with($directory, $rootPath.'tests') && ! str_ends_with($directory, 'pest-plugin-arch/tests')) {
+                if (str_starts_with($directory, $rootPath.'tests') && ! str_ends_with($directory, 'pest-plugin-arch' . DIRECTORY_SEPARATOR . 'tests')) {
                     continue;
                 }
 
