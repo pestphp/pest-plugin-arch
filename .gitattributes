@@ -11,4 +11,5 @@ phpstan.neon             export-ignore
 phpunit.xml              export-ignore
 CHANGELOG.md             export-ignore
 CONTRIBUTING.md          export-ignore
-README.md                export-ignore
+/rector.php              export-ignore
+/README.md               export-ignore
