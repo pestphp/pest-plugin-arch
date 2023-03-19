@@ -46,3 +46,19 @@ it('supports namespaced functions', function () {
         ->toUse('Tests\Fixtures\my_request_namespaced_function')
         ->not->toUse('my_request_global_function');
 });
+
+it('dependency does not support paths', function () {
+    expect('tests/Fixtures/my_request_namespaced_function')
+        ->toUse('my_request_global_function');
+})->throws(
+    \PHPUnit\Framework\ExpectationFailedException::class,
+    "Expecting 'tests/Fixtures/my_request_namespaced_function' to be a class name or namespace, but it contains a path.",
+);
+
+it('targets does not support paths', function () {
+    expect('Tests\Fixtures\my_request_namespaced_function')
+        ->toUse('tests/Fixtures/my_request_namespaced_function');
+})->throws(
+    \PHPUnit\Framework\ExpectationFailedException::class,
+    "Expecting 'tests/Fixtures/my_request_namespaced_function' to be a class name or namespace, but it contains a path.",
+);
