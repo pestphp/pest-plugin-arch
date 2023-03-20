@@ -15,7 +15,6 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
-        "pestphp/pest": "^2.0.0",
         "pestphp/pest-plugin": "^2.0.0",
         "ta-tikoma/phpunit-architecture-test": "^0.7.1"
     },
@@ -37,6 +36,7 @@
         ]
     },
     "require-dev": {
+        "pestphp/pest": "^2.0.1",
         "pestphp/pest-dev-tools": "^2.5.0"
     },
     "minimum-stability": "dev",
