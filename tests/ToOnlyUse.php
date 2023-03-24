@@ -1,7 +1,6 @@
 <?php
 
 use Pest\Support\Str;
-use PHPUnit\Framework\ExpectationFailedException;
 use Tests\Fixtures\Contracts\Models\Barable;
 use Tests\Fixtures\Contracts\Models\Fooable;
 use Tests\Fixtures\Contracts\Models\Storable;
@@ -22,20 +21,20 @@ it('passes', function () {
 });
 
 it('fail 1', function () {
-    expect([Product::class])->toOnlyUse([
-        Fooable::class,
-    ]);
-})->throws(
-    ExpectationFailedException::class,
-    "Expecting 'Tests\Fixtures\Models\Product' to only use 'Tests\Fixtures\Contracts\Models\Fooable'. However, it also uses 'Tests\Fixtures\Contracts\Models\Barable'."
-);
+    expect(fn () => expect([Product::class])->toOnlyUse([Fooable::class]))->toThrowArchitectureViolation(
+        "Expecting 'Tests\Fixtures\Models\Product' to only use 'Tests\Fixtures\Contracts\Models\Fooable'. However, it also uses 'Tests\Fixtures\Contracts\Models\Barable'.",
+        'tests/Fixtures/Models/Product.php',
+        7
+    );
+});
 
 it('fail 2', function () {
-    expect(Product::class)->toOnlyUse([]);
-})->throws(
-    ExpectationFailedException::class,
-    "Expecting 'Tests\Fixtures\Models\Product' to use nothing. However, it uses 'Tests\Fixtures\Contracts\Models\Barable'."
-);
+    expect(fn () => expect(Product::class)->toOnlyUse([]))->toThrowArchitectureViolation(
+        "Expecting 'Tests\Fixtures\Models\Product' to use nothing. However, it uses 'Tests\Fixtures\Contracts\Models\Barable'.",
+        'tests/Fixtures/Models/Product.php',
+        7
+    );
+});
 
 test('ignoring', function () {
     expect(Product::class)

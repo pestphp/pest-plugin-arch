@@ -1,7 +1,6 @@
 <?php
 
 use Pest\Exceptions\InvalidExpectation;
-use PHPUnit\Framework\ExpectationFailedException;
 use Tests\Fixtures\Contracts\Models\Fooable;
 use Tests\Fixtures\Models\Product;
 
@@ -12,11 +11,13 @@ it('passes', function () {
 });
 
 it('fails 1', function () {
-    expect([Product::class])->toUseNothing();
-})->throws(
-    ExpectationFailedException::class,
-    "Expecting 'Tests\Fixtures\Models\Product' to use nothing. However, it uses 'Tests\Fixtures\Contracts\Models\Barable'."
-);
+    expect(fn () => expect([Product::class])->toUseNothing())
+        ->toThrowArchitectureViolation(
+            "Expecting 'Tests\Fixtures\Models\Product' to use nothing. However, it uses 'Tests\Fixtures\Contracts\Models\Barable'.",
+            'tests/Fixtures/Models/Product.php',
+            7
+        );
+});
 
 test('ignoring', function () {
     expect(Product::class)
