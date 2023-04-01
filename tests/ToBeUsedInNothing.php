@@ -1,7 +1,6 @@
 <?php
 
 use Pest\Exceptions\InvalidExpectation;
-use PHPUnit\Framework\ExpectationFailedException;
 use Tests\Fixtures\Contracts\Models\Fooable;
 use Tests\Fixtures\Support\Env;
 
@@ -16,18 +15,20 @@ it('passes as aliases', function () {
 });
 
 it('fails 1', function () {
-    expect(Fooable::class)->toBeUsedInNothing();
-})->throws(
-    ExpectationFailedException::class,
-    "Expecting 'Tests\Fixtures\Contracts\Models\Fooable' not to be used on 'Tests\Fixtures\Models\Product'."
-);
+    expect(fn () => expect(Fooable::class)->toBeUsedInNothing())->toThrowArchitectureViolation(
+        "Expecting 'Tests\Fixtures\Contracts\Models\Fooable' not to be used on 'Tests\Fixtures\Models\Product'.",
+        'tests/Fixtures/Models/Product.php',
+        8
+    );
+});
 
 it('fails 2', function () {
-    expect(Fooable::class)->not->toBeUsed();
-})->throws(
-    ExpectationFailedException::class,
-    "Expecting 'Tests\Fixtures\Contracts\Models\Fooable' not to be used on 'Tests\Fixtures\Models\Product'."
-);
+    expect(fn () => expect(Fooable::class)->not->toBeUsed())->toThrowArchitectureViolation(
+        "Expecting 'Tests\Fixtures\Contracts\Models\Fooable' not to be used on 'Tests\Fixtures\Models\Product'.",
+        'tests/Fixtures/Models/Product.php',
+        8
+    );
+});
 
 test('ignoring', function () {
     expect(Fooable::class)->toBeUsedInNothing()->ignoring('Tests\Fixtures\Models');

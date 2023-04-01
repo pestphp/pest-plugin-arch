@@ -6,9 +6,11 @@ namespace Pest\Arch\Expectations;
 
 use Pest\Arch\Blueprint;
 use Pest\Arch\Collections\Dependencies;
+use Pest\Arch\Exception\ArchitectureViolationException;
 use Pest\Arch\Options\LayerOptions;
 use Pest\Arch\SingleArchExpectation;
 use Pest\Arch\ValueObjects\Targets;
+use Pest\Arch\ValueObjects\ViolationReference;
 use Pest\Expectation;
 use PHPUnit\Framework\ExpectationFailedException;
 
@@ -33,11 +35,17 @@ final class ToOnlyUse
 
         return SingleArchExpectation::fromExpectation($expectation, static function (LayerOptions $options) use ($blueprint): void {
             $blueprint->expectToOnlyUse(
-                $options, static fn (string $value, string $dependOn, string $notAllowedDependOn) => throw new ExpectationFailedException(
-                    $dependOn === ''
+                $options, static function (string $value, string $dependOn, string $notAllowedDependOn, ViolationReference|null $reference): void {
+                    $message = $dependOn === ''
                         ? "Expecting '{$value}' to use nothing. However, it uses '{$notAllowedDependOn}'."
-                        : "Expecting '{$value}' to only use '{$dependOn}'. However, it also uses '{$notAllowedDependOn}'.",
-                ));
+                        : "Expecting '{$value}' to only use '{$dependOn}'. However, it also uses '{$notAllowedDependOn}'.";
+
+                    if ($reference === null) {
+                        throw new ExpectationFailedException($message);
+                    }
+
+                    throw new ArchitectureViolationException($message, $reference);
+                });
         });
     }
 }

@@ -16,6 +16,8 @@ test('base')
         'Pest',
         'PHPUnit\Architecture',
         'Symfony\Component\Finder\Finder',
+        'PhpParser\Node',
+        'Whoops\Exception\Frame',
     ])->ignoring(['PHPUnit\Framework', 'Composer']);
 
 test('collections')

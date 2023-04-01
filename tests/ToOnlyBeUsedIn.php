@@ -26,7 +26,9 @@ it('fail 1', function () {
 })->throws(ExpectationFailedException::class, "Expecting 'Tests\Fixtures\Models\User' to use 'Tests\Fixtures\Contracts\Models\Storable'.");
 
 it('fail 2', function () {
-    expect(Barable::class)->toOnlyBeUsedIn([
-        User::class,
-    ]);
-})->throws(ExpectationFailedException::class, "Tests\Fixtures\Contracts\Models\Barable' not to be used on 'Tests\Fixtures\Models\Product'.");
+    expect(fn () => expect(Barable::class)->toOnlyBeUsedIn([User::class]))->toThrowArchitectureViolation(
+        "Expecting 'Tests\Fixtures\Contracts\Models\Barable' not to be used on 'Tests\Fixtures\Models\Product'.",
+        'tests/Fixtures/Models/Product.php',
+        7
+    );
+});
