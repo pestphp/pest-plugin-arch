@@ -11,7 +11,7 @@ use Pest\Arch\Repositories\ObjectsRepository;
 use Pest\Arch\Support\Composer;
 use Pest\Arch\ValueObjects\Dependency;
 use Pest\Arch\ValueObjects\Targets;
-use Pest\Arch\ValueObjects\ViolationReference;
+use Pest\Arch\ValueObjects\Violation;
 use PhpParser\Node\Name;
 use PHPUnit\Architecture\ArchitectureAsserts;
 use PHPUnit\Architecture\Elements\Layer\Layer;
@@ -75,7 +75,7 @@ final class Blueprint
     /**
      * Expects the target to "only" use the given dependencies.
      *
-     * @param  callable(string, string, string, ViolationReference|null): mixed  $failure
+     * @param  callable(string, string, string, Violation|null): mixed  $failure
      */
     public function expectToOnlyUse(LayerOptions $options, callable $failure): void
     {
@@ -115,7 +115,7 @@ final class Blueprint
     /**
      * Expects the dependency to "only" be used by given targets.
      *
-     * @param  callable(string, string, ViolationReference|null): mixed  $failure
+     * @param  callable(string, string, Violation|null): mixed  $failure
      */
     public function expectToOnlyBeUsedIn(LayerOptions $options, callable $failure): void
     {
@@ -171,7 +171,7 @@ final class Blueprint
         Assert::assertEquals($expected, $actual, $message);
     }
 
-    private function getUsagePathAndLines(Layer $layer, string $objectName, string $target): null|ViolationReference
+    private function getUsagePathAndLines(Layer $layer, string $objectName, string $target): null|Violation
     {
         $dependOnObjects = array_filter(
             $layer->getIterator()->getArrayCopy(), //@phpstan-ignore-line
@@ -187,14 +187,20 @@ final class Blueprint
         );
 
         /** @var array<int, Name> $names */
-        /** @phpstan-ignore-next-line */
-        $names = array_values(array_filter($names, static fn (Name $name): bool => $name->toString() === $target));
+        $names = array_values(array_filter(
+            $names, static fn (Name $name): bool => $name->toString() === $target, // @phpstan-ignore-line
+        ));
 
-        if ($names !== []) {
-            /** @phpstan-ignore-next-line */
-            return new ViolationReference($dependOnObject->path, $names[0]->getAttribute('startLine'), $names[0]->getAttribute('endLine'));
+        if ($names === []) {
+            return null;
         }
 
-        return null;
+        $startLine = $names[0]->getAttribute('startLine');
+        assert(is_int($startLine));
+
+        $endLine = $names[0]->getAttribute('endLine');
+        assert(is_int($endLine));
+
+        return new Violation($dependOnObject->path, $startLine, $endLine);
     }
 }

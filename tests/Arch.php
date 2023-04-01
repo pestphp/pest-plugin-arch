@@ -2,7 +2,9 @@
 
 use Pest\Arch\ValueObjects\Dependency;
 use Pest\Arch\ValueObjects\Targets;
+use Pest\Arch\ValueObjects\Violation;
 use Pest\Expectation;
+use Whoops\Exception\Frame;
 
 test('globals')
     ->expect('Pest\Arch')
@@ -26,7 +28,10 @@ test('collections')
 
 test('exceptions')
     ->expect('Pest\Arch\Exceptions')
-    ->toUseNothing();
+    ->toOnlyUse([
+        Frame::class,
+        Violation::class,
+    ])->ignoring('PHPUnit\Framework');
 
 test('expectations')
     ->expect('Pest\Arch\Expectations')
