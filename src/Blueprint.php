@@ -201,6 +201,9 @@ final class Blueprint
         $endLine = $names[0]->getAttribute('endLine');
         assert(is_int($endLine));
 
-        return new Violation($dependOnObject->path, $startLine, $endLine);
+        $path = preg_replace('/[\/\\\\]vendor[\/\\\\]composer[\/\\\\]\.\.[\/\\\\]\.\./', '', $dependOnObject->path);
+        $path = str_replace('\vendor\composer\..\..', '', $path);
+
+        return new Violation($path, $startLine, $endLine);
     }
 }
