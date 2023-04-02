@@ -202,7 +202,8 @@ final class Blueprint
         assert(is_int($endLine));
 
         $path = preg_replace('/[\/\\\\]vendor[\/\\\\]composer[\/\\\\]\.\.[\/\\\\]\.\./', '', $dependOnObject->path);
-        $path = str_replace('\vendor\composer\..\..', '', $path);
+
+        assert($path !== null);
 
         return new Violation($path, $startLine, $endLine);
     }
