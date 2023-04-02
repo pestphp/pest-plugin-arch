@@ -15,7 +15,11 @@ expect()->extend('toThrowArchitectureViolation', function (string $message, stri
         $violationLine = $frame->getLine();
 
         expect($exception->getMessage())->toBe($message)
-            ->and($violationFile)->toEndWith($file)
-            ->and($violationLine)->toBe($line);
+            ->and($violationFile)
+            ->toEndWith($file)
+            ->not->toContain('/vendor/composer/../..')
+            ->not->toContain('\vendor\composer\..\..')
+            ->and($violationLine)
+            ->toBe($line);
     });
 });
