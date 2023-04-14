@@ -95,11 +95,8 @@ final class Blueprint
 
             $layer = $this->layerFactory->make($options, $targetValue);
             foreach ($layer as $object) {
-                assert($object instanceof ObjectDescription);
-
+                // @phpstan-ignore-next-line
                 foreach ($object->uses as $use) {
-                    assert(is_string($use));
-
                     if (! in_array($use, $allowedUses, true)) {
                         $failure($targetValue, $this->dependencies->__toString(), $use, $this->getUsagePathAndLines($layer, $targetValue, $use));
 

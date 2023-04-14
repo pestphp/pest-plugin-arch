@@ -117,7 +117,7 @@ final class SingleArchExpectation implements Contracts\ArchExpectation
      */
     public function ensureLazyExpectationIsVerified(): void
     {
-        if (TestSuite::getInstance()->test !== null && ! $this->lazyExpectationVerified) {
+        if (TestSuite::getInstance()->test instanceof \PHPUnit\Framework\TestCase && ! $this->lazyExpectationVerified) {
             $this->lazyExpectationVerified = true;
 
             $e = null;
@@ -127,7 +127,7 @@ final class SingleArchExpectation implements Contracts\ArchExpectation
             try {
                 ($this->lazyExpectation)($options);
             } catch (ExpectationFailedException $e) {
-                if ($this->opposite === null) {
+                if (! $this->opposite instanceof \Closure) {
                     throw $e;
                 }
             }

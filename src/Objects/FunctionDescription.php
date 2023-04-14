@@ -21,6 +21,7 @@ final class FunctionDescription extends ObjectDescription // @phpstan-ignore-lin
         $description = new self();
 
         $description->path = $path;
+        /** @var class-string<mixed> $path */
         $description->name = $path;
         $description->uses = new ObjectUses([]);
         // $description->reflectionClass = new ReflectionFunction($path);

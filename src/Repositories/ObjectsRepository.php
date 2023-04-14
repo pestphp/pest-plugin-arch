@@ -45,7 +45,7 @@ final class ObjectsRepository
      */
     public static function getInstance(): self
     {
-        if (self::$instance !== null) {
+        if (self::$instance instanceof \Pest\Arch\Repositories\ObjectsRepository) {
             return self::$instance;
         }
 
