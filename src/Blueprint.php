@@ -82,7 +82,6 @@ final class Blueprint
         foreach ($this->target->value as $targetValue) {
             $allowedUses = array_merge(
                 ...array_map(fn (Layer $layer): array => array_map(
-                    // @phpstan-ignore-next-line
                     fn (ObjectDescription $object): string => $object->name, iterator_to_array($layer->getIterator())), array_map(
                         fn (string $dependency): Layer => $this->layerFactory->make($options, $dependency),
                         [
@@ -95,7 +94,6 @@ final class Blueprint
 
             $layer = $this->layerFactory->make($options, $targetValue);
             foreach ($layer as $object) {
-                // @phpstan-ignore-next-line
                 foreach ($object->uses as $use) {
                     if (! in_array($use, $allowedUses, true)) {
                         $failure($targetValue, $this->dependencies->__toString(), $use, $this->getUsagePathAndLines($layer, $targetValue, $use));
