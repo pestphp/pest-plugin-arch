@@ -40,7 +40,7 @@ final class ToOnlyUse
                         ? "Expecting '{$value}' to use nothing. However, it uses '{$notAllowedDependOn}'."
                         : "Expecting '{$value}' to only use '{$dependOn}'. However, it also uses '{$notAllowedDependOn}'.";
 
-                    if (! $violation instanceof \Pest\Arch\ValueObjects\Violation) {
+                    if (! $violation instanceof Violation) {
                         throw new ExpectationFailedException($message);
                     }
 

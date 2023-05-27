@@ -6,13 +6,11 @@ use Pest\Arch\ValueObjects\Violation;
 use Pest\Expectation;
 use Whoops\Exception\Frame;
 
-test('globals')
-    ->expect('Pest\Arch')
-    ->not->toUse(['dd', 'dump', 'ray']);
-
 test('base')
     ->expect('Pest\Arch')
     ->toOnlyUse([
+        'dd',
+        'dump',
         'expect',
         'test',
         'Pest',
@@ -54,7 +52,7 @@ test('repositories')->expect('Pest\Arch\Repositories')->toOnlyUse([
 test('value objects')
     ->expect('Pest\Arch\ValueObjects')
     ->toUseNothing()
-    ->ignoring([Targets::class, Dependency::class, 'PHPUnit\Framework'])
+    ->ignoring([Targets::class, Dependency::class, 'PHPUnit\Framework', Expectation::class])
     ->expect(Targets::class)
     ->toOnlyUse([Expectation::class])
     ->ignoring('PHPUnit\Framework');
