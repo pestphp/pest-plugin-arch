@@ -12,6 +12,7 @@ use Pest\Arch\SingleArchExpectation;
 use Pest\Arch\ValueObjects\Targets;
 use Pest\Arch\ValueObjects\Violation;
 use Pest\Expectation;
+use PHPUnit\Architecture\Elements\ObjectDescription;
 
 /**
  * @internal
@@ -33,7 +34,8 @@ final class ToBeFinal
         return SingleArchExpectation::fromExpectation(
             $expectation,
             static function (LayerOptions $options) use ($blueprint, $strictTypes): void {
-                $blueprint->expectToBeFinal(
+                $blueprint->expect(
+                    fn (ObjectDescription $object) => $object->reflectionClass->isFinal(),
                     $options,
                     static fn (Violation $violation) => throw new ArchExpectationFailedException(
                         $violation,

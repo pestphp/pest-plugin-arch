@@ -37,6 +37,7 @@ test('expectations')
         'expect',
         'Pest\Expectation',
         'Pest\Arch',
+        'PHPUnit\Architecture\Elements\ObjectDescription',
     ])->ignoring('PHPUnit\Framework');
 
 test('repositories')->expect('Pest\Arch\Repositories')->toOnlyUse([

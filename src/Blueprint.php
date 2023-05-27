@@ -77,11 +77,12 @@ final class Blueprint
     }
 
     /**
-     * Expects the target to use strict types
+     * Creates an expectation with the given callback.
      *
+     * @param  callable(ObjectDescription $object): bool  $callback
      * @param  callable(Violation): mixed  $failure
      */
-    public function expectToUseStrictTypes(LayerOptions $options, callable $failure, bool $strictTypes = true): void
+    public function expect(callable $callback, LayerOptions $options, callable $failure, bool $expected = true): void
     {
         foreach ($this->target->value as $targetValue) {
             $targetLayer = $this->layerFactory->make($options, $targetValue);
@@ -93,43 +94,9 @@ final class Blueprint
                     }
                 }
 
-                $usesStrictTypes = str_contains((string) file_get_contents($object->path), 'declare(strict_types=1)');
+                $result = $callback($object);
 
-                if (($usesStrictTypes && $strictTypes) || (! $usesStrictTypes && ! $strictTypes)) {
-                    self::assertTrue(true);
-
-                    continue;
-                }
-
-                $path = (string) realpath($object->path);
-
-                $path = substr($path, strlen(TestSuite::getInstance()->rootPath) + 1);
-
-                $failure(new Violation($path, 1, 1));
-            }
-        }
-    }
-
-    /**
-     * Expects the target to be final.
-     *
-     * @param  callable(Violation): mixed  $failure
-     */
-    public function expectToBeFinal(LayerOptions $options, callable $failure, bool $final = true): void
-    {
-        foreach ($this->target->value as $targetValue) {
-            $targetLayer = $this->layerFactory->make($options, $targetValue);
-
-            foreach ($targetLayer as $object) {
-                foreach ($options->exclude as $exclude) {
-                    if (str_starts_with($object->name, $exclude)) {
-                        continue 2;
-                    }
-                }
-
-                $isFinal = $object->reflectionClass->isFinal();
-
-                if (($isFinal && $final) || (! $isFinal && ! $final)) {
+                if (($result && $expected) || (! $result && ! $expected)) {
                     self::assertTrue(true);
 
                     continue;
