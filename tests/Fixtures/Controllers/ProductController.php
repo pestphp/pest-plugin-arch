@@ -6,7 +6,7 @@ namespace Tests\Fixtures\Controllers;
 
 use Tests\Fixtures\Models\Product;
 
-class ProductController
+final class ProductController
 {
     public function index(): array
     {
