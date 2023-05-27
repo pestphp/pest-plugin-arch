@@ -81,7 +81,7 @@ final class Blueprint
      *
      * @param  callable(Violation): mixed  $failure
      */
-    public function expectToUseStrictTypes(LayerOptions $options, callable $failure, bool $toUseStrictTypes = true): void
+    public function expectToUseStrictTypes(LayerOptions $options, callable $failure, bool $strictTypes = true): void
     {
         foreach ($this->target->value as $targetValue) {
             $targetLayer = $this->layerFactory->make($options, $targetValue);
@@ -95,7 +95,7 @@ final class Blueprint
 
                 $usesStrictTypes = str_contains((string) file_get_contents($object->path), 'declare(strict_types=1)');
 
-                if (($usesStrictTypes === $toUseStrictTypes) || (! $usesStrictTypes && ! $toUseStrictTypes)) {
+                if (($usesStrictTypes && $strictTypes) || (! $usesStrictTypes && ! $strictTypes)) {
                     self::assertTrue(true);
 
                     continue;

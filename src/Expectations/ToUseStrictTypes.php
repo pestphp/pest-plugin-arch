@@ -21,7 +21,7 @@ final class ToUseStrictTypes
     /**
      * Creates an "ToUseStrictTypes" expectation.
      */
-    public static function make(Expectation $expectation): SingleArchExpectation
+    public static function make(Expectation $expectation, bool $strictTypes = true): SingleArchExpectation
     {
         assert(is_string($expectation->value) || is_array($expectation->value));
         /** @var Expectation<array<int, string>|string> $expectation */
@@ -32,13 +32,18 @@ final class ToUseStrictTypes
 
         return SingleArchExpectation::fromExpectation(
             $expectation,
-            static function (LayerOptions $options) use ($blueprint): void {
+            static function (LayerOptions $options) use ($blueprint, $strictTypes): void {
                 $blueprint->expectToUseStrictTypes(
                     $options,
                     static fn (Violation $violation) => throw new ArchExpectationFailedException(
                         $violation,
-                        "Expecting '{$violation->path}' to use 'declare(strict_types=1);' declaration.",
+                        sprintf(
+                            "Expecting '%s' to %suse 'declare(strict_types=1);' declaration.",
+                            $violation->path,
+                            $strictTypes ? '' : 'not ',
+                        ),
                     ),
+                    $strictTypes,
                 );
             },
         );
