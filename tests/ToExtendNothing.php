@@ -6,31 +6,31 @@ use Tests\Fixtures\Controllers\UserController;
 
 it('passes', function () {
     expect(ProductController::class)
-        ->toUseStrictTypes()
+        ->toExtendNothing()
         ->and(UserController::class)
-        ->not->toUseStrictTypes();
+        ->not->toExtendNothing();
 });
 
 it('fails 1', function () {
-    expect([UserController::class])->toUseStrictTypes();
+    expect([UserController::class])->toExtendNothing();
 })->throws(
     ArchExpectationFailedException::class,
-    "Expecting 'tests/Fixtures/Controllers/UserController.php' to use strict types."
+    "Expecting 'tests/Fixtures/Controllers/UserController.php' to extend nothing."
 );
 
 test('ignoring', function () {
     expect('Tests\Fixtures\Controllers')
-        ->toUseStrictTypes()
+        ->toExtendNothing()
         ->ignoring(UserController::class)
-        ->not->toUseStrictTypes()
+        ->not->toExtendNothing()
         ->ignoring(ProductController::class);
 });
 
 test('ignoring opposite message', function () {
     expect(ProductController::class)
         ->not
-        ->toUseStrictTypes();
+        ->toExtendNothing();
 })->throws(
     ArchExpectationFailedException::class,
-    "Expecting 'tests/Fixtures/Controllers/ProductController.php' not to use strict types."
+    "Expecting 'tests/Fixtures/Controllers/ProductController.php' to extend a class."
 );

@@ -12,17 +12,16 @@ use Pest\Arch\SingleArchExpectation;
 use Pest\Arch\ValueObjects\Targets;
 use Pest\Arch\ValueObjects\Violation;
 use Pest\Expectation;
-use PHPUnit\Architecture\Elements\ObjectDescription;
 
 /**
  * @internal
  */
-final class ToUseStrictTypes
+final class ToBe
 {
     /**
-     * Creates an "ToUseStrictTypes" expectation.
+     * Creates an "ToBe" expectation.
      */
-    public static function make(Expectation $expectation, bool $strictTypes = true): SingleArchExpectation
+    public static function make(Expectation $expectation, callable $callback, string $what): SingleArchExpectation
     {
         assert(is_string($expectation->value) || is_array($expectation->value));
         /** @var Expectation<array<int, string>|string> $expectation */
@@ -33,19 +32,18 @@ final class ToUseStrictTypes
 
         return SingleArchExpectation::fromExpectation(
             $expectation,
-            static function (LayerOptions $options) use ($blueprint, $strictTypes): void {
+            static function (LayerOptions $options) use ($callback, $blueprint, $what): void {
                 $blueprint->expect(
-                    fn (ObjectDescription $object) => str_contains((string) file_get_contents($object->path), 'declare(strict_types=1);'),
+                    $callback,
                     $options,
                     static fn (Violation $violation) => throw new ArchExpectationFailedException(
                         $violation,
                         sprintf(
-                            "Expecting '%s' to %suse 'declare(strict_types=1);' declaration.",
+                            "Expecting '%s' %s.",
                             $violation->path,
-                            $strictTypes ? '' : 'not ',
+                            $what
                         ),
                     ),
-                    $strictTypes,
                 );
             },
         );

@@ -2,7 +2,10 @@
 
 namespace Tests\Fixtures\Controllers;
 
-class UserController
+use Tests\Fixtures\Contracts\Controllers\Indexable;
+use Tests\Fixtures\Controller;
+
+class UserController extends Controller implements Indexable
 {
     public function index(): array
     {
