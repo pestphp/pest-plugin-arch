@@ -81,8 +81,9 @@ final class Blueprint
      *
      * @param  callable(ObjectDescription $object): bool  $callback
      * @param  callable(Violation): mixed  $failure
+     * @param  callable(): int  $lineFinder
      */
-    public function expect(callable $callback, LayerOptions $options, callable $failure, bool $expected = true): void
+    public function targeted(callable $callback, LayerOptions $options, callable $failure, callable $lineFinder): void
     {
         foreach ($this->target->value as $targetValue) {
             $targetLayer = $this->layerFactory->make($options, $targetValue);
@@ -94,19 +95,17 @@ final class Blueprint
                     }
                 }
 
-                $result = $callback($object);
-
-                if (($result && $expected) || (! $result && ! $expected)) {
+                if ($callback($object)) {
                     self::assertTrue(true);
 
                     continue;
                 }
 
                 $path = (string) realpath($object->path);
-
+                $line = $lineFinder($path);
                 $path = substr($path, strlen(TestSuite::getInstance()->rootPath) + 1);
 
-                $failure(new Violation($path, 1, 1));
+                $failure(new Violation($path, $line, $line));
             }
         }
     }

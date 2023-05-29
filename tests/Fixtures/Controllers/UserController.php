@@ -10,7 +10,7 @@ class UserController extends Controller implements Indexable
     public function index(): array
     {
         return [
-            // ..
+            //
         ];
     }
 }

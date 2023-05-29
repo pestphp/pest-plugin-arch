@@ -16,13 +16,17 @@ use Pest\Expectation;
 /**
  * @internal
  */
-final class ToBe
+final class Targeted
 {
     /**
      * Creates an "ToBe" expectation.
      */
-    public static function make(Expectation $expectation, callable $callback, string $what): SingleArchExpectation
-    {
+    public static function make(
+        Expectation $expectation,
+        callable $callback,
+        string $what,
+        callable $line,
+    ): SingleArchExpectation {
         assert(is_string($expectation->value) || is_array($expectation->value));
         /** @var Expectation<array<int, string>|string> $expectation */
         $blueprint = Blueprint::make(
@@ -32,8 +36,8 @@ final class ToBe
 
         return SingleArchExpectation::fromExpectation(
             $expectation,
-            static function (LayerOptions $options) use ($callback, $blueprint, $what): void {
-                $blueprint->expect(
+            static function (LayerOptions $options) use ($callback, $blueprint, $what, $line): void {
+                $blueprint->targeted(
                     $callback,
                     $options,
                     static fn (Violation $violation) => throw new ArchExpectationFailedException(
@@ -44,6 +48,7 @@ final class ToBe
                             $what
                         ),
                     ),
+                    $line,
                 );
             },
         );
