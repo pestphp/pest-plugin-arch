@@ -13,7 +13,7 @@ final class FileLineFinder
      * Gets the line number of the first occurrence of the given callback.
      *
      * @param  callable(string): bool  $callback
-     * @return callable(): int
+     * @return callable(string): int
      */
     public static function where(callable $callback): callable
     {

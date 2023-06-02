@@ -81,7 +81,7 @@ final class Blueprint
      *
      * @param  callable(ObjectDescription $object): bool  $callback
      * @param  callable(Violation): mixed  $failure
-     * @param  callable(): int  $lineFinder
+     * @param  callable(string): int  $lineFinder
      */
     public function targeted(callable $callback, LayerOptions $options, callable $failure, callable $lineFinder): void
     {
