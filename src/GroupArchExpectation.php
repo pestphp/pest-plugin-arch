@@ -9,6 +9,8 @@ use Pest\Expectation;
 
 /**
  * @internal
+ *
+ * @mixin Expectation<string>
  */
 final class GroupArchExpectation implements Contracts\ArchExpectation
 {

@@ -9,12 +9,15 @@ use Pest\Arch\Options\LayerOptions;
 use Pest\Arch\Support\UserDefinedFunctions;
 use Pest\Expectation;
 use Pest\TestSuite;
+use PHPUnit\Architecture\Elements\ObjectDescription;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
+ *
+ * @mixin Expectation<array|string>
  */
 final class SingleArchExpectation implements Contracts\ArchExpectation
 {
@@ -34,6 +37,15 @@ final class SingleArchExpectation implements Contracts\ArchExpectation
      * @var array<int, string>
      */
     public array $ignoring = [];
+
+    /**
+     * The ignored list of layers.
+     *
+     * @var array<int, Closure(ObjectDescription): bool>
+     *
+     * @internal
+     */
+    public array $excludeCallbacks = [];
 
     /**
      * Creates a new Arch Expectation instance.

@@ -65,6 +65,10 @@ final class LayerFactory
             $layer = $layer->excludeByNameStart($exclude);
         }
 
+        foreach ($options->excludeCallbacks as $callback) {
+            $layer = $layer->exclude($callback);
+        }
+
         return $layer;
     }
 }

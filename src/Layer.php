@@ -12,6 +12,7 @@ use Traversable;
 /**
  * @method Layer assertDoesNotDependOn(string ...$objects)
  * @method Layer excludeByNameStart(string $name)
+ * @method Layer exclude(callable $callback)
  * @method Layer leaveByNameStart(string $name)
  *
  * @implements IteratorAggregate<int, ObjectDescription>

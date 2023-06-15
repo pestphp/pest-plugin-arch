@@ -25,7 +25,7 @@ final class ToUse
     public static function make(Expectation $expectation, array|string $dependencies): SingleArchExpectation
     {
         assert(is_string($expectation->value) || is_array($expectation->value));
-        /** @var Expectation<array<int, string>|string> $expectation */
+
         $blueprint = Blueprint::make(
             Targets::fromExpectation($expectation),
             Dependencies::fromExpectationInput($dependencies),
