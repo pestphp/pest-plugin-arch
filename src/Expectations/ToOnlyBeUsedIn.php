@@ -53,7 +53,6 @@ final class ToOnlyBeUsedIn
                     );
                 },
             ),
-            ToBeUsedIn::make($expectation, $targets),
         ]);
     }
 }
