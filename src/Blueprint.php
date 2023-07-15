@@ -204,7 +204,7 @@ final class Blueprint
         Assert::assertEquals($expected, $actual, $message);
     }
 
-    private function getUsagePathAndLines(Layer $layer, string $objectName, string $target): null|Violation
+    private function getUsagePathAndLines(Layer $layer, string $objectName, string $target): ?Violation
     {
         $dependOnObjects = array_filter(
             $layer->getIterator()->getArrayCopy(), //@phpstan-ignore-line

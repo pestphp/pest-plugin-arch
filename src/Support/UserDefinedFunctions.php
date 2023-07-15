@@ -14,7 +14,7 @@ final class UserDefinedFunctions
      *
      * @var array<int, string>|null
      */
-    private static array|null $functions = null;
+    private static ?array $functions = null;
 
     /**
      * Returns the list of user defined functions.

@@ -91,7 +91,7 @@ final class ObjectsRepository
             }
 
             $objectsPerPrefix = array_values(array_filter(array_reduce($directories, fn (array $files, string $fileOrDirectory): array => array_merge($files, array_values(array_map(
-                static fn (SplFileInfo $file): ObjectDescription|null => ObjectDescriptionFactory::make($file->getPathname()),
+                static fn (SplFileInfo $file): ?ObjectDescription => ObjectDescriptionFactory::make($file->getPathname()),
                 is_dir($fileOrDirectory) ? iterator_to_array(Finder::create()->files()->in($fileOrDirectory)->name('*.php')) : [new SplFileInfo($fileOrDirectory)],
             ))), [])));
 

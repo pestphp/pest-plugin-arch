@@ -24,7 +24,7 @@ final class ObjectDescriptionFactory
     /**
      * Makes a new Object Description instance, is possible.
      */
-    public static function make(string $filename): ObjectDescription|null
+    public static function make(string $filename): ?ObjectDescription
     {
         self::ensureServiceContainerIsInitialized();
 

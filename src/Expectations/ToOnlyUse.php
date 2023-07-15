@@ -35,7 +35,7 @@ final class ToOnlyUse
 
         return SingleArchExpectation::fromExpectation($expectation, static function (LayerOptions $options) use ($blueprint): void {
             $blueprint->expectToOnlyUse(
-                $options, static function (string $value, string $dependOn, string $notAllowedDependOn, Violation|null $violation): void {
+                $options, static function (string $value, string $dependOn, string $notAllowedDependOn, ?Violation $violation): void {
                     $message = $dependOn === ''
                         ? "Expecting '{$value}' to use nothing. However, it uses '{$notAllowedDependOn}'."
                         : "Expecting '{$value}' to only use '{$dependOn}'. However, it also uses '{$notAllowedDependOn}'.";
