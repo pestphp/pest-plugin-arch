@@ -37,7 +37,7 @@
         ]
     },
     "require-dev": {
-        "pestphp/pest": "dev-develop as 2.6.2",
+        "pestphp/pest": "^2.9.4",
         "pestphp/pest-dev-tools": "^2.12.0"
     },
     "minimum-stability": "dev",
