@@ -41,11 +41,9 @@ final class SingleArchExpectation implements Contracts\ArchExpectation
     /**
      * The ignored list of layers.
      *
-     * @var array<int, Closure(ObjectDescription): bool>
-     *
-     * @internal
+     * @var array<int, callable(ObjectDescription): bool>
      */
-    public array $excludeCallbacks = [];
+    private array $excludeCallbacks = [];
 
     /**
      * Creates a new Arch Expectation instance.
@@ -116,6 +114,22 @@ final class SingleArchExpectation implements Contracts\ArchExpectation
         $this->ensureLazyExpectationIsVerified();
 
         return $this->expectation->$name; // @phpstan-ignore-line
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function mergeExcludeCallbacks(array $callbacks): void
+    {
+        $this->excludeCallbacks = [...$this->excludeCallbacks, ...$callbacks];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function excludeCallbacks(): array
+    {
+        return $this->excludeCallbacks;
     }
 
     /**

@@ -7,6 +7,7 @@ namespace Pest\Arch;
 use Closure;
 use Pest\Arch\Contracts\ArchExpectation;
 use Pest\Expectation;
+use Pest\Expectations\HigherOrderExpectation;
 use PHPUnit\Architecture\Elements\ObjectDescription;
 
 /**
@@ -37,7 +38,7 @@ final class PendingArchExpectation
      */
     public function classes(): self
     {
-        $this->excludeCallbacks[] = fn (ObjectDescription $object): bool => ! class_exists($object->name);
+        $this->excludeCallbacks[] = fn (ObjectDescription $object): bool => ! class_exists($object->name) || enum_exists($object->name);
 
         return $this;
     }
@@ -94,10 +95,13 @@ final class PendingArchExpectation
         /** @var $archExpectation SingleArchExpectation */
         $archExpectation = $expectation->{$name}(...$arguments); // @phpstan-ignore-line
 
-        $archExpectation->excludeCallbacks = array_merge(
-            $archExpectation->excludeCallbacks,
-            $this->excludeCallbacks,
-        );
+        if ($archExpectation instanceof HigherOrderExpectation) {
+            $originalExpectation = (fn (): \Pest\Expectation => $this->original)->call($archExpectation);
+        } else {
+            $originalExpectation = $archExpectation;
+        }
+
+        $originalExpectation->mergeExcludeCallbacks($this->excludeCallbacks);
 
         return $archExpectation;
     }

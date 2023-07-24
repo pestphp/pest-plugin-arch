@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Fixtures\Contracts\Models;
+namespace Tests\Fixtures\Contracts;
 
 interface NotUsed
 {

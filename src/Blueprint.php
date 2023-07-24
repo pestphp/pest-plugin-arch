@@ -8,6 +8,7 @@ use Pest\Arch\Collections\Dependencies;
 use Pest\Arch\Factories\LayerFactory;
 use Pest\Arch\Options\LayerOptions;
 use Pest\Arch\Repositories\ObjectsRepository;
+use Pest\Arch\Support\AssertLocker;
 use Pest\Arch\Support\Composer;
 use Pest\Arch\ValueObjects\Dependency;
 use Pest\Arch\ValueObjects\Targets;
@@ -59,6 +60,8 @@ final class Blueprint
      */
     public function expectToUse(LayerOptions $options, callable $failure): void
     {
+        AssertLocker::incrementAndLock();
+
         foreach ($this->target->value as $targetValue) {
             $targetLayer = $this->layerFactory->make($options, $targetValue);
 
@@ -74,6 +77,8 @@ final class Blueprint
                 $failure($targetValue, $dependency->value);
             }
         }
+
+        AssertLocker::unlock();
     }
 
     /**
@@ -85,6 +90,8 @@ final class Blueprint
      */
     public function targeted(callable $callback, LayerOptions $options, callable $failure, callable $lineFinder): void
     {
+        AssertLocker::incrementAndLock();
+
         foreach ($this->target->value as $targetValue) {
             $targetLayer = $this->layerFactory->make($options, $targetValue);
 
@@ -96,8 +103,6 @@ final class Blueprint
                 }
 
                 if ($callback($object)) {
-                    self::assertTrue(true);
-
                     continue;
                 }
 
@@ -108,6 +113,8 @@ final class Blueprint
                 $failure(new Violation($path, $line, $line));
             }
         }
+
+        AssertLocker::unlock();
     }
 
     /**
@@ -117,6 +124,8 @@ final class Blueprint
      */
     public function expectToOnlyUse(LayerOptions $options, callable $failure): void
     {
+        AssertLocker::incrementAndLock();
+
         foreach ($this->target->value as $targetValue) {
             $allowedUses = array_merge(
                 ...array_map(fn (Layer $layer): array => array_map(
@@ -140,9 +149,9 @@ final class Blueprint
                     }
                 }
             }
-
-            self::assertTrue(true);
         }
+
+        AssertLocker::unlock();
     }
 
     /**
@@ -152,6 +161,8 @@ final class Blueprint
      */
     public function expectToOnlyBeUsedIn(LayerOptions $options, callable $failure): void
     {
+        AssertLocker::incrementAndLock();
+
         foreach (Composer::userNamespaces() as $namespace) {
             $namespaceLayer = $this->layerFactory->make($options, $namespace);
 
@@ -172,6 +183,8 @@ final class Blueprint
                 }
             }
         }
+
+        AssertLocker::unlock();
     }
 
     /**
