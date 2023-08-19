@@ -24,7 +24,7 @@ final class ObjectDescriptionFactory
     /**
      * Makes a new Object Description instance, is possible.
      */
-    public static function make(string $filename): ?ObjectDescription
+    public static function make(string $filename, bool $onlyUserDefinedUses = true): ?ObjectDescription
     {
         self::ensureServiceContainerIsInitialized();
 
@@ -49,7 +49,7 @@ final class ObjectDescriptionFactory
             $object->uses = new ObjectUses(array_values(
                 array_filter(
                     iterator_to_array($object->uses->getIterator()),
-                    static fn (string $use): bool => self::isUserDefined($use) && ! self::isSameLayer($object, $use),
+                    static fn (string $use): bool => (! $onlyUserDefinedUses || self::isUserDefined($use)) && ! self::isSameLayer($object, $use),
                 )
             ));
         }

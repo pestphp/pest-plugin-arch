@@ -13,6 +13,13 @@ it('passes', function () {
     }
 });
 
+it('failure with native functions', function () {
+    expect('sleep')->not->toBeUsedIn('Tests\Fixtures\Misc\HasSleepFunction');
+})->throws(
+    ExpectationFailedException::class,
+    "Expecting 'sleep' not to be used in 'Tests\Fixtures\Misc\HasSleepFunction'."
+);
+
 it('fails 1', function () {
     expect([Fooable::class])
         ->toBeUsedIn(['Tests\Fixtures\Models', 'Tests\Fixtures\Controllers']);

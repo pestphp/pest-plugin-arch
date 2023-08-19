@@ -63,7 +63,7 @@ final class Blueprint
         AssertLocker::incrementAndLock();
 
         foreach ($this->target->value as $targetValue) {
-            $targetLayer = $this->layerFactory->make($options, $targetValue);
+            $targetLayer = $this->layerFactory->make($options, $targetValue, false);
 
             foreach ($this->dependencies->values as $dependency) {
                 $dependencyLayer = $this->layerFactory->make($options, $dependency->value);
@@ -164,7 +164,7 @@ final class Blueprint
         AssertLocker::incrementAndLock();
 
         foreach (Composer::userNamespaces() as $namespace) {
-            $namespaceLayer = $this->layerFactory->make($options, $namespace);
+            $namespaceLayer = $this->layerFactory->make($options, $namespace, false);
 
             foreach ($this->dependencies->values as $dependency) {
                 $namespaceLayer = $namespaceLayer->excludeByNameStart($dependency->value);
