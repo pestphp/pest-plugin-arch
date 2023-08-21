@@ -29,8 +29,6 @@ test('base')
         'dump',
         'expect',
         'test',
-        'clone',
-        'eval',
         'Pest',
         'PHPUnit\Architecture',
         'Symfony\Component\Finder\Finder',

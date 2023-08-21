@@ -6,6 +6,7 @@ namespace Pest\Arch\Factories;
 
 use Pest\Arch\Objects\ObjectDescription;
 use Pest\Arch\Objects\VendorObjectDescription;
+use Pest\Arch\Support\PhpCoreExpressions;
 use PHPUnit\Architecture\Asserts\Dependencies\Elements\ObjectUses;
 use PHPUnit\Architecture\Services\ServiceContainer;
 use ReflectionClass;
@@ -75,6 +76,10 @@ final class ObjectDescriptionFactory
      */
     private static function isUserDefined(string $use): bool
     {
+        if(PhpCoreExpressions::getClass($use) !== null){
+            return false;
+        }
+
         return match (true) {
             enum_exists($use) => (new \ReflectionEnum($use))->isUserDefined(),
             function_exists($use) => (new ReflectionFunction($use))->isUserDefined(),
