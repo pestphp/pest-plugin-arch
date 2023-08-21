@@ -45,4 +45,4 @@ test('failure 6', function () {
 })->throws(
     ExpectationFailedException::class,
     'Expecting \'sleep\' not to be used in \'Tests\Fixtures\Misc\HasNativeFunctions\'.',
-)->only();
+);
