@@ -31,6 +31,7 @@ final class LayerFactory
     public function make(LayerOptions $options, string $name, bool $onlyUserDefinedUses = true): Layer
     {
         $objects = array_map(function (ObjectDescription $object) use ($options): ObjectDescription {
+
             if ($object instanceof VendorObjectDescription) {
                 return $object;
             }

@@ -11,7 +11,7 @@ it('passes', function () {
 });
 
 it('passes as aliases', function () {
-    expect([Env::class])->not->toBeUsed();
+    expect([Env::class, 'die'])->not->toBeUsed();
 });
 
 it('fails 1', function () {
@@ -34,7 +34,7 @@ it('fails with native functions', function () {
     expect(fn () => expect('sleep')->not->toBeUsed())->toThrowArchitectureViolation(
         "Expecting 'sleep' not to be used on 'Tests\Fixtures\Misc\HasSleepFunction'.",
         'tests/Fixtures/Misc/HasSleepFunction.php',
-        10
+        9,
     );
 });
 
