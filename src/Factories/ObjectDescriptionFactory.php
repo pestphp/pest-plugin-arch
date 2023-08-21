@@ -76,7 +76,7 @@ final class ObjectDescriptionFactory
      */
     private static function isUserDefined(string $use): bool
     {
-        if(PhpCoreExpressions::getClass($use) !== null){
+        if (PhpCoreExpressions::getClass($use) !== null) {
             return false;
         }
 
