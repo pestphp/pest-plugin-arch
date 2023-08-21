@@ -13,12 +13,14 @@ it('passes', function () {
     }
 });
 
-it('failure with native functions', function () {
-    expect('sleep')->not->toBeUsedIn('Tests\Fixtures\Misc\HasSleepFunction');
-})->throws(
-    ExpectationFailedException::class,
-    "Expecting 'sleep' not to be used in 'Tests\Fixtures\Misc\HasSleepFunction'."
-);
+it('failure with native functions', function (string $function) {
+    expect(fn () => expect($function)->not->toBeUsedIn('Tests\Fixtures\Misc\HasNativeFunctions'))->toThrow(
+        ExpectationFailedException::class,
+        "Expecting '$function' not to be used in 'Tests\Fixtures\Misc\HasNativeFunctions'."
+    );
+})->with([
+    'sleep', 'die', 'eval', 'exit', 'clone', 'empty', 'isset', 'print',
+])->only();
 
 it('fails 1', function () {
     expect([Fooable::class])

@@ -44,14 +44,14 @@ test('failure 4', function () {
 );
 
 test('failure 5', function () {
-    expect('die')->toBeUsedIn('Tests\Fixtures\Misc\HasSleepFunction');
+    expect('die')->toBeUsedIn('Tests\Fixtures\Misc\HasNativeFunctions');
 })->throws(
     ExpectationFailedException::class,
     'Expecting \'Tests\Fixtures\Misc\HasSleepFunction\' to use \'die\'.',
 );
 
 test('failure 6', function () {
-    expect('sleep')->not->toBeUsedIn('Tests\Fixtures\Misc\HasSleepFunction');
+    expect('sleep')->not->toBeUsedIn('Tests\Fixtures\Misc\HasNativeFunctions');
 })->throws(
     ExpectationFailedException::class,
     'Expecting \'sleep\' not to be used in \'Tests\Fixtures\Misc\HasSleepFunction\'.',

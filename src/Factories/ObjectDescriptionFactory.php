@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Pest\Arch\Factories;
 
+use Pest\Arch\Objects\ObjectDescription;
 use Pest\Arch\Objects\VendorObjectDescription;
 use PHPUnit\Architecture\Asserts\Dependencies\Elements\ObjectUses;
-use PHPUnit\Architecture\Elements\ObjectDescription;
 use PHPUnit\Architecture\Services\ServiceContainer;
 use ReflectionClass;
 use ReflectionFunction;
@@ -36,7 +36,8 @@ final class ObjectDescriptionFactory
         try {
             $object = $isFromVendor
                 ? VendorObjectDescription::make($filename)
-                : ServiceContainer::$descriptionClass::make($filename);
+                : ObjectDescription::make($filename);
+
         } finally {
             error_reporting($originalErrorReportingLevel);
         }

@@ -30,13 +30,22 @@ it('fails 2', function () {
     );
 });
 
-it('fails with native functions', function () {
-    expect(fn () => expect('sleep')->not->toBeUsed())->toThrowArchitectureViolation(
-        "Expecting 'sleep' not to be used on 'Tests\Fixtures\Misc\HasSleepFunction'.",
-        'tests/Fixtures/Misc/HasSleepFunction.php',
-        9,
+it('fails with native functions', function (string $function, int $violation_line) {
+    expect(fn () => expect($function)->not->toBeUsed())->toThrowArchitectureViolation(
+        "Expecting '$function' not to be used on 'Tests\Fixtures\Misc\HasNativeFunctions'.",
+        'tests/Fixtures/Misc/HasNativeFunctions.php',
+        $violation_line,
     );
-});
+})->with([
+    'sleep' => ['function' => 'sleep', 'violation_line' => 9],
+    'die' => ['function' => 'die', 'violation_line' => 14],
+    'exit' => ['function' => 'exit', 'violation_line' => 19],
+    'eval' => ['function' => 'eval', 'violation_line' => 24],
+    'clone' => ['function' => 'clone', 'violation_line' => 29],
+    'empty' => ['function' => 'empty', 'violation_line' => 34],
+    'isset' => ['function' => 'isset', 'violation_line' => 38],
+    'print' => ['function' => 'print', 'violation_line' => 47],
+])->only();
 
 test('ignoring', function () {
     expect(Fooable::class)->toBeUsedInNothing()->ignoring('Tests\Fixtures\Models');
