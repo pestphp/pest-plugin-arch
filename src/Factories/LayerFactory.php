@@ -28,7 +28,7 @@ final class LayerFactory
     /**
      * Make a new Layer using the given name.
      */
-    public function make(LayerOptions $options, string $name): Layer
+    public function make(LayerOptions $options, string $name, bool $onlyUserDefinedUses = true): Layer
     {
         $objects = array_map(function (ObjectDescription $object) use ($options): ObjectDescription {
             if ($object instanceof VendorObjectDescription) {
@@ -57,7 +57,7 @@ final class LayerFactory
             );
 
             return $object;
-        }, $this->objectsStorage->allByNamespace($name));
+        }, $this->objectsStorage->allByNamespace($name, $onlyUserDefinedUses));
 
         $layer = Layer::fromBase($objects)->leaveByNameStart($name);
 

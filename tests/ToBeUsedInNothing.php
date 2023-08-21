@@ -30,6 +30,14 @@ it('fails 2', function () {
     );
 });
 
+it('fails with native functions', function () {
+    expect(fn () => expect('sleep')->not->toBeUsed())->toThrowArchitectureViolation(
+        "Expecting 'sleep' not to be used on 'Tests\Fixtures\Misc\HasSleepFunction'.",
+        'tests/Fixtures/Misc/HasSleepFunction.php',
+        10
+    );
+});
+
 test('ignoring', function () {
     expect(Fooable::class)->toBeUsedInNothing()->ignoring('Tests\Fixtures\Models');
 });
