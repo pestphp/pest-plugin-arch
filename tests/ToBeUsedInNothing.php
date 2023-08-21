@@ -45,7 +45,7 @@ it('fails with native functions', function (string $function, int $violation_lin
     'empty' => ['function' => 'empty', 'violation_line' => 34],
     'isset' => ['function' => 'isset', 'violation_line' => 38],
     'print' => ['function' => 'print', 'violation_line' => 47],
-])->only();
+]);
 
 test('ignoring', function () {
     expect(Fooable::class)->toBeUsedInNothing()->ignoring('Tests\Fixtures\Models');

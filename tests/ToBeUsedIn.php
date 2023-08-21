@@ -20,7 +20,7 @@ it('failure with native functions', function (string $function) {
     );
 })->with([
     'sleep', 'die', 'eval', 'exit', 'clone', 'empty', 'isset', 'print',
-])->only();
+]);
 
 it('fails 1', function () {
     expect([Fooable::class])
