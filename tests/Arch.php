@@ -2,12 +2,15 @@
 
 use Pest\Arch\Exceptions\ArchExpectationFailedException;
 use Pest\Arch\Objects\FunctionDescription;
+use Pest\Arch\Objects\ObjectDescription;
 use Pest\Arch\Objects\ObjectDescriptionBase;
 use Pest\Arch\Objects\VendorObjectDescription;
+use Pest\Arch\Support\PhpCoreExpressions;
 use Pest\Arch\ValueObjects\Dependency;
 use Pest\Arch\ValueObjects\Targets;
 use Pest\Arch\ValueObjects\Violation;
 use Pest\Expectation;
+use Tests\Fixtures\Misc\HasNativeFunctions;
 use Whoops\Exception\Frame;
 
 test('base')
@@ -16,6 +19,7 @@ test('base')
     ->classes->not->toBeAbstract()
     ->classes->toExtendNothing()->ignoring([
         VendorObjectDescription::class,
+        ObjectDescription::class,
         ObjectDescriptionBase::class,
         FunctionDescription::class,
         ArchExpectationFailedException::class,

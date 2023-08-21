@@ -11,7 +11,7 @@ it('passes', function () {
 });
 
 it('passes as aliases', function () {
-    expect([Env::class, 'die'])->not->toBeUsed();
+    expect([Env::class, 'error_get_last'])->not->toBeUsed();
 });
 
 it('fails 1', function () {
