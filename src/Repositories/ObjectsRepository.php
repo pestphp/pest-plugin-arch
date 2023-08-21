@@ -7,7 +7,6 @@ namespace Pest\Arch\Repositories;
 use Pest\Arch\Factories\ObjectDescriptionFactory;
 use Pest\Arch\Objects\FunctionDescription;
 use Pest\Arch\Support\Composer;
-use Pest\Arch\Support\PhpCoreExpressions;
 use Pest\Arch\Support\UserDefinedFunctions;
 use PHPUnit\Architecture\Elements\ObjectDescription;
 use ReflectionFunction;
@@ -70,12 +69,6 @@ final class ObjectsRepository
      */
     public function allByNamespace(string $namespace, bool $onlyUserDefinedUses = true): array
     {
-        if (PhpCoreExpressions::getClass($namespace) !== null) {
-            return [
-                FunctionDescription::make($namespace),
-            ];
-        }
-
         if (function_exists($namespace) && (new ReflectionFunction($namespace))->getName() === $namespace) {
             return [
                 FunctionDescription::make($namespace),
