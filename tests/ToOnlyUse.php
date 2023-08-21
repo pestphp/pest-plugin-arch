@@ -16,6 +16,13 @@ it('passes', function () {
                 'Tests\Fixtures',
                 Str::class,
                 'my_request_global_function',
+                'clone',
+                'empty',
+                'eval',
+                'die',
+                'exit',
+                'isset',
+                'print',
             ]);
     }
 });
