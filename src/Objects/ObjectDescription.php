@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Pest\Arch\Objects;
 
 use Pest\Arch\Support\PhpCoreExpressions;
@@ -7,8 +9,14 @@ use PhpParser\Node\Expr;
 use PHPUnit\Architecture\Asserts\Dependencies\Elements\ObjectUses;
 use PHPUnit\Architecture\Services\ServiceContainer;
 
-final class ObjectDescription extends \PHPUnit\Architecture\Elements\ObjectDescription
+/**
+ * @internal
+ */
+final class ObjectDescription extends \PHPUnit\Architecture\Elements\ObjectDescription // @phpstan-ignore-line
 {
+    /**
+     * {@inheritDoc}
+     */
     public static function make(string $path): ?self
     {
         /** @var ObjectDescription|null $description */

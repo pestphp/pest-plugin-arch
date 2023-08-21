@@ -24,7 +24,7 @@ final class ObjectDescriptionFactory
     /**
      * Makes a new Object Description instance, is possible.
      */
-    public static function make(string $filename, bool $onlyUserDefinedUses = true): ?ObjectDescription
+    public static function make(string $filename, bool $onlyUserDefinedUses = true): ?\PHPUnit\Architecture\Elements\ObjectDescription
     {
         self::ensureServiceContainerIsInitialized();
 
@@ -89,7 +89,7 @@ final class ObjectDescriptionFactory
     /**
      * Checks if the given use is in the same layer as the given object.
      */
-    private static function isSameLayer(ObjectDescription $object, string $use): bool
+    private static function isSameLayer(\PHPUnit\Architecture\Elements\ObjectDescription $object, string $use): bool
     {
         return $use === 'self'
             || $use === 'static'

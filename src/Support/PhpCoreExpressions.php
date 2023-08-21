@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Pest\Arch\Support;
 
 use Pest\Exceptions\ShouldNotHappen;
@@ -18,6 +20,9 @@ use PhpParser\Node\Expr\ShellExec;
  */
 final class PhpCoreExpressions
 {
+    /**
+     * @var array<int, class-string<Expr>>
+     */
     public static array $ENABLED = [
         Clone_::class,
         Empty_::class,
