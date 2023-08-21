@@ -26,7 +26,7 @@ final class ObjectsRepository
     /**
      * Holds the Objects Descriptions of the previous resolved prefixes.
      *
-     * @var array<string, array<int, ObjectDescription>>
+     * @var array<string, array{0?: array<int, ObjectDescription|FunctionDescription>, 1?: array<int, ObjectDescription|FunctionDescription>}>
      */
     private array $cachedObjectsPerPrefix = [];
 
@@ -85,9 +85,13 @@ final class ObjectsRepository
 
         foreach ($directoriesByNamespace as $prefix => $directories) {
             if (array_key_exists($prefix, $this->cachedObjectsPerPrefix)) {
-                $objects = [...$objects, ...$this->cachedObjectsPerPrefix[$prefix]];
+                if (array_key_exists((int) $onlyUserDefinedUses, $this->cachedObjectsPerPrefix[$prefix])) {
+                    $objects = [...$objects, ...$this->cachedObjectsPerPrefix[$prefix][(int) $onlyUserDefinedUses]];
 
-                continue;
+                    continue;
+                }
+            } else {
+                $this->cachedObjectsPerPrefix[$prefix] = [];
             }
 
             $objectsPerPrefix = array_values(array_filter(array_reduce($directories, fn (array $files, string $fileOrDirectory): array => array_merge($files, array_values(array_map(
@@ -95,7 +99,7 @@ final class ObjectsRepository
                 is_dir($fileOrDirectory) ? iterator_to_array(Finder::create()->files()->in($fileOrDirectory)->name('*.php')) : [new SplFileInfo($fileOrDirectory)],
             ))), [])));
 
-            $objects = [...$objects, ...$this->cachedObjectsPerPrefix[$prefix] = $objectsPerPrefix];
+            $objects = [...$objects, ...$this->cachedObjectsPerPrefix[$prefix][(int) $onlyUserDefinedUses] = $objectsPerPrefix];
         }
 
         return [...$objects, ...array_map(
