@@ -18,9 +18,7 @@ it('failure with native functions', function (string $function) {
         ExpectationFailedException::class,
         "Expecting '$function' not to be used in 'Tests\Fixtures\Misc\HasNativeFunctions'."
     );
-})->with([
-    'sleep', 'die', 'eval', 'exit', 'clone', 'empty', 'isset', 'print',
-]);
+})->with(['sleep', 'die', 'eval', 'exit', 'clone', 'empty', 'isset', 'print']);
 
 it('fails 1', function () {
     expect([Fooable::class])
