@@ -151,9 +151,9 @@ final class ObjectsRepository
                 // This is needed to avoid having a prefix like "App" and a namespace like "App\Application\..."
                 // This would result in a directory like "\lication\..."
                 $posFirstPrefix = strpos($name, $prefix);
-                $nameWithOutPrefix = $posFirstPrefix !== false ? substr($name, $posFirstPrefix + strlen($prefix)) : $name;
+                $nameWithoutPrefix = $posFirstPrefix !== false ? substr($name, $posFirstPrefix + strlen($prefix)) : $name;
 
-                $prefix = str_replace('\\', DIRECTORY_SEPARATOR, ltrim($nameWithOutPrefix, '\\'));
+                $prefix = str_replace('\\', DIRECTORY_SEPARATOR, ltrim($nameWithoutPrefix, '\\'));
 
                 $directoriesByNamespace[$name] = [...$directoriesByNamespace[$name] ?? [], ...array_values(array_filter(array_map(static function (string $directory) use ($prefix): string {
                     $fileOrDirectory = $directory.DIRECTORY_SEPARATOR.$prefix;

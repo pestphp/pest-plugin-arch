@@ -8,7 +8,7 @@ use Tests\Fixtures\Contracts\Models\Barable;
 use Tests\Fixtures\Contracts\Models\Fooable;
 use Tests\Fixtures\Contracts\Models\Storable;
 
-class Product implements Storable, Fooable, Barable
+class Product implements Barable, Fooable, Storable
 {
     // ...
 }
