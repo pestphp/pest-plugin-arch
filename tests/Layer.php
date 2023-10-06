@@ -16,7 +16,7 @@ it('does allow empty layers', function ($layer) {
     expect($layer)->toUseNothing();
 })->with(['App\Repositories', NonExistingClass::class, 'ray']);
 
-it('it does include vendor dependencies', function () {
+it('does include vendor dependencies', function () {
     expect(DependsOnVendor::class)
         ->toOnlyUse('Pest')
         ->toOnlyUse('Pest\Support')
