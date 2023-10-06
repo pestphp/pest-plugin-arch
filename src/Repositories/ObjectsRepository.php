@@ -149,7 +149,7 @@ final class ObjectsRepository
 
                 // Remove the first occurrence of the prefix, if any.
                 // This is needed to avoid having a prefix like "App" and a namespace like "App\Application\..."
-                // This would result in a directory like "\lication\..."Application\
+                // This would result in a directory like "\lication\..."
                 $posFirstAppPrefix = strpos($name, $prefix);
                 $name = $posFirstAppPrefix !== false ? substr($name, $posFirstAppPrefix + strlen($prefix)) : $name;
 
