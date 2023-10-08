@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Pest\Arch;
 
 use Closure;
+use Exception;
 use Pest\Arch\Contracts\ArchExpectation;
 use Pest\Expectation;
 use Pest\Expectations\HigherOrderExpectation;
 use PHPUnit\Architecture\Elements\ObjectDescription;
+use ReflectionClass;
 
 /**
  * @internal
@@ -39,6 +41,29 @@ final class PendingArchExpectation
     public function classes(): self
     {
         $this->excludeCallbacks[] = fn (ObjectDescription $object): bool => ! class_exists($object->name) || enum_exists($object->name);
+
+        return $this;
+    }
+
+    /**
+     * Filters the given "targets" by only abstract classes.
+     */
+    public function abstracts(): self
+    {
+        $this->excludeCallbacks[] = function (ObjectDescription $object): bool {
+            try {
+                if (! class_exists($object->name) || enum_exists($object->name)) {
+                    return true;
+                }
+
+                $reflection = new ReflectionClass($object->name);
+
+                return ! $reflection->isAbstract();
+            } catch(Exception $e) {
+
+                return true;
+            }
+        };
 
         return $this;
     }
