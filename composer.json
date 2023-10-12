@@ -15,9 +15,9 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
-        "nunomaduro/collision": "^7.9.0|^8.0.0",
+        "nunomaduro/collision": "^7.10.0|^8.0.0",
         "pestphp/pest-plugin": "^2.1.1",
-        "ta-tikoma/phpunit-architecture-test": "^0.7.4"
+        "ta-tikoma/phpunit-architecture-test": "^0.7.5"
     },
     "autoload": {
         "psr-4": {
@@ -37,7 +37,7 @@
         ]
     },
     "require-dev": {
-        "pestphp/pest": "^2.22.0",
+        "pestphp/pest": "^2.23.2",
         "pestphp/pest-dev-tools": "^2.16.0"
     },
     "minimum-stability": "dev",
