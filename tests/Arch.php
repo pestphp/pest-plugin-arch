@@ -11,7 +11,7 @@ use Pest\Arch\ValueObjects\Violation;
 use Pest\Expectation;
 use Whoops\Exception\Frame;
 
-test('base')
+arch('base')
     ->expect('Pest\Arch')
     ->classes->toBeFinal()
     ->classes->not->toBeAbstract()
@@ -34,16 +34,16 @@ test('base')
         'Whoops\Exception\Frame',
     ])->ignoring(['PHPUnit\Framework', 'Composer']);
 
-test('contracts')
+arch('contracts')
     ->expect('Pest\Arch')
     ->not->toBeInterface()
     ->ignoring('Pest\Arch\Contracts');
 
-test('collections')
+arch('collections')
     ->expect('Pest\Arch\Collections')
     ->toOnlyUse('Pest\Arch\ValueObjects');
 
-test('exceptions')
+arch('exceptions')
     ->expect('Pest\Arch\Exceptions')
     ->toImplement(Throwable::class)
     ->toOnlyUse([
@@ -51,7 +51,7 @@ test('exceptions')
         Violation::class,
     ])->ignoring('PHPUnit\Framework');
 
-test('expectations')
+arch('expectations')
     ->expect('Pest\Arch\Expectations')
     ->toOnlyUse([
         'expect',
@@ -60,7 +60,7 @@ test('expectations')
         'PHPUnit\Architecture\Elements\ObjectDescription',
     ])->ignoring('PHPUnit\Framework');
 
-test('repositories')->expect('Pest\Arch\Repositories')->toOnlyUse([
+arch('repositories')->expect('Pest\Arch\Repositories')->toOnlyUse([
     'Pest\TestSuite',
     'Pest\Arch\Factories',
     'Pest\Arch\Objects',
@@ -70,7 +70,7 @@ test('repositories')->expect('Pest\Arch\Repositories')->toOnlyUse([
     'Symfony\Component\Finder\Finder',
 ]);
 
-test('value objects')
+arch('value objects')
     ->expect('Pest\Arch\ValueObjects')
     ->toUseNothing()
     ->ignoring([Targets::class, Dependency::class, 'PHPUnit\Framework', Expectation::class])
