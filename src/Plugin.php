@@ -1,31 +1,29 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Pest\Arch;
 
-use Pest\Arch\Support\CommandArgumentMode;
-use Pest\Contracts\Plugins\Bootable;
 use Pest\Contracts\Plugins\HandlesArguments;
 use Pest\Plugins\Concerns\HandleArguments;
 
 /**
  * @internal
  */
-final class Plugin implements HandlesArguments, Bootable
+final class Plugin implements HandlesArguments
 {
     use HandleArguments;
 
-    private CommandArgumentMode $mode;
-
     public function handleArguments(array $arguments): array
     {
-        if (! $this->hasArgument('--arch', $arguments)) {
-            return $arguments;
+        if ($this->hasArgument('--arch', $arguments)) {
+            return $this->pushArgument('--group=arch', $this->popArgument('--arch', $arguments));
         }
 
-        return $this->popArgument('--arch', $arguments);
-    }
+        if ($this->hasArgument('--exclude-arch', $arguments)) {
+            return $this->pushArgument('--exclude-group=arch', $this->popArgument('--exclude-arch', $arguments));
+        }
 
-    public function boot(): void
-    {
+        return $arguments;
     }
 }
