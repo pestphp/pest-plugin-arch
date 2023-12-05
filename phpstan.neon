@@ -15,3 +15,4 @@ parameters:
     ignoreErrors:
         - "#has a nullable return type declaration.#"
         - "# with a nullable type declaration.#"
+        - "#has parameter \\$closure with null as default value.#"
