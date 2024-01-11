@@ -16,7 +16,7 @@
     "require": {
         "php": "^8.2",
         "pestphp/pest-plugin": "^3.0.0",
-        "ta-tikoma/phpunit-architecture-test": "^0.8.0"
+        "ta-tikoma/phpunit-architecture-test": "^0.8.4"
     },
     "autoload": {
         "psr-4": {
