@@ -62,13 +62,13 @@ final class Blueprint
      */
     public function expectToUse(LayerOptions $options, callable $failure): void
     {
-        AssertLocker::incrementAndLock();
-
         foreach ($this->target->value as $targetValue) {
             $targetLayer = $this->layerFactory->make($options, $targetValue, false);
 
             foreach ($this->dependencies->values as $dependency) {
                 $dependencyLayer = $this->layerFactory->make($options, $dependency->value);
+
+                AssertLocker::incrementAndLock();
 
                 try {
                     $this->assertDoesNotDependOn($targetLayer, $dependencyLayer);
@@ -92,8 +92,6 @@ final class Blueprint
      */
     public function targeted(callable $callback, LayerOptions $options, callable $failure, callable $lineFinder): void
     {
-        AssertLocker::incrementAndLock();
-
         foreach ($this->target->value as $targetValue) {
             $targetLayer = $this->layerFactory->make($options, $targetValue);
 
@@ -103,6 +101,8 @@ final class Blueprint
                         continue 2;
                     }
                 }
+
+                AssertLocker::incrementAndLock();
 
                 if ($callback($object)) {
                     continue;
@@ -126,8 +126,6 @@ final class Blueprint
      */
     public function expectToOnlyUse(LayerOptions $options, callable $failure): void
     {
-        AssertLocker::incrementAndLock();
-
         foreach ($this->target->value as $targetValue) {
             $allowedUses = array_merge(
                 ...array_map(fn (Layer $layer): array => array_map(
@@ -144,6 +142,8 @@ final class Blueprint
             $layer = $this->layerFactory->make($options, $targetValue);
             foreach ($layer as $object) {
                 foreach ($object->uses as $use) {
+                    AssertLocker::incrementAndLock();
+
                     if (! in_array($use, $allowedUses, true)) {
                         $failure($targetValue, $this->dependencies->__toString(), $use, $this->getUsagePathAndLines($layer, $targetValue, $use));
 
