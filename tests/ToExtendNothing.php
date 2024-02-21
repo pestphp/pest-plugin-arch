@@ -1,6 +1,7 @@
 <?php
 
 use Pest\Arch\Exceptions\ArchExpectationFailedException;
+use Tests\Fixtures\Controllers\CategoryController;
 use Tests\Fixtures\Controllers\ProductController;
 use Tests\Fixtures\Controllers\UserController;
 
@@ -23,7 +24,7 @@ test('ignoring', function () {
         ->toExtendNothing()
         ->ignoring(UserController::class)
         ->not->toExtendNothing()
-        ->ignoring(ProductController::class);
+        ->ignoring([ProductController::class, CategoryController::class]);
 });
 
 test('ignoring opposite message', function () {
