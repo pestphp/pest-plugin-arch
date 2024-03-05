@@ -103,7 +103,7 @@ final class ObjectsRepository
 
             $objectsPerPrefix = array_values(array_filter(array_reduce($directories, fn (array $files, string $fileOrDirectory): array => array_merge($files, array_values(array_map(
                 static fn (SplFileInfo $file): ?ObjectDescription => ObjectDescriptionFactory::make($file->getPathname(), $onlyUserDefinedUses),
-                is_dir($fileOrDirectory) ? iterator_to_array(Finder::create()->files()->in($fileOrDirectory)->name('*.php')) : [new SplFileInfo($fileOrDirectory)],
+                is_dir($fileOrDirectory) || str_contains($fileOrDirectory, '*') ? iterator_to_array(Finder::create()->files()->in($fileOrDirectory)->name('*.php')) : [new SplFileInfo($fileOrDirectory)],
             ))), [])));
 
             $objects = [...$objects, ...$this->cachedObjectsPerPrefix[$prefix][(int) $onlyUserDefinedUses] = $objectsPerPrefix];
@@ -151,13 +151,15 @@ final class ObjectsRepository
 
                 $directoriesByNamespace[$name] = [...$directoriesByNamespace[$name] ?? [], ...array_values(array_filter(array_map(static function (string $directory) use ($prefix): string {
                     $fileOrDirectory = $directory.DIRECTORY_SEPARATOR.$prefix;
-
                     if (is_dir($fileOrDirectory)) {
+                        return $fileOrDirectory;
+                    }
+                    if (str_contains($fileOrDirectory, '*')) {
                         return $fileOrDirectory;
                     }
 
                     return $fileOrDirectory.'.php';
-                }, $directories), static fn (string $fileOrDirectory): bool => is_dir($fileOrDirectory) || file_exists($fileOrDirectory)))];
+                }, $directories), static fn (string $fileOrDirectory): bool => is_dir($fileOrDirectory) || str_contains($fileOrDirectory, '*') || file_exists($fileOrDirectory)))];
             }
         }
 
