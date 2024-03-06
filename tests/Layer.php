@@ -1,5 +1,9 @@
 <?php
 
+use Tests\Fixtures\Domains\A\Contracts\Models\Bazable as BazableDomainA;
+use Tests\Fixtures\Domains\A\Models\Article as ArticleDomainA;
+use Tests\Fixtures\Domains\B\Contracts\Models\Bazable as BazableDomainB;
+use Tests\Fixtures\Domains\B\Models\Article as ArticleDomainB;
 use Tests\Fixtures\Enums\Color;
 use Tests\Fixtures\Enums\ColorThatDependsOnColor;
 use Tests\Fixtures\Misc\DependOnGlobalFunctions;
@@ -21,6 +25,24 @@ it('it does include vendor dependencies', function () {
         ->toOnlyUse('Pest')
         ->toOnlyUse('Pest\Support')
         ->toOnlyUse('Pest\Support\Str');
+});
+
+it('loads namespaces', function () {
+    expect('Tests\Fixtures\Domains\A\Models')
+        ->getTargets()
+        ->toBe([ArticleDomainA::class]);
+});
+
+it('loads namespaces using wildcards', function () {
+    expect('Tests\Fixtures\Domains\*\Models')
+        ->getTargets()
+        ->toBe([ArticleDomainA::class, ArticleDomainB::class]);
+});
+
+it('loads namespaces using multiple wildcards', function () {
+    expect('Tests\Fixtures\Domains\*\*\Models')
+        ->getTargets()
+        ->toBe([BazableDomainA::class, BazableDomainB::class]);
 });
 
 it('does support enums', function () {
