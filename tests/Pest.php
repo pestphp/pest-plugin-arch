@@ -26,7 +26,7 @@ expect()->extend('toThrowArchitectureViolation', function (string $message, stri
     });
 });
 
-expect()->extend('getObjects', function () {
+expect()->extend('getTargets', function () {
     $classes = [];
     Targeted::make(
         $this,

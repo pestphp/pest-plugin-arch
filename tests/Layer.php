@@ -29,19 +29,19 @@ it('it does include vendor dependencies', function () {
 
 it('loads namespaces', function () {
     expect('Tests\Fixtures\Domains\A\Models')
-        ->getObjects()
+        ->getTargets()
         ->toBe([ArticleDomainA::class]);
 });
 
 it('loads namespaces using wildcards', function () {
     expect('Tests\Fixtures\Domains\*\Models')
-        ->getObjects()
+        ->getTargets()
         ->toBe([ArticleDomainA::class, ArticleDomainB::class]);
 });
 
 it('loads namespaces using multiple wildcards', function () {
     expect('Tests\Fixtures\Domains\*\*\Models')
-        ->getObjects()
+        ->getTargets()
         ->toBe([BazableDomainA::class, BazableDomainB::class]);
 });
 
