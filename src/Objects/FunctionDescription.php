@@ -20,7 +20,11 @@ final class FunctionDescription extends ObjectDescription // @phpstan-ignore-lin
     {
         $description = new self();
 
-        $description->path = (new ReflectionFunction($path))->getFileName();
+        try {
+            $description->path = (new ReflectionFunction($path))->getFileName();
+        } catch (\Throwable) {
+            $description->path = $path;
+        }
 
         /** @var class-string<mixed> $path */
         $description->name = $path;
