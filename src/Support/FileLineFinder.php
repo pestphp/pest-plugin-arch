@@ -18,6 +18,10 @@ final class FileLineFinder
     public static function where(callable $callback): callable
     {
         return function (string $path) use ($callback): int {
+            if (file_exists($path) === false) {
+                return 0;
+            }
+
             $contents = (string) file_get_contents($path);
 
             foreach (explode("\n", $contents) as $line => $content) {
