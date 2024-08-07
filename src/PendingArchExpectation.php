@@ -30,8 +30,7 @@ final class PendingArchExpectation
     public function __construct(
         private readonly Expectation $expectation,
         private array $excludeCallbacks,
-    ) {
-    }
+    ) {}
 
     /**
      * Filters the given "targets" by only classes.

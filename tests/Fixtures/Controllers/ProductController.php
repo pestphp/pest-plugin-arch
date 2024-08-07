@@ -11,7 +11,7 @@ final class ProductController
     public function index(): array
     {
         return [
-            new Product(),
+            new Product,
         ];
     }
 }

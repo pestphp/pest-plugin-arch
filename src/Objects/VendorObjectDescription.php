@@ -17,7 +17,7 @@ final class VendorObjectDescription extends ObjectDescription // @phpstan-ignore
      */
     public static function make(string $path): ?self // @phpstan-ignore-line
     {
-        $object = new self();
+        $object = new self;
 
         try {
             $vendorObject = ObjectDescriptionBase::make($path);

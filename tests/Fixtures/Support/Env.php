@@ -2,6 +2,4 @@
 
 namespace Tests\Fixtures\Support;
 
-class Env
-{
-}
+class Env {}

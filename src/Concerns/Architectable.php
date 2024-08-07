@@ -21,7 +21,7 @@ trait Architectable
      */
     public function arch(): TestCaseOptions
     {
-        $options = $this->options ??= new TestCaseOptions();
+        $options = $this->options ??= new TestCaseOptions;
 
         return $this->options = $options;
     }

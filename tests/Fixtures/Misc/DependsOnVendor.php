@@ -8,6 +8,6 @@ class DependsOnVendor
 {
     public function makeStrFromVendor(): Str
     {
-        return new Str();
+        return new Str;
     }
 }
