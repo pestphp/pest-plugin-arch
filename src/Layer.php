@@ -13,7 +13,8 @@ use Traversable;
 /**
  * @method Layer assertDoesNotDependOn(string ...$objects)
  * @method Layer excludeByNameStart(string $name)
- * @mixin LayerLeave
+ * @method Layer leaveByNameRegex(string $name)
+ * @method Layer leaveByNameStart(string $name)
  *
  * @implements IteratorAggregate<int, ObjectDescription>
  */
