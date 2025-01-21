@@ -147,7 +147,13 @@ final class ObjectsRepository
             if (str_starts_with($name, $prefix)) {
                 $directories = array_values(array_filter($directories, static fn (string $directory): bool => is_dir($directory)));
 
-                $prefix = str_replace('\\', DIRECTORY_SEPARATOR, ltrim(str_replace($prefix, '', $name), '\\'));
+                // Remove the first occurrence of the prefix, if any.
+                // This is needed to avoid having a prefix like "App" and a namespace like "App\Application\..."
+                // This would result in a directory like "\lication\..."
+                $posFirstPrefix = strpos($name, $prefix);
+                $nameWithoutPrefix = $posFirstPrefix !== false ? substr($name, $posFirstPrefix + strlen($prefix)) : $name;
+
+                $prefix = str_replace('\\', DIRECTORY_SEPARATOR, ltrim($nameWithoutPrefix, '\\'));
 
                 $directoriesByNamespace[$name] = [...$directoriesByNamespace[$name] ?? [], ...array_values(array_filter(array_map(static function (string $directory) use ($prefix): string {
                     $fileOrDirectory = $directory.DIRECTORY_SEPARATOR.$prefix;
