@@ -255,6 +255,10 @@ final class Blueprint
         /** @var class-string<\PhpParser\Node> $class */
         $class = PhpCoreExpressions::getClass($target) ?? Name::class;
 
+        if ($dependOnObject === null) {
+            return null;
+        }
+
         $nodes = ServiceContainer::$nodeFinder->findInstanceOf(
             $dependOnObject->stmts,
             $class,
