@@ -255,6 +255,7 @@ final class Blueprint
         /** @var class-string<\PhpParser\Node> $class */
         $class = PhpCoreExpressions::getClass($target) ?? Name::class;
 
+        // @phpstan-ignore-next-line
         if ($dependOnObject === null) {
             return null;
         }

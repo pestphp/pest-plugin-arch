@@ -18,6 +18,6 @@ test('only classes implementing interfaces are tested', function (): void {
 
 test('only class using traits are tested', function (): void {
     expect('Tests\Fixtures\Controllers')
-        ->usingTrait(HasResponses::class)
+        ->using(HasResponses::class)
         ->toUseTrait(HasResponses::class);
 });

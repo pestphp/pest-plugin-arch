@@ -85,9 +85,12 @@ final class PendingArchExpectation
 
     /**
      * Filters the given "targets" by only classes extending the given class.
+     *
+     * @param  class-string  $parentClass
      */
     public function extending(string $parentClass): self
     {
+        // @phpstan-ignore-next-line
         $this->excludeCallbacks[] = fn (ObjectDescription $object): bool => ! is_subclass_of($object->name, $parentClass);
 
         return $this;
@@ -96,7 +99,7 @@ final class PendingArchExpectation
     /**
      * Filters the given "targets" by only classes using the given trait.
      */
-    public function usingTrait(string $trait): self
+    public function using(string $trait): self
     {
         $this->excludeCallbacks[] = fn (ObjectDescription $object): bool => ! in_array($trait, class_uses($object->name));
 
