@@ -11,6 +11,8 @@ use Pest\Arch\ValueObjects\Violation;
 use Pest\Expectation;
 use Whoops\Exception\Frame;
 
+arch('strict types')->expect('*')->toUseStrictTypes();
+
 arch('base')
     ->expect('Pest\Arch')
     ->classes->toBeFinal()
