@@ -22,10 +22,12 @@ final class ToOnlyUse
     /**
      * Creates an "ToOnlyUse" expectation.
      *
+     * @param  Expectation<array<int, string>|string>  $expectation
      * @param  array<int, string>|string  $dependencies
      */
     public static function make(Expectation $expectation, array|string $dependencies): SingleArchExpectation
     {
+        // @phpstan-ignore-next-line
         assert(is_string($expectation->value) || is_array($expectation->value));
         /** @var Expectation<array<int, string>|string> $expectation */
         $blueprint = Blueprint::make(

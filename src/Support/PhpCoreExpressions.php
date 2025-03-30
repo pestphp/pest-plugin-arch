@@ -41,6 +41,7 @@ final class PhpCoreExpressions
             Exit_::class => match ($expression->getAttribute('kind')) {
                 Exit_::KIND_EXIT => 'exit',
                 Exit_::KIND_DIE => 'die',
+                // @phpstan-ignore-next-line
                 default => throw ShouldNotHappen::fromMessage('Unhandled Exit expression kind '.$expression->getAttribute('kind')),
             },
             Isset_::class => 'isset',

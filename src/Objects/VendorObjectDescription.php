@@ -10,12 +10,12 @@ use PHPUnit\Architecture\Elements\ObjectDescription;
 /**
  * @internal
  */
-final class VendorObjectDescription extends ObjectDescription // @phpstan-ignore-line
+final class VendorObjectDescription extends ObjectDescription
 {
     /**
      * {@inheritDoc}
      */
-    public static function make(string $path): ?self // @phpstan-ignore-line
+    public static function make(string $path): ?self
     {
         $object = new self;
 

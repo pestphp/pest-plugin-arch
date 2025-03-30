@@ -55,7 +55,7 @@ final class Composer
         $autoloadLines = explode("\n", (string) file_get_contents($autoload));
 
         /** @var ClassLoader $loader */
-        $loader = eval($autoloadLines[count($autoloadLines) - 2]); // @phpstan-ignore-line
+        $loader = eval($autoloadLines[count($autoloadLines) - 2]);
 
         return $loader;
     }
