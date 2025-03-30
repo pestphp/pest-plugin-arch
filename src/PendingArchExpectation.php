@@ -74,6 +74,36 @@ final class PendingArchExpectation
     }
 
     /**
+     * Filters the given "targets" by only classes implementing the given interface.
+     */
+    public function implementing(string $interface): self
+    {
+        $this->excludeCallbacks[] = fn (ObjectDescription $object): bool => ! in_array($interface, class_implements($object->name));
+
+        return $this;
+    }
+
+    /**
+     * Filters the given "targets" by only classes extending the given class.
+     */
+    public function extending(string $parentClass): self
+    {
+        $this->excludeCallbacks[] = fn (ObjectDescription $object): bool => ! is_subclass_of($object->name, $parentClass);
+
+        return $this;
+    }
+
+    /**
+     * Filters the given "targets" by only classes using the given trait.
+     */
+    public function usingTrait(string $trait): self
+    {
+        $this->excludeCallbacks[] = fn (ObjectDescription $object): bool => ! in_array($trait, class_uses($object->name));
+
+        return $this;
+    }
+
+    /**
      * Creates an opposite expectation.
      */
     public function not(): self
