@@ -1,8 +1,8 @@
 <?php
 
 use Tests\Fixtures\Misc\TestsNestedNamespace\IsNested;
-use Tests\Fixtures\Models\User;
 use Tests\Fixtures\Models\Product;
+use Tests\Fixtures\Models\User;
 
 it('finds objects by namespace', function (string $namespace, array $expected) {
     $sut = new Pest\Arch\Repositories\ObjectsRepository([
