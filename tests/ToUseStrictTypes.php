@@ -1,13 +1,14 @@
 <?php
 
 use Pest\Arch\Exceptions\ArchExpectationFailedException;
+use Tests\Fixtures\Controllers\CategoryController;
 use Tests\Fixtures\Controllers\ProductController;
 use Tests\Fixtures\Controllers\UserController;
 
 it('passes', function () {
     expect(ProductController::class)
         ->toUseStrictTypes()
-        ->and(UserController::class)
+        ->and([UserController::class, CategoryController::class])
         ->not->toUseStrictTypes();
 });
 
@@ -18,10 +19,17 @@ it('fails 1', function () {
     "Expecting 'tests/Fixtures/Controllers/UserController.php' to use strict types."
 );
 
+it('fails when commented', function () {
+    expect([CategoryController::class])->toUseStrictTypes();
+})->throws(
+    ArchExpectationFailedException::class,
+    "Expecting 'tests/Fixtures/Controllers/CategoryController.php' to use strict types."
+);
+
 test('ignoring', function () {
     expect('Tests\Fixtures\Controllers')
         ->toUseStrictTypes()
-        ->ignoring(UserController::class)
+        ->ignoring([UserController::class, CategoryController::class])
         ->not->toUseStrictTypes()
         ->ignoring(ProductController::class);
 });

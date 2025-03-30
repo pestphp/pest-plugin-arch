@@ -2,6 +2,7 @@
 
 use Pest\Arch\Exceptions\ArchExpectationFailedException;
 use Tests\Fixtures\Controller;
+use Tests\Fixtures\Controllers\CategoryController;
 use Tests\Fixtures\Controllers\ProductController;
 use Tests\Fixtures\Controllers\UserController;
 
@@ -22,7 +23,7 @@ it('fails 1', function () {
 test('ignoring', function () {
     expect('Tests\Fixtures\Controllers')
         ->toExtend(Controller::class)
-        ->ignoring(ProductController::class)
+        ->ignoring([ProductController::class, CategoryController::class])
         ->not->toExtend(Controller::class)
         ->ignoring(UserController::class);
 });
