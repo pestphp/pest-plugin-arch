@@ -17,8 +17,6 @@ final class VendorObjectDescription extends ObjectDescription
      */
     public static function make(string $path): ?self
     {
-        $object = new self;
-
         try {
             $vendorObject = ObjectDescriptionBase::make($path);
         } catch (Error) {
@@ -29,8 +27,6 @@ final class VendorObjectDescription extends ObjectDescription
             return null;
         }
 
-        $object->name = $vendorObject->name;
-
-        return $object;
+        return $vendorObject;
     }
 }

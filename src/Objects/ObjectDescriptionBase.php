@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Pest\Arch\Objects;
 
-use PHPUnit\Architecture\Elements\ObjectDescriptionBase as BaseObjectDescriptionBase;
+extends use PHPUnit\Architecture\Elements\ObjectDescription;
 
 /**
  * @internal
  */
-final class ObjectDescriptionBase extends BaseObjectDescriptionBase
+final class ObjectDescriptionBase extends ObjectDescription
 {
     //
 }
