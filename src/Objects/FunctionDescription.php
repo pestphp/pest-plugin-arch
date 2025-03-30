@@ -7,11 +7,12 @@ namespace Pest\Arch\Objects;
 use PHPUnit\Architecture\Asserts\Dependencies\Elements\ObjectUses;
 use PHPUnit\Architecture\Elements\ObjectDescription;
 use ReflectionFunction;
+use Throwable;
 
 /**
  * @internal
  */
-final class FunctionDescription extends ObjectDescription // @phpstan-ignore-line
+final class FunctionDescription extends ObjectDescription
 {
     /**
      * {@inheritDoc}
@@ -22,7 +23,7 @@ final class FunctionDescription extends ObjectDescription // @phpstan-ignore-lin
 
         try {
             $description->path = (string) (new ReflectionFunction($path))->getFileName();
-        } catch (\Throwable) { // @phpstan-ignore-line
+        } catch (Throwable) {
             $description->path = $path;
         }
 

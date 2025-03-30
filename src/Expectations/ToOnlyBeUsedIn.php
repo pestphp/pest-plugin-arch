@@ -23,10 +23,12 @@ final class ToOnlyBeUsedIn
     /**
      * Creates an "ToOnlyBeUsedIn" expectation.
      *
+     * @param  Expectation<array<int, string>|string>  $expectation
      * @param  array<int, string>|string  $targets
      */
     public static function make(Expectation $expectation, array|string $targets): GroupArchExpectation
     {
+        // @phpstan-ignore-next-line
         assert(is_string($expectation->value) || is_array($expectation->value));
 
         /** @var Expectation<array<int, string>|string> $expectation */

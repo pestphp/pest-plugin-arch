@@ -18,6 +18,7 @@ final class GroupArchExpectation implements Contracts\ArchExpectation
     /**
      * Creates a new Arch Expectation instance.
      *
+     * @param  Expectation<array<int, string>|string>  $original
      * @param  array<int, GroupArchExpectation|SingleArchExpectation>  $expectations
      */
     private function __construct(private readonly Expectation $original, private readonly array $expectations)
@@ -69,6 +70,7 @@ final class GroupArchExpectation implements Contracts\ArchExpectation
     /**
      * Creates a new Arch Expectation instance from the given expectations.
      *
+     * @param  Expectation<array<int, string>|string>  $original
      * @param  array<int, GroupArchExpectation|SingleArchExpectation>  $expectations
      */
     public static function fromExpectations(Expectation $original, array $expectations): self

@@ -13,7 +13,7 @@ use PHPUnit\Architecture\Elements\ObjectDescription;
 /**
  * @internal
  *
- * @mixin Expectation<array|string>
+ * @mixin Expectation<array<int, string>|string>
  */
 final class PendingArchExpectation
 {
@@ -25,6 +25,7 @@ final class PendingArchExpectation
     /**
      * Creates a new Pending Arch Expectation instance.
      *
+     * @param  Expectation<array<int, string>|string>  $expectation
      * @param  array<int, Closure(ObjectDescription): bool>  $excludeCallbacks
      */
     public function __construct(
@@ -91,10 +92,11 @@ final class PendingArchExpectation
     {
         $expectation = $this->opposite ? $this->expectation->not() : $this->expectation;
 
-        /** @var $archExpectation SingleArchExpectation */
-        $archExpectation = $expectation->{$name}(...$arguments); // @phpstan-ignore-line
+        /** @var ArchExpectation $archExpectation */
+        $archExpectation = $expectation->{$name}(...$arguments);
 
-        if ($archExpectation instanceof HigherOrderExpectation) {
+        if ($archExpectation instanceof HigherOrderExpectation) { // @phpstan-ignore-line
+            // @phpstan-ignore-next-line
             $originalExpectation = (fn (): \Pest\Expectation => $this->original)->call($archExpectation);
         } else {
             $originalExpectation = $archExpectation;
@@ -110,6 +112,6 @@ final class PendingArchExpectation
      */
     public function __get(string $name): mixed
     {
-        return $this->{$name}(); // @phpstan-ignore-line
+        return $this->{$name}();
     }
 }

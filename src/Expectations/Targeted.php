@@ -20,6 +20,8 @@ final class Targeted
 {
     /**
      * Creates an "ToBe" expectation.
+     *
+     * @param  Expectation<array<int, string>|string>  $expectation
      */
     public static function make(
         Expectation $expectation,
@@ -27,6 +29,7 @@ final class Targeted
         string $what,
         callable $line,
     ): SingleArchExpectation {
+        // @phpstan-ignore-next-line
         assert(is_string($expectation->value) || is_array($expectation->value));
         /** @var Expectation<array<int, string>|string> $expectation */
         $blueprint = Blueprint::make(

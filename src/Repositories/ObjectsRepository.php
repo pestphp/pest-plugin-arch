@@ -106,9 +106,11 @@ final class ObjectsRepository
                 is_dir($fileOrDirectory) ? iterator_to_array(Finder::create()->files()->in($fileOrDirectory)->name('*.php')) : [new SplFileInfo($fileOrDirectory)],
             ))), [])));
 
+            // @phpstan-ignore-next-line
             $objects = [...$objects, ...$this->cachedObjectsPerPrefix[$prefix][(int) $onlyUserDefinedUses] = $objectsPerPrefix];
         }
 
+        // @phpstan-ignore-next-line
         return [...$objects, ...array_map(
             static fn (string $function): FunctionDescription => FunctionDescription::make($function),
             $this->functionsByNamespace($namespace),

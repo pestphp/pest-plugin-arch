@@ -23,6 +23,7 @@ final class AssertLocker
      */
     public static function incrementAndLock(): void
     {
+        // @phpstan-ignore-next-line
         Assert::assertTrue(true);
 
         self::$count = Assert::getCount();

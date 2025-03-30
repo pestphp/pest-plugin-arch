@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @internal
  *
- * @mixin Expectation<array|string>
+ * @mixin Expectation<array<int, string>|string>
  */
 final class SingleArchExpectation implements Contracts\ArchExpectation
 {
@@ -47,6 +47,8 @@ final class SingleArchExpectation implements Contracts\ArchExpectation
 
     /**
      * Creates a new Arch Expectation instance.
+     *
+     * @param  Expectation<array<int, string>|string>  $expectation
      */
     private function __construct(private readonly Expectation $expectation, private readonly Closure $lazyExpectation)
     {
@@ -85,6 +87,8 @@ final class SingleArchExpectation implements Contracts\ArchExpectation
 
     /**
      * Creates a new Arch Expectation instance from the given expectation.
+     *
+     * @param  Expectation<array<int, string>|string>  $expectation
      */
     public static function fromExpectation(Expectation $expectation, Closure $lazyExpectation): self
     {
@@ -126,6 +130,8 @@ final class SingleArchExpectation implements Contracts\ArchExpectation
 
     /**
      * {@inheritDoc}
+     *
+     * @return array<int, callable(ObjectDescription): bool>
      */
     public function excludeCallbacks(): array
     {

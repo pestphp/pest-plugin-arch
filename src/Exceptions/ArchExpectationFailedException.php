@@ -12,7 +12,7 @@ use Whoops\Exception\Frame;
 /**
  * @internal
  */
-final class ArchExpectationFailedException extends AssertionFailedError implements RenderableOnCollisionEditor // @phpstan-ignore-line
+final class ArchExpectationFailedException extends AssertionFailedError implements RenderableOnCollisionEditor
 {
     /**
      * Creates a new exception instance.
