@@ -21,3 +21,9 @@ test('only class using traits are tested', function (): void {
         ->using(HasResponses::class)
         ->toUseTrait(HasResponses::class);
 });
+
+test('only abstract classes are tested', function (): void {
+    expect('Tests\Fixtures\Misc\Abstracts')
+        ->abstracts()
+        ->toHaveMethod('edible');
+});
