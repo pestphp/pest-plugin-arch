@@ -47,6 +47,34 @@ final class Composer
     }
 
     /**
+     * Gets the list of top-level vendor namespaces defined in the "composer.json" file.
+     *
+     * @return array<int, string>
+     */
+    public static function vendorNamespaces(): array
+    {
+        $namespaces = [];
+
+        $rootPath = TestSuite::getInstance()->rootPath.DIRECTORY_SEPARATOR;
+
+        foreach (self::loader()->getPrefixesPsr4() as $namespace => $directories) {
+            foreach ($directories as $directory) {
+                $directory = realpath($directory);
+
+                if ($directory === false) {
+                    continue;
+                }
+
+                if (str_starts_with($directory, $rootPath.'vendor')) {
+                    $namespaces[] = rtrim($namespace, '\\');
+                }
+            }
+        }
+
+        return $namespaces;
+    }
+
+    /**
      * Gets composer's autoloader class.
      */
     public static function loader(): ClassLoader

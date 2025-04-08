@@ -6,6 +6,7 @@ namespace Pest\Arch;
 
 use Closure;
 use Pest\Arch\Options\LayerOptions;
+use Pest\Arch\Support\Composer;
 use Pest\Arch\Support\UserDefinedFunctions;
 use Pest\Expectation;
 use Pest\TestSuite;
@@ -73,6 +74,14 @@ final class SingleArchExpectation implements Contracts\ArchExpectation
     public function ignoringGlobalFunctions(): self
     {
         return $this->ignoring(UserDefinedFunctions::get());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function ignoringThirdPartiesDeps(): self
+    {
+        return $this->ignoring(Composer::vendorNamespaces());
     }
 
     /**

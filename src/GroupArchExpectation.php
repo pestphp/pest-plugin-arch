@@ -56,6 +56,20 @@ final class GroupArchExpectation implements Contracts\ArchExpectation
     }
 
     /**
+     * Ignores third-party dependencies.
+     *
+     * @return $this
+     */
+    public function ignoringThirdPartiesDeps(): self
+    {
+        foreach ($this->expectations as $expectation) {
+            $expectation->ignoringThirdPartiesDeps();
+        }
+
+        return $this;
+    }
+
+    /**
      * Sets the "opposite" callback.
      */
     public function opposite(Closure $callback): self

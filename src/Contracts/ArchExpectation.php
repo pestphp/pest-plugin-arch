@@ -30,6 +30,13 @@ interface ArchExpectation
     public function ignoringGlobalFunctions(): self;
 
     /**
+     * Ignores third-party dependencies
+     *
+     * @return $this
+     */
+    public function ignoringThirdPartiesDeps(): self;
+
+    /**
      * Merge the given exclude callbacks.
      *
      * @param  array<int, callable(ObjectDescription): bool>  $callbacks
