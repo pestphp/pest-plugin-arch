@@ -10,7 +10,7 @@ jobs:
         os: [ubuntu-latest, macos-latest]
         php: ['8.2', '8.3']
         dependency-version: [prefer-lowest, prefer-stable]
-        parallel: ['', '--parallel']
+        parallel: ['', '-- --parallel']
 
     name: PHP ${{ matrix.php }} - ${{ matrix.os }} - ${{ matrix.dependency-version }} - ${{ matrix.parallel }}
 
@@ -34,4 +34,4 @@ jobs:
       run: composer update --${{ matrix.dependency-version }} --no-interaction --no-progress --ansi
 
     - name: Unit Tests
-      run: composer test:unit -- ${{ matrix.parallel }}
+      run: composer test:unit ${{ matrix.parallel }}
