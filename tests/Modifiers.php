@@ -24,6 +24,6 @@ test('only class using traits are tested', function (): void {
 
 test('only abstract classes are tested', function (): void {
     expect('Tests\Fixtures\Misc\Abstracts')
-        ->abstracts()
+        ->abstractClasses()
         ->toHaveMethod('edible');
 });

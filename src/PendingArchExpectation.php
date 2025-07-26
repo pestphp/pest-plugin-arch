@@ -46,9 +46,9 @@ final class PendingArchExpectation
     /**
      * Filters the given "targets" by only abstract classes.
      */
-    public function abstracts(): self
+    public function abstractClasses(): self
     {
-        $this->excludeCallbacks[] = fn(ObjectDescription $object): bool => !$object->reflectionClass->isAbstract();
+        $this->excludeCallbacks[] = fn (ObjectDescription $object): bool => ! class_exists($object->name) || ! $object->reflectionClass->isAbstract();
 
         return $this;
     }
@@ -100,7 +100,6 @@ final class PendingArchExpectation
      */
     public function extending(string $parentClass): self
     {
-        // @phpstan-ignore-next-line
         $this->excludeCallbacks[] = fn (ObjectDescription $object): bool => ! is_subclass_of($object->name, $parentClass);
 
         return $this;

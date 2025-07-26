@@ -2,7 +2,4 @@
 
 namespace Tests\Fixtures\Misc\Abstracts;
 
-class Leef
-{
-
-}
+class Leef {}
