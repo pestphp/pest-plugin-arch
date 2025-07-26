@@ -44,6 +44,16 @@ final class PendingArchExpectation
     }
 
     /**
+     * Filters the given "targets" by only abstract classes.
+     */
+    public function abstracts(): self
+    {
+        $this->excludeCallbacks[] = fn(ObjectDescription $object): bool => !$object->reflectionClass->isAbstract();
+
+        return $this;
+    }
+
+    /**
      * Filters the given "targets" by only interfaces.
      */
     public function interfaces(): self
