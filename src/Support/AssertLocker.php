@@ -46,9 +46,6 @@ final class AssertLocker
     {
         $reflectionClass = new ReflectionClass(Assert::class);
 
-        $property = $reflectionClass->getProperty('count');
-        $property->setAccessible(true);
-
-        return $property;
+        return $reflectionClass->getProperty('count');
     }
 }
