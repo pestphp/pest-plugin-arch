@@ -30,7 +30,7 @@ final class ToBeUsedIn
             $expectation,
             array_map(
                 // @phpstan-ignore-next-line
-                static fn ($target): SingleArchExpectation => ToUse::make(expect($target), $expectation->value), $targets
+                static fn (string $target): SingleArchExpectation => ToUse::make(expect($target), $expectation->value), $targets
             )
         );
     }

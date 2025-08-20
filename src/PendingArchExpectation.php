@@ -90,7 +90,6 @@ final class PendingArchExpectation
      */
     public function extending(string $parentClass): self
     {
-        // @phpstan-ignore-next-line
         $this->excludeCallbacks[] = fn (ObjectDescription $object): bool => ! is_subclass_of($object->name, $parentClass);
 
         return $this;

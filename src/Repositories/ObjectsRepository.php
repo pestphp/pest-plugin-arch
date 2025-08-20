@@ -125,7 +125,7 @@ final class ObjectsRepository
     private function functionsByNamespace(string $name): array
     {
         return array_map(
-            static function ($functionName): string {
+            static function (string $functionName): string {
                 $reflection = new ReflectionFunction($functionName);
 
                 return $reflection->getName();

@@ -267,7 +267,7 @@ final class Blueprint
 
         /** @var array<int, Name|Expr> $nodes */
         $names = array_values(array_filter(
-            $nodes, static function ($node) use ($target): bool {
+            $nodes, static function (\PhpParser\Node\Expr|\PhpParser\Node\Name $node) use ($target): bool {
                 $name = $node instanceof Name ? $node->toString() : PhpCoreExpressions::getName($node);
 
                 return $name === $target;
