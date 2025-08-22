@@ -15,7 +15,7 @@ final class Composer
     /**
      * Gets the list of namespaces defined in the "composer.json" file.
      *
-     * @return array<int, string>
+     * @return array<string, string>
      */
     public static function userNamespaces(): array
     {
@@ -39,7 +39,7 @@ final class Composer
                     continue;
                 }
 
-                $namespaces[] = rtrim($namespace, '\\');
+                $namespaces[$directory] = rtrim($namespace, '\\');
             }
         }
 
