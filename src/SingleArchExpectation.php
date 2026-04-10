@@ -161,7 +161,7 @@ final class SingleArchExpectation implements Contracts\ArchExpectation
             try {
                 ($this->lazyExpectation)($options);
             } catch (ExpectationFailedException|AssertionFailedError $e) {
-                if (! $this->opposite instanceof \Closure) {
+                if (! $this->opposite instanceof Closure) {
                     throw $e;
                 }
             }
