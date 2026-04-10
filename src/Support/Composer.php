@@ -29,6 +29,22 @@ final class Composer
      */
     public static function userNamespacesWithDirectories(): array
     {
+        $rootPath = TestSuite::getInstance()->rootPath.DIRECTORY_SEPARATOR;
+
+        return array_filter(
+            self::allNamespacesWithDirectories(),
+            static fn (string $namespace, string $directory): bool => ! str_starts_with($directory, $rootPath.'tests') || str_ends_with($directory, 'pest-plugin-arch'.DIRECTORY_SEPARATOR.'tests'),
+            ARRAY_FILTER_USE_BOTH,
+        );
+    }
+
+    /**
+     * Gets the map of directories to namespaces for all non-vendor PSR-4 entries.
+     *
+     * @return array<string, string>
+     */
+    public static function allNamespacesWithDirectories(): array
+    {
         $namespaces = [];
 
         $rootPath = TestSuite::getInstance()->rootPath.DIRECTORY_SEPARATOR;
@@ -42,10 +58,6 @@ final class Composer
                 }
 
                 if (str_starts_with($directory, $rootPath.'vendor')) {
-                    continue;
-                }
-
-                if (str_starts_with($directory, $rootPath.'tests') && ! str_ends_with($directory, 'pest-plugin-arch'.DIRECTORY_SEPARATOR.'tests')) {
                     continue;
                 }
 

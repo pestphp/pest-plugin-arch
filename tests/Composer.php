@@ -18,3 +18,14 @@ it('retrieves user namespaces with directories', function () {
         ->and(array_values($namespaces))->toContain('Tests')
         ->and($namespaces)->each(fn ($namespace, $directory) => expect($directory)->toBeDirectory());
 });
+
+it('retrieves all non-vendor namespaces with directories', function () {
+    $all = Composer::allNamespacesWithDirectories();
+    $user = Composer::userNamespacesWithDirectories();
+
+    expect($all)->toBeArray()
+        ->and(array_values($all))->toContain('Pest\Arch')
+        ->and(array_values($all))->toContain('Tests')
+        ->and($all)->each(fn ($namespace, $directory) => expect($directory)->toBeDirectory())
+        ->and(array_keys($user))->each(fn ($directory) => expect($all)->toHaveKey($directory->value));
+});
