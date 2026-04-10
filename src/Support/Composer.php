@@ -19,6 +19,16 @@ final class Composer
      */
     public static function userNamespaces(): array
     {
+        return array_values(self::userNamespacesWithDirectories());
+    }
+
+    /**
+     * Gets the map of directories to namespaces defined in the "composer.json" file.
+     *
+     * @return array<string, string>
+     */
+    public static function userNamespacesWithDirectories(): array
+    {
         $namespaces = [];
 
         $rootPath = TestSuite::getInstance()->rootPath.DIRECTORY_SEPARATOR;
@@ -39,7 +49,7 @@ final class Composer
                     continue;
                 }
 
-                $namespaces[] = rtrim($namespace, '\\');
+                $namespaces[$directory] = rtrim($namespace, '\\');
             }
         }
 
