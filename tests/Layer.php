@@ -1,5 +1,6 @@
 <?php
 
+use PHPUnit\Framework\ExpectationFailedException;
 use Tests\Fixtures\Domains\A\Contracts\Models\Bazable as BazableDomainA;
 use Tests\Fixtures\Domains\A\Models\Article as ArticleDomainA;
 use Tests\Fixtures\Domains\B\Contracts\Models\Bazable as BazableDomainB;
@@ -73,7 +74,7 @@ it('dependency does not support paths', function () {
     expect('tests/Fixtures/my_request_namespaced_function')
         ->toUse('my_request_global_function');
 })->throws(
-    \PHPUnit\Framework\ExpectationFailedException::class,
+    ExpectationFailedException::class,
     "Expecting 'tests/Fixtures/my_request_namespaced_function' to be a class name or namespace, but it contains a path.",
 );
 
@@ -81,6 +82,6 @@ it('targets does not support paths', function () {
     expect('Tests\Fixtures\my_request_namespaced_function')
         ->toUse('tests/Fixtures/my_request_namespaced_function');
 })->throws(
-    \PHPUnit\Framework\ExpectationFailedException::class,
+    ExpectationFailedException::class,
     "Expecting 'tests/Fixtures/my_request_namespaced_function' to be a class name or namespace, but it contains a path.",
 );

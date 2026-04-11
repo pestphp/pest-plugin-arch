@@ -1,5 +1,6 @@
 <?php
 
+use Pest\Arch\Exceptions\ArchExpectationFailedException;
 use PHPUnit\Framework\ExpectationFailedException;
 
 test('native functions', function () {
@@ -29,14 +30,14 @@ test('failure 2', function () {
 test('failure 3', function () {
     expect('sleep')->not->toBeUsed();
 })->throws(
-    \Pest\Arch\Exceptions\ArchExpectationFailedException::class,
+    ArchExpectationFailedException::class,
     'Expecting \'sleep\' not to be used on \'Tests\Fixtures\Misc\HasNativeFunctions\'.'
 );
 
 test('failure 4', function () {
     expect('sleep')->toBeUsedInNothing();
 })->throws(
-    \Pest\Arch\Exceptions\ArchExpectationFailedException::class,
+    ArchExpectationFailedException::class,
     'Expecting \'sleep\' not to be used on \'Tests\Fixtures\Misc\HasNativeFunctions\'.'
 );
 

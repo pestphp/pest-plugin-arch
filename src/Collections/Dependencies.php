@@ -31,7 +31,7 @@ final class Dependencies implements Stringable
     public static function fromExpectationInput(array|string $values): self
     {
         return new self(array_map(
-            static fn (string $value): Dependency => Dependency::fromString($value),
+            Dependency::fromString(...),
             is_array($values) ? $values : [$values]
         ));
     }

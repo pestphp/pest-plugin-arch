@@ -22,7 +22,7 @@ final class ObjectDescription extends \PHPUnit\Architecture\Elements\ObjectDescr
         /** @var ObjectDescription|null $description */
         $description = parent::make($path);
 
-        if (! $description instanceof \Pest\Arch\Objects\ObjectDescription) {
+        if (! $description instanceof ObjectDescription) {
             return null;
         }
 
@@ -55,6 +55,6 @@ final class ObjectDescription extends \PHPUnit\Architecture\Elements\ObjectDescr
         }
 
         /** @var array<int, Expr> $expressions */
-        return array_filter(array_map(fn (Expr $expression): string => PhpCoreExpressions::getName($expression), $expressions));
+        return array_filter(array_map(PhpCoreExpressions::getName(...), $expressions));
     }
 }

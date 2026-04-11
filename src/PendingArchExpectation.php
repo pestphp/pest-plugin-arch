@@ -139,7 +139,7 @@ final class PendingArchExpectation
 
         if ($archExpectation instanceof HigherOrderExpectation) { // @phpstan-ignore-line
             // @phpstan-ignore-next-line
-            $originalExpectation = (fn (): \Pest\Expectation => $this->original)->call($archExpectation);
+            $originalExpectation = (fn (): Expectation => $this->original)->call($archExpectation);
         } else {
             $originalExpectation = $archExpectation;
         }

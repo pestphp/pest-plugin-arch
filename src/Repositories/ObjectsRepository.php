@@ -46,7 +46,7 @@ final class ObjectsRepository
      */
     public static function getInstance(): self
     {
-        if (self::$instance instanceof \Pest\Arch\Repositories\ObjectsRepository) {
+        if (self::$instance instanceof ObjectsRepository) {
             return self::$instance;
         }
 
@@ -54,7 +54,7 @@ final class ObjectsRepository
 
         $namespaces = [];
 
-        foreach ((fn (): array => $loader->getPrefixesPsr4())->call($loader) as $namespacePrefix => $directories) {
+        foreach (($loader->getPrefixesPsr4(...))->call($loader) as $namespacePrefix => $directories) {
             $namespace = rtrim($namespacePrefix, '\\');
 
             $namespaces[$namespace] = $directories;
@@ -112,7 +112,7 @@ final class ObjectsRepository
 
         // @phpstan-ignore-next-line
         return [...$objects, ...array_map(
-            static fn (string $function): FunctionDescription => FunctionDescription::make($function),
+            FunctionDescription::make(...),
             $this->functionsByNamespace($namespace),
         )];
     }
@@ -147,7 +147,7 @@ final class ObjectsRepository
 
         foreach ($this->prefixes as $prefix => $directories) {
             if (str_starts_with($name, $prefix)) {
-                $directories = array_values(array_filter($directories, static fn (string $directory): bool => is_dir($directory)));
+                $directories = array_values(array_filter($directories, is_dir(...)));
 
                 // Remove the first occurrence of the prefix, if any.
                 // This is needed to avoid having a prefix like "App" and a namespace like "App\Application\..."
@@ -157,17 +157,21 @@ final class ObjectsRepository
 
                 $prefix = str_replace('\\', DIRECTORY_SEPARATOR, ltrim($nameWithoutPrefix, '\\'));
 
-                $directoriesByNamespace[$name] = [...$directoriesByNamespace[$name] ?? [], ...array_values(array_filter(array_map(static function (string $directory) use ($prefix): string {
+                $directoriesByNamespace[$name] = [...$directoriesByNamespace[$name] ?? [], ...array_values(array_filter(array_merge(...array_map(static function (string $directory) use ($prefix): array {
                     $fileOrDirectory = $directory.DIRECTORY_SEPARATOR.$prefix;
+
                     if (is_dir($fileOrDirectory)) {
-                        return $fileOrDirectory;
-                    }
-                    if (str_contains($fileOrDirectory, '*')) {
-                        return $fileOrDirectory;
+                        return file_exists($fileOrDirectory.'.php')
+                            ? [$fileOrDirectory, $fileOrDirectory.'.php']
+                            : [$fileOrDirectory];
                     }
 
-                    return $fileOrDirectory.'.php';
-                }, $directories), static fn (string $fileOrDirectory): bool => is_dir($fileOrDirectory) || str_contains($fileOrDirectory, '*') || file_exists($fileOrDirectory)))];
+                    if (str_contains($fileOrDirectory, '*')) {
+                        return [$fileOrDirectory];
+                    }
+
+                    return [$fileOrDirectory.'.php'];
+                }, $directories)), static fn (string $fileOrDirectory): bool => is_dir($fileOrDirectory) || str_contains($fileOrDirectory, '*') || file_exists($fileOrDirectory)))];
             }
         }
 

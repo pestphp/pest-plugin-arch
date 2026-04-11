@@ -96,9 +96,7 @@ final class ObjectDescriptionFactory
      */
     private static function isSameLayer(\PHPUnit\Architecture\Elements\ObjectDescription $object, string $use): bool
     {
-        return $use === 'self'
-            || $use === 'static'
-            || $use === 'parent'
+        return in_array($use, ['self', 'static', 'parent'], true)
             || $object->reflectionClass->getNamespaceName() === $use;
     }
 }
