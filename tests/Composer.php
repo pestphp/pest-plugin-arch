@@ -1,5 +1,6 @@
 <?php
 
+use Composer\Autoload\ClassLoader;
 use Pest\Arch\Support\Composer;
 
 it('retrieves user namespaces', function () {
@@ -28,4 +29,20 @@ it('retrieves all non-vendor namespaces with directories', function () {
         ->and(array_values($all))->toContain('Tests')
         ->and($all)->each(fn ($namespace, $directory) => expect($directory)->toBeDirectory())
         ->and(array_keys($user))->each(fn ($directory) => expect($all)->toHaveKey($directory->value));
+});
+
+it('removes composer loaders registered during a callback', function () {
+    $vendorDirectory = __DIR__.'/Fixtures/ScopedVendor';
+    $loader = new ClassLoader($vendorDirectory);
+
+    $result = Composer::withoutNewLoaders(function () use ($loader, $vendorDirectory): string {
+        $loader->register(true);
+
+        expect(ClassLoader::getRegisteredLoaders())->toHaveKey($vendorDirectory);
+
+        return 'done';
+    });
+
+    expect($result)->toBe('done')
+        ->and(ClassLoader::getRegisteredLoaders())->not->toHaveKey($vendorDirectory);
 });

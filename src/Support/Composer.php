@@ -13,6 +13,27 @@ use Pest\TestSuite;
 final class Composer
 {
     /**
+     * @template TValue
+     *
+     * @param  callable(): TValue  $callback
+     * @return TValue
+     */
+    public static function withoutNewLoaders(callable $callback): mixed
+    {
+        $loaders = ClassLoader::getRegisteredLoaders();
+
+        try {
+            return $callback();
+        } finally {
+            foreach (ClassLoader::getRegisteredLoaders() as $vendorDirectory => $loader) {
+                if (! array_key_exists($vendorDirectory, $loaders)) {
+                    $loader->unregister();
+                }
+            }
+        }
+    }
+
+    /**
      * Gets the list of namespaces defined in the "composer.json" file.
      *
      * @return array<int, string>
