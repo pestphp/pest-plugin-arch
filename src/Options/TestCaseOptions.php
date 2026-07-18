@@ -22,7 +22,6 @@ final class TestCaseOptions
      * Ignores the given "targets" or "dependencies".
      *
      * @param  array<int, string>|string  $targetsOrDependencies
-     * @return $this
      */
     public function ignore(array|string $targetsOrDependencies): self
     {
@@ -35,8 +34,6 @@ final class TestCaseOptions
 
     /**
      * Ignores global "user defined" functions.
-     *
-     * @return $this
      */
     public function ignoreGlobalFunctions(): self
     {

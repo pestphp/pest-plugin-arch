@@ -63,7 +63,7 @@ test('ignoring opposite message', function () {
         ->ignoring('Tests\Fixtures\Enums');
 })->throws(
     ExpectationFailedException::class,
-    "Expecting 'Tests\Fixtures\Models\Product' not to use 'Tests\Fixtures\Contracts\Mode…orable'."
+    "Expecting 'Tests\Fixtures\Models\Product' not to use 'Tests\Fixtures\Contracts\Models\Storable'."
 );
 
 test('layer may not exist', function () {

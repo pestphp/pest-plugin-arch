@@ -30,7 +30,6 @@ final class GroupArchExpectation implements ArchExpectation
      * Ignores the given layers.
      *
      * @param  array<int, string>|string  $targetsOrDependencies
-     * @return $this
      */
     public function ignoring(array|string $targetsOrDependencies): self
     {
@@ -43,8 +42,6 @@ final class GroupArchExpectation implements ArchExpectation
 
     /**
      * Ignores the global "user defined" functions.
-     *
-     * @return $this
      */
     public function ignoringGlobalFunctions(): self
     {
