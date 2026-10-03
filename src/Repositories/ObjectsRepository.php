@@ -25,11 +25,11 @@ final class ObjectsRepository
     private static ?self $instance = null;
 
     /**
-     * Holds the Objects Descriptions of the previous resolved prefixes.
+     * Holds the Objects Descriptions of the previous resolved files.
      *
-     * @var array<string, array{0?: array<int, ObjectDescription|FunctionDescription>, 1?: array<int, ObjectDescription|FunctionDescription>}>
+     * @var array<string, array{0?: ObjectDescription|null, 1?: ObjectDescription|null}>
      */
-    private array $cachedObjectsPerPrefix = [];
+    private array $cachedObjectsPerFile = [];
 
     /**
      * Creates a new Objects Repository.
@@ -90,24 +90,13 @@ final class ObjectsRepository
 
         $objects = [];
 
-        foreach ($directoriesByNamespace as $prefix => $directories) {
-            if (array_key_exists($prefix, $this->cachedObjectsPerPrefix)) {
-                if (array_key_exists((int) $onlyUserDefinedUses, $this->cachedObjectsPerPrefix[$prefix])) {
-                    $objects = [...$objects, ...$this->cachedObjectsPerPrefix[$prefix][(int) $onlyUserDefinedUses]];
-
-                    continue;
-                }
-            } else {
-                $this->cachedObjectsPerPrefix[$prefix] = [];
-            }
-
+        foreach ($directoriesByNamespace as $directories) {
             $objectsPerPrefix = array_values(array_filter(array_reduce($directories, fn (array $files, string $fileOrDirectory): array => array_merge($files, array_values(array_map(
-                static fn (SplFileInfo $file): ?ObjectDescription => ObjectDescriptionFactory::make($file->getPathname(), $onlyUserDefinedUses),
+                fn (SplFileInfo $file): ?ObjectDescription => $this->objectByFile($file->getPathname(), $onlyUserDefinedUses),
                 is_dir($fileOrDirectory) || str_contains($fileOrDirectory, '*') ? iterator_to_array(Finder::create()->files()->in($fileOrDirectory)->name('*.php')) : [new SplFileInfo($fileOrDirectory)],
             ))), [])));
 
-            // @phpstan-ignore-next-line
-            $objects = [...$objects, ...$this->cachedObjectsPerPrefix[$prefix][(int) $onlyUserDefinedUses] = $objectsPerPrefix];
+            $objects = [...$objects, ...$objectsPerPrefix];
         }
 
         // @phpstan-ignore-next-line
@@ -115,6 +104,20 @@ final class ObjectsRepository
             FunctionDescription::make(...),
             $this->functionsByNamespace($namespace),
         )];
+    }
+
+    /**
+     * Gets the object of the given file, if any.
+     */
+    private function objectByFile(string $pathname, bool $onlyUserDefinedUses): ?ObjectDescription
+    {
+        $this->cachedObjectsPerFile[$pathname] ??= [];
+
+        if (! array_key_exists((int) $onlyUserDefinedUses, $this->cachedObjectsPerFile[$pathname])) {
+            $this->cachedObjectsPerFile[$pathname][(int) $onlyUserDefinedUses] = ObjectDescriptionFactory::make($pathname, $onlyUserDefinedUses);
+        }
+
+        return $this->cachedObjectsPerFile[$pathname][(int) $onlyUserDefinedUses];
     }
 
     /**

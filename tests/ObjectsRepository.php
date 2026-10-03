@@ -91,3 +91,47 @@ it('returns empty when prefix has no valid directories', function () {
 
     expect($result)->toBeEmpty();
 });
+
+it('reuses the same objects across nested namespaces', function (bool $onlyUserDefinedUses) {
+    $sut = new ObjectsRepository([
+        'Tests' => [
+            __DIR__,
+        ],
+    ]);
+
+    $parentObjects = [];
+
+    foreach ($sut->allByNamespace('Tests\Fixtures', $onlyUserDefinedUses) as $object) {
+        $parentObjects[$object->name] = $object;
+    }
+
+    $nestedObjects = $sut->allByNamespace('Tests\Fixtures\Models', $onlyUserDefinedUses);
+
+    expect($nestedObjects)->toHaveCount(2);
+
+    foreach ($nestedObjects as $object) {
+        expect($object)->toBe($parentObjects[$object->name]);
+    }
+})->with([true, false]);
+
+it('filters uses per user defined uses flag', function () {
+    $sut = new ObjectsRepository([
+        'Tests' => [
+            __DIR__,
+        ],
+    ]);
+
+    $usesOf = function (string $namespace, bool $onlyUserDefinedUses) use ($sut): array {
+        $objects = array_values(array_filter(
+            $sut->allByNamespace($namespace, $onlyUserDefinedUses),
+            fn ($object): bool => $object->name === Collection::class,
+        ));
+
+        return iterator_to_array($objects[0]->uses->getIterator());
+    };
+
+    expect($usesOf('Tests\Fixtures', true))->not->toContain('Countable')
+        ->and($usesOf('Tests\Fixtures\Support', true))->not->toContain('Countable')
+        ->and($usesOf('Tests\Fixtures', false))->toContain('Countable')
+        ->and($usesOf('Tests\Fixtures\Support', false))->toContain('Countable');
+});
