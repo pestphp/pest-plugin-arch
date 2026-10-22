@@ -54,6 +54,10 @@ final class ObjectDescriptionFactory
                     static fn (string $use): bool => (! $onlyUserDefinedUses || self::isUserDefined($use)) && ! self::isSameLayer($object, $use),
                 )
             ));
+
+            // The syntax tree is no longer needed once the object is described, and keeping it for every
+            // parsed file would hold most of the memory of an arch run...
+            $object->stmts = [];
         }
 
         return $object;
