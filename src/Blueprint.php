@@ -261,8 +261,11 @@ final class Blueprint
             return null;
         }
 
+        // Object descriptions don't keep their syntax tree, so the file is parsed again to locate the violation...
+        $stmts = ServiceContainer::$parser->parse((string) file_get_contents($dependOnObject->path)) ?? [];
+
         $nodes = ServiceContainer::$nodeFinder->findInstanceOf(
-            $dependOnObject->stmts,
+            ServiceContainer::$nodeTraverser->traverse($stmts),
             $class,
         );
 
