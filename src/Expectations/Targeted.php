@@ -43,7 +43,7 @@ final class Targeted
                 $blueprint->targeted(
                     $callback,
                     $options,
-                    static fn (Violation $violation) => throw new ArchExpectationFailedException(
+                    static fn (Violation $violation): never => throw new ArchExpectationFailedException(
                         $violation,
                         sprintf(
                             "Expecting '%s' %s.",

@@ -23,9 +23,7 @@ final class UserDefinedFunctions
      */
     public static function get(): array
     {
-        if (self::$functions === null) {
-            self::$functions = get_defined_functions()['user'];
-        }
+        self::$functions ??= get_defined_functions()['user'];
 
         return self::$functions;
     }

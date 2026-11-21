@@ -173,7 +173,7 @@ final class SingleArchExpectation implements Contracts\ArchExpectation
                 return;
             }
 
-            ($this->opposite)(); // @phpstan-ignore-line
+            ($this->opposite)();
         }
     }
 }
