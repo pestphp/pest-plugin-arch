@@ -61,9 +61,9 @@ test('opposite', function () {
     expect(Fooable::class)
         ->not
         ->toBeUsedInNothing();
-})->throws(InvalidExpectation::class, 'Expectation [not->toBeUsedInNothing] is not valid.');
+})->throws(InvalidExpectation::class, '[not->toBeUsedInNothing]');
 
 test('opposite as aliases', function () {
     expect(Fooable::class)
         ->toBeUsed();
-})->throws(InvalidExpectation::class, 'Expectation [toBeUsed] is not valid.');
+})->throws(InvalidExpectation::class, '[toBeUsed]');

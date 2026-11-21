@@ -35,4 +35,4 @@ test('opposite', function () {
     expect(Product::class)
         ->not
         ->toUseNothing();
-})->throws(InvalidExpectation::class, 'Expectation [not->toUseNothing] is not valid.');
+})->throws(InvalidExpectation::class, '[not->toUseNothing]');

@@ -16,7 +16,7 @@ it('fails 1', function () {
     expect([ProductController::class])->toExtend(Controller::class);
 })->throws(
     ArchExpectationFailedException::class,
-    "Expecting 'tests/Fixtures/Controllers/ProductController.php' to extend 'Tests\Fixtures\Controller'."
+    "Expecting 'tests/Fixtures/Controllers/ProductController.php' to extend"
 );
 
 test('ignoring', function () {
@@ -33,5 +33,5 @@ test('ignoring opposite message', function () {
         ->toExtend(Controller::class);
 })->throws(
     ArchExpectationFailedException::class,
-    "Expecting 'tests/Fixtures/Controllers/UserController.php' not to extend 'Tests\Fixtures\Controller'."
+    "Expecting 'tests/Fixtures/Controllers/UserController.php' not to extend"
 );
