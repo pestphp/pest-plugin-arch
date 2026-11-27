@@ -1,6 +1,7 @@
 <?php
 
 use Pest\Arch\Repositories\ObjectsRepository;
+use Tests\Fixtures\Misc\HasNativeFunctions;
 use Tests\Fixtures\Misc\TestsNestedNamespace\IsNested;
 use Tests\Fixtures\Models\Product;
 use Tests\Fixtures\Models\User;
@@ -66,6 +67,19 @@ it('finds objects when namespace is only a file', function () {
 
     expect($result)->toHaveCount(1)
         ->and($result[0]->name)->toBe('Tests\Fixtures\Controller');
+});
+
+it('reuses file descriptions across overlapping namespaces for the same dependency mode', function () {
+    $repository = new ObjectsRepository(['Tests' => [__DIR__]]);
+
+    $objects = $repository->allByNamespace('Tests\Fixtures\Misc', false);
+    $wide = array_find($objects, fn ($object) => $object->name === HasNativeFunctions::class);
+    [$narrow] = $repository->allByNamespace(HasNativeFunctions::class, false);
+    [$userDefinedOnly] = $repository->allByNamespace(HasNativeFunctions::class);
+
+    expect($narrow)->toBe($wide)
+        ->and($narrow->uses->getByName('clone'))->toBe('clone')
+        ->and($userDefinedOnly->uses->getByName('clone'))->toBeNull();
 });
 
 it('returns empty for non-existent namespace', function () {
