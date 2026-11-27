@@ -31,6 +31,9 @@ final class ObjectsRepository
      */
     private array $cachedObjectsPerPrefix = [];
 
+    /** @var array{0: array<string, ObjectDescription|null>, 1: array<string, ObjectDescription|null>} */
+    private array $cachedObjectsPerFile = [[], []];
+
     /**
      * Creates a new Objects Repository.
      *
@@ -102,7 +105,7 @@ final class ObjectsRepository
             }
 
             $objectsPerPrefix = array_values(array_filter(array_reduce($directories, fn (array $files, string $fileOrDirectory): array => array_merge($files, array_values(array_map(
-                static fn (SplFileInfo $file): ?ObjectDescription => ObjectDescriptionFactory::make($file->getPathname(), $onlyUserDefinedUses),
+                fn (SplFileInfo $file): ?ObjectDescription => $this->objectForFile($file->getPathname(), $onlyUserDefinedUses),
                 is_dir($fileOrDirectory) || str_contains($fileOrDirectory, '*') ? iterator_to_array(Finder::create()->files()->in($fileOrDirectory)->name('*.php')) : [new SplFileInfo($fileOrDirectory)],
             ))), [])));
 
@@ -115,6 +118,17 @@ final class ObjectsRepository
             FunctionDescription::make(...),
             $this->functionsByNamespace($namespace),
         )];
+    }
+
+    private function objectForFile(string $path, bool $onlyUserDefinedUses): ?ObjectDescription
+    {
+        $mode = (int) $onlyUserDefinedUses;
+
+        if (! array_key_exists($path, $this->cachedObjectsPerFile[$mode])) {
+            $this->cachedObjectsPerFile[$mode][$path] = ObjectDescriptionFactory::make($path, $onlyUserDefinedUses);
+        }
+
+        return $this->cachedObjectsPerFile[$mode][$path];
     }
 
     /**
